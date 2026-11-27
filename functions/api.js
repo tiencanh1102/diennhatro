@@ -1,5 +1,5 @@
 /**
- * Cloudflare Pages Function Proxy — Nhà Cho Thuê V2
+ * Cloudflare Pages Function Proxy — Nhà Cho Thuê V3.1
  * Route: /api
  * Ẩn hoàn toàn link Google Apps Script (/exec) bằng biến môi trường GAS_URL
  * Cấu hình tại: Cloudflare Pages -> Settings -> Variables and Secrets -> GAS_URL
@@ -55,7 +55,7 @@ export async function onRequestGet(context) {
     });
   } catch (err) {
     return new Response(
-      JSON.stringify({ ok: false, error: "Lỗi kết nối máy chủ proxy: " + (err?.message || String(err)) }),
+      JSON.stringify({ ok: false, error: "Lỗi kết nối máy chủ: " + (err && err.message ? err.message : String(err)) }),
       { status: 502, headers: { ...CORS_HEADERS, "Content-Type": "application/json; charset=utf-8" } }
     );
   }
@@ -96,7 +96,7 @@ export async function onRequestPost(context) {
     });
   } catch (err) {
     return new Response(
-      JSON.stringify({ ok: false, error: "Lỗi gửi dữ liệu qua proxy: " + (err?.message || String(err)) }),
+      JSON.stringify({ ok: false, error: "Lỗi gửi dữ liệu tới máy chủ: " + (err && err.message ? err.message : String(err)) }),
       { status: 502, headers: { ...CORS_HEADERS, "Content-Type": "application/json; charset=utf-8" } }
     );
   }
