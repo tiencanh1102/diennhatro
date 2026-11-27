@@ -1,0 +1,3316 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Quản Lý Phòng Trọ - 9 Phòng</title>
+
+  <!-- Google Fonts: Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
+          },
+          colors: {
+            brand: {
+              50: '#eef2ff',
+              100: '#e0e7ff',
+              500: '#4f46e5',
+              600: '#4338ca',
+              700: '#3730a3',
+              800: '#312e81',
+              900: '#1e1b4b',
+            }
+          }
+        }
+      }
+    };
+  </script>
+
+  <!-- html2canvas CDN để xuất phiếu thu thành ảnh PNG -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+  <style>
+    /* Tối ưu hiển thị thanh cuộn và tránh giật khung trên di động */
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      background-color: #f1f5f9;
+      -webkit-tap-highlight-color: transparent;
+    }
+    /* Ẩn mũi tên tăng giảm mặc định của input number */
+    input[type="number"]::-webkit-inner-spin-button,
+    input[type="number"]::-webkit-outer-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+    input[type="number"] {
+      -moz-appearance: textfield;
+    }
+    /* Hiệu ứng xuất hiện mượt mà */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .animate-fade-in {
+      animation: fadeIn 0.2s ease-out forwards;
+    }
+    /* Thanh cuộn ngang gọn cho bảng trên màn hình nhỏ */
+    .thin-scroll::-webkit-scrollbar {
+      height: 6px;
+      width: 6px;
+    }
+    .thin-scroll::-webkit-scrollbar-track {
+      background: #f1f5f9;
+      border-radius: 9999px;
+    }
+    .thin-scroll::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 9999px;
+    }
+  </style>
+</head>
+<body class="text-slate-800 antialiased min-h-screen flex flex-col">
+
+  <!-- ===================================================================== -->
+  <!-- HEADER CỐ ĐỊNH + THANH ĐIỀU HƯỚNG 3 TAB (STICKY)                       -->
+  <!-- ===================================================================== -->
+  <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-200 shadow-sm">
+    <!-- Hàng trên: Tên app, trạng thái đồng bộ, nút Đồng bộ & Cài đặt -->
+    <div class="max-w-5xl mx-auto px-3 sm:px-5 h-16 flex items-center justify-between gap-2">
+      <div class="flex items-center gap-2.5 min-w-0">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-600 to-blue-700 text-white flex items-center justify-center shadow-md shadow-indigo-200 shrink-0">
+          <!-- Icon Nhà trọ -->
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M3 10.5L12 3l9 7.5M5 9.5V20a1 1 0 001 1h4v-6h4v6h4a1 1 0 001-1V9.5" />
+          </svg>
+        </div>
+        <div class="min-w-0">
+          <h1 class="text-base sm:text-lg font-extrabold text-slate-900 tracking-tight truncate">Quản Lý Phòng Trọ</h1>
+          <div id="syncStatusBadge" class="flex items-center gap-1.5 text-xs font-medium text-slate-500">
+            <!-- JS cập nhật động -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Nhóm nút thao tác nhanh -->
+      <div class="flex items-center gap-1.5 sm:gap-2 shrink-0">
+        <!-- Nút Đồng bộ (mở menu dropdown) -->
+        <div class="relative">
+          <button id="btnSyncMenu" type="button" onclick="toggleSyncDropdown(event)"
+            class="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs sm:text-sm font-semibold bg-indigo-50 text-indigo-700 hover:bg-indigo-100 active:scale-[0.98] transition border border-indigo-200/80 min-h-[40px]">
+            <svg id="syncHeaderIcon" class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+            </svg>
+            <span>Đồng bộ</span>
+            <svg class="w-3.5 h-3.5 opacity-70" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+            </svg>
+          </button>
+
+          <!-- Dropdown Đồng bộ -->
+          <div id="syncDropdown" class="hidden absolute right-0 mt-2 w-64 bg-white rounded-2xl shadow-xl border border-slate-200 p-2 z-50 animate-fade-in">
+            <div class="px-3 py-2 border-b border-slate-100 mb-1">
+              <p class="text-xs font-semibold text-slate-800">Đồng bộ Google Sheets</p>
+              <p id="syncDropdownSub" class="text-[11px] text-slate-500 mt-0.5 truncate">Chưa gắn link Apps Script</p>
+            </div>
+            <button type="button" onclick="pullFromSheet()" class="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-left text-sm font-medium text-slate-700 hover:bg-indigo-50 hover:text-indigo-700 transition">
+              <svg class="w-4 h-4 text-emerald-600 shrink-0" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+              </svg>
+              <div>
+                <div>Tải từ Google Sheet</div>
+                <div class="text-[11px] text-slate-400 font-normal">Lấy dữ liệu mới nhất về máy</div>
+              </div>
+            </button>
+            <button type="button" onclick="pushAllToSheet()" class="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-left text-sm font-medium text-slate-700 hover:bg-indigo-50 hover:text-indigo-700 transition">
+              <svg class="w-4 h-4 text-indigo-600 shrink-0" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
+              </svg>
+              <div>
+                <div>Đẩy toàn bộ lên Sheet</div>
+                <div class="text-[11px] text-slate-400 font-normal">Đồng bộ cấu hình, điện & hóa đơn</div>
+              </div>
+            </button>
+            <div class="border-t border-slate-100 mt-1 pt-1">
+              <button type="button" onclick="closeSyncDropdown(); openSettingsModal();" class="w-full flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-semibold text-slate-600 hover:bg-slate-100 transition">
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                </svg>
+                <span>Cấu hình Link Sheet & VietQR</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Nút Cài đặt -->
+        <button type="button" onclick="openSettingsModal()" aria-label="Cài đặt"
+          class="inline-flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl text-xs sm:text-sm font-semibold bg-slate-100 text-slate-700 hover:bg-slate-200 active:scale-[0.98] transition min-h-[40px]">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+          </svg>
+          <span class="hidden sm:inline">Cài đặt</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Thanh điều hướng 3 tab chính -->
+    <nav class="max-w-5xl mx-auto px-3 sm:px-5 pb-2.5">
+      <div class="grid grid-cols-3 gap-1.5 bg-slate-100 p-1 rounded-2xl">
+        <button id="navTab-config" type="button" onclick="switchTab('config')"
+          class="flex items-center justify-center gap-1.5 py-2.5 px-2 rounded-xl text-xs sm:text-sm font-bold transition min-h-[42px]">
+          <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4" />
+          </svg>
+          <span class="truncate">Dữ liệu</span>
+        </button>
+
+        <button id="navTab-electric" type="button" onclick="switchTab('electric')"
+          class="flex items-center justify-center gap-1.5 py-2.5 px-2 rounded-xl text-xs sm:text-sm font-bold transition min-h-[42px]">
+          <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
+          </svg>
+          <span class="truncate">Số điện</span>
+        </button>
+
+        <button id="navTab-invoice" type="button" onclick="switchTab('invoice')"
+          class="flex items-center justify-center gap-1.5 py-2.5 px-2 rounded-xl text-xs sm:text-sm font-bold transition min-h-[42px]">
+          <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 14l6-6m-5.5.5h.01m4.99 5h.01M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16l3.5-2 3.5 2 3.5-2 3.5 2z" />
+          </svg>
+          <span id="navTabInvoiceLabel" class="truncate">Tiền T11/2026</span>
+        </button>
+      </div>
+    </nav>
+  </header>
+
+  <!-- ===================================================================== -->
+  <!-- NỘI DUNG CHÍNH (3 TAB)                                                -->
+  <!-- ===================================================================== -->
+  <main class="flex-1 max-w-5xl w-full mx-auto px-3 sm:px-5 py-5 pb-20">
+
+    <!-- ==================== TAB 1: DỮ LIỆU (9 PHÒNG) ==================== -->
+    <section id="tab-config" class="space-y-5 animate-fade-in">
+      <!-- Banner giới thiệu & Tóm tắt nhanh -->
+      <div class="bg-white rounded-2xl border border-slate-200 p-4 shadow-sm">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div>
+            <h2 class="text-base sm:text-lg font-bold text-slate-900">Cấu hình cố định 9 phòng trọ</h2>
+            <p class="text-xs sm:text-sm text-slate-500 mt-0.5">
+              Định mức mặc định: Phòng 3.000.000đ • Nước 100.000đ/người • Điện 4.000đ/số • Không thu wifi.
+            </p>
+          </div>
+          <div id="configSummaryPill" class="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-indigo-50 text-indigo-700 text-xs font-semibold shrink-0 self-start sm:self-auto">
+            <!-- JS render -->
+          </div>
+        </div>
+
+        <!-- Thanh công cụ Cập nhật nhanh hàng loạt -->
+        <div class="mt-4 pt-4 border-t border-slate-100">
+          <div class="flex items-center justify-between mb-2.5">
+            <span class="text-xs font-bold uppercase tracking-wider text-slate-500 flex items-center gap-1.5">
+              <svg class="w-4 h-4 text-indigo-600" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+              </svg>
+              Cập nhật nhanh hàng loạt cho cả 9 phòng
+            </span>
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-4 gap-2.5">
+            <div>
+              <label class="block text-[11px] font-semibold text-slate-500 mb-1">Tiền phòng chung (đ)</label>
+              <input id="bulkRent" type="text" inputmode="numeric" placeholder="3.000.000"
+                oninput="formatMoneyInputEl(this)"
+                class="w-full px-3 py-2 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 outline-none text-sm font-semibold text-slate-800" />
+            </div>
+            <div>
+              <label class="block text-[11px] font-semibold text-slate-500 mb-1">Giá nước / người (đ)</label>
+              <input id="bulkWater" type="text" inputmode="numeric" placeholder="100.000"
+                oninput="formatMoneyInputEl(this)"
+                class="w-full px-3 py-2 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 outline-none text-sm font-semibold text-slate-800" />
+            </div>
+            <div>
+              <label class="block text-[11px] font-semibold text-slate-500 mb-1">Giá điện / số (đ)</label>
+              <input id="bulkElec" type="text" inputmode="numeric" placeholder="4.000"
+                oninput="formatMoneyInputEl(this)"
+                class="w-full px-3 py-2 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 outline-none text-sm font-semibold text-slate-800" />
+            </div>
+            <div class="flex items-end">
+              <button type="button" onclick="applyBulkConfig()"
+                class="w-full py-2 px-3 rounded-xl bg-slate-800 hover:bg-slate-900 active:scale-[0.98] text-white text-xs sm:text-sm font-semibold transition min-h-[40px]">
+                Áp dụng cả 9 phòng
+              </button>
+            </div>
+          </div>
+          <p class="text-[11px] text-slate-400 mt-1.5">Để trống ô nào thì giữ nguyên giá trị hiện tại của từng phòng ở ô đó.</p>
+        </div>
+      </div>
+
+      <!-- Danh sách thẻ 9 phòng -->
+      <div id="roomsConfigGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <!-- JS render 9 thẻ phòng -->
+      </div>
+
+      <!-- Nút Lưu cấu hình & Đồng bộ -->
+      <div class="sticky bottom-3 z-30">
+        <div class="bg-white/95 backdrop-blur-md border border-slate-200 shadow-lg rounded-2xl p-3 flex flex-col sm:flex-row items-center justify-between gap-2.5">
+          <div class="text-xs text-slate-500 text-center sm:text-left">
+            Thay đổi được tự động lưu nháp trên máy. Bấm nút bên cạnh để lưu chuẩn & đồng bộ lên Google Sheets.
+          </div>
+          <button type="button" onclick="saveConfigAndSync()"
+            class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-gradient-to-r from-indigo-600 to-blue-600 hover:from-indigo-700 hover:to-blue-700 active:scale-[0.99] text-white font-bold text-sm shadow-md shadow-indigo-200 transition min-h-[46px]">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.4" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+            </svg>
+            <span>Lưu cấu hình & Đồng bộ</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== TAB 2: NHẬP SỐ ĐIỆN & LỊCH SỬ ==================== -->
+    <section id="tab-electric" class="hidden space-y-5 animate-fade-in">
+      <!-- Thanh chọn kỳ & tóm tắt điện kỳ đang chọn -->
+      <div class="bg-white rounded-2xl border border-slate-200 p-4 shadow-sm space-y-4">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div>
+            <h2 class="text-base sm:text-lg font-bold text-slate-900">Ghi chỉ số điện hàng tháng</h2>
+            <p id="elecPrevHint" class="text-xs sm:text-sm text-slate-500 mt-0.5">
+              Tự động kéo số điện mới của tháng trước làm số cũ tháng này.
+            </p>
+          </div>
+          <!-- Bộ chọn Kỳ (Tháng / Năm) -->
+          <div class="flex items-center gap-2 self-start sm:self-auto">
+            <div class="flex items-center bg-indigo-50 border border-indigo-200 rounded-xl p-1">
+              <select id="elecSelectMonth" onchange="onPeriodChange(this.value, null)"
+                class="bg-transparent text-indigo-800 font-bold text-sm px-2 py-1.5 outline-none cursor-pointer">
+                <!-- JS fill 1..12 -->
+              </select>
+              <span class="text-indigo-300 font-bold">/</span>
+              <select id="elecSelectYear" onchange="onPeriodChange(null, this.value)"
+                class="bg-transparent text-indigo-800 font-bold text-sm px-2 py-1.5 outline-none cursor-pointer">
+                <!-- JS fill years -->
+              </select>
+            </div>
+            <button type="button" onclick="refillOldIndexFromPrevious()" title="Kéo lại số cũ từ tháng trước"
+              class="p-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 transition min-h-[42px] min-w-[42px] flex items-center justify-center">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- Tóm tắt tổng số điện & tiền điện tạm tính của kỳ -->
+        <div class="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
+          <div class="rounded-xl bg-slate-50 border border-slate-200/80 p-3">
+            <div class="text-[11px] font-semibold text-slate-500 uppercase">Tổng điện tiêu thụ</div>
+            <div id="elecTotalUsageSum" class="text-lg sm:text-xl font-extrabold text-indigo-700 mt-0.5">0 kWh</div>
+          </div>
+          <div class="rounded-xl bg-slate-50 border border-slate-200/80 p-3">
+            <div class="text-[11px] font-semibold text-slate-500 uppercase">Tổng tiền điện dự kiến</div>
+            <div id="elecTotalMoneySum" class="text-lg sm:text-xl font-extrabold text-slate-900 mt-0.5">0 đ</div>
+          </div>
+          <div class="col-span-2 sm:col-span-1 rounded-xl bg-slate-50 border border-slate-200/80 p-3 flex items-center justify-between sm:block">
+            <div class="text-[11px] font-semibold text-slate-500 uppercase">Trạng thái kỳ này</div>
+            <div id="elecPeriodSavedBadge" class="text-xs sm:text-sm font-bold text-amber-600 sm:mt-1">Chưa chốt sổ</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Danh sách nhập chỉ số điện 9 phòng -->
+      <div id="electricInputsList" class="space-y-3">
+        <!-- JS render 9 dòng/thẻ nhập điện -->
+      </div>
+
+      <!-- Nút Chốt số điện & Kết tiền sang Tab Tiền tháng X -->
+      <div class="sticky bottom-3 z-30">
+        <div class="bg-white/95 backdrop-blur-md border border-slate-200 shadow-lg rounded-2xl p-3 flex flex-col sm:flex-row items-center justify-between gap-2.5">
+          <div id="elecWarningSummary" class="text-xs text-slate-500 text-center sm:text-left">
+            Kiểm tra kỹ số mới trước khi chốt sang hóa đơn tháng.
+          </div>
+          <button id="btnFinalizeElectric" type="button" onclick="finalizeElectricAndBuildInvoices()"
+            class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-gradient-to-r from-indigo-600 to-blue-600 hover:from-indigo-700 hover:to-blue-700 active:scale-[0.99] text-white font-bold text-sm shadow-md shadow-indigo-200 transition min-h-[46px]">
+            <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" stroke-width="2.4" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
+            </svg>
+            <span id="btnFinalizeElectricText">Chốt số điện & Kết tiền sang Tab Tiền T11/2026</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- PHẦN LỊCH SỬ SỐ ĐIỆN -->
+      <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden mt-6">
+        <div class="p-4 border-b border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div>
+            <h3 class="text-base font-bold text-slate-900 flex items-center gap-2">
+              <svg class="w-4 h-4 text-indigo-600" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              Lịch sử số điện đã lưu
+            </h3>
+            <p class="text-xs text-slate-500 mt-0.5">Tra cứu nhanh chỉ số điện theo từng tháng hoặc từng phòng để đối chiếu.</p>
+          </div>
+          <!-- Bộ lọc lịch sử điện -->
+          <div class="flex flex-wrap items-center gap-2">
+            <select id="elecHistFilterPeriod" onchange="state.elecFilterPeriod = this.value; renderElectricHistory();"
+              class="px-3 py-2 rounded-xl border border-slate-200 bg-slate-50 text-xs sm:text-sm font-semibold text-slate-700 outline-none focus:border-indigo-500">
+              <option value="ALL">Tất cả các kỳ</option>
+            </select>
+            <select id="elecHistFilterRoom" onchange="state.elecFilterRoom = this.value; renderElectricHistory();"
+              class="px-3 py-2 rounded-xl border border-slate-200 bg-slate-50 text-xs sm:text-sm font-semibold text-slate-700 outline-none focus:border-indigo-500">
+              <option value="ALL">Tất cả phòng</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Danh sách nhóm kỳ nhanh (Mở sửa / Xóa kỳ) -->
+        <div id="elecPeriodChips" class="px-4 py-3 bg-slate-50/70 border-b border-slate-100 flex flex-wrap gap-2 hidden">
+          <!-- JS render -->
+        </div>
+
+        <!-- Bảng lịch sử chi tiết -->
+        <div class="overflow-x-auto thin-scroll">
+          <table class="w-full text-left border-collapse min-w-[600px]">
+            <thead>
+              <tr class="bg-slate-50 text-[11px] font-bold uppercase tracking-wider text-slate-500 border-b border-slate-200">
+                <th class="py-3 px-4">Kỳ</th>
+                <th class="py-3 px-3">Phòng</th>
+                <th class="py-3 px-3 text-right">Số cũ</th>
+                <th class="py-3 px-3 text-right">Số mới</th>
+                <th class="py-3 px-3 text-right">Tiêu thụ</th>
+                <th class="py-3 px-3">Ngày ghi</th>
+                <th class="py-3 px-3">Ghi chú</th>
+                <th class="py-3 px-4 text-right">Thao tác</th>
+              </tr>
+            </thead>
+            <tbody id="elecHistoryTableBody" class="divide-y divide-slate-100 text-sm">
+              <!-- JS render -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== TAB 3: TIỀN THÁNG X & LỊCH SỬ HÓA ĐƠN ==================== -->
+    <section id="tab-invoice" class="hidden space-y-5 animate-fade-in">
+      <!-- Header chọn Kỳ & 4 thẻ thống kê -->
+      <div class="bg-white rounded-2xl border border-slate-200 p-4 shadow-sm space-y-4">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div>
+            <h2 id="invoicePeriodHeading" class="text-base sm:text-lg font-bold text-slate-900">Tiền phòng Tháng 11/2026</h2>
+            <p class="text-xs sm:text-sm text-slate-500 mt-0.5">
+              Số liệu từng hóa đơn được chốt cứng theo kỳ, kèm VietQR và mẫu tin nhắn Zalo.
+            </p>
+          </div>
+          <!-- Bộ chọn Kỳ (đồng bộ với Tab 2) -->
+          <div class="flex items-center gap-2 self-start sm:self-auto">
+            <div class="flex items-center bg-indigo-50 border border-indigo-200 rounded-xl p-1">
+              <select id="invSelectMonth" onchange="onPeriodChange(this.value, null)"
+                class="bg-transparent text-indigo-800 font-bold text-sm px-2 py-1.5 outline-none cursor-pointer">
+                <!-- JS fill 1..12 -->
+              </select>
+              <span class="text-indigo-300 font-bold">/</span>
+              <select id="invSelectYear" onchange="onPeriodChange(null, this.value)"
+                class="bg-transparent text-indigo-800 font-bold text-sm px-2 py-1.5 outline-none cursor-pointer">
+                <!-- JS fill years -->
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- 4 Thẻ thống kê nhanh -->
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-3">
+          <div class="rounded-2xl bg-indigo-50/70 border border-indigo-100 p-3.5">
+            <div class="text-[11px] font-bold uppercase tracking-wider text-indigo-600">Tổng phải thu</div>
+            <div id="statTotalDue" class="text-lg sm:text-xl font-extrabold text-indigo-950 mt-1">0 đ</div>
+          </div>
+          <div class="rounded-2xl bg-emerald-50/70 border border-emerald-100 p-3.5">
+            <div class="text-[11px] font-bold uppercase tracking-wider text-emerald-600">Đã thu</div>
+            <div id="statTotalPaid" class="text-lg sm:text-xl font-extrabold text-emerald-700 mt-1">0 đ</div>
+          </div>
+          <div class="rounded-2xl bg-rose-50/70 border border-rose-100 p-3.5">
+            <div class="text-[11px] font-bold uppercase tracking-wider text-rose-600">Còn thiếu</div>
+            <div id="statTotalRemain" class="text-lg sm:text-xl font-extrabold text-rose-700 mt-1">0 đ</div>
+          </div>
+          <div class="rounded-2xl bg-slate-50 border border-slate-200/80 p-3.5">
+            <div class="flex items-center justify-between">
+              <div class="text-[11px] font-bold uppercase tracking-wider text-slate-500">Tiến độ</div>
+              <span id="statProgressPct" class="text-xs font-extrabold text-indigo-600">0%</span>
+            </div>
+            <div id="statProgressText" class="text-base sm:text-lg font-extrabold text-slate-900 mt-1">0/0 phòng</div>
+            <div class="w-full h-1.5 bg-slate-200 rounded-full mt-2 overflow-hidden">
+              <div id="statProgressBar" class="h-full bg-emerald-500 rounded-full transition-all duration-300" style="width: 0%"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Danh sách 9 hóa đơn của kỳ đang chọn -->
+      <div id="invoicesGrid" class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+        <!-- JS render -->
+      </div>
+
+      <!-- Thanh nút Lưu & Đồng bộ Hóa đơn -->
+      <div id="invoiceStickySaveBar" class="sticky bottom-3 z-30 hidden">
+        <div class="bg-white/95 backdrop-blur-md border border-slate-200 shadow-lg rounded-2xl p-3 flex flex-col sm:flex-row items-center justify-between gap-2.5">
+          <div class="text-xs text-slate-500 text-center sm:text-left">
+            Mọi khoản phát sinh, nợ cũ và trạng thái thu tiền đều được lưu tự động trên máy.
+          </div>
+          <button type="button" onclick="saveInvoicesAndSync()"
+            class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 active:scale-[0.99] text-white font-bold text-sm shadow-md shadow-emerald-200 transition min-h-[46px]">
+            <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" stroke-width="2.4" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+            </svg>
+            <span id="btnSaveInvoicesText">Lưu & Đồng bộ Hóa đơn T11/2026</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- PHẦN LỊCH SỬ TIỀN PHÒNG -->
+      <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden mt-6">
+        <div class="p-4 border-b border-slate-100 space-y-3">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div>
+              <h3 class="text-base font-bold text-slate-900 flex items-center gap-2">
+                <svg class="w-4 h-4 text-indigo-600" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                </svg>
+                Lịch sử tiền phòng các tháng
+              </h3>
+              <p class="text-xs text-slate-500 mt-0.5">Xem tổng kết doanh thu 12 tháng trong năm hoặc soi lịch sử đóng tiền của riêng từng phòng.</p>
+            </div>
+
+            <!-- Chuyển chế độ xem: Tổng hợp tháng / Chi tiết theo phòng -->
+            <div class="inline-flex bg-slate-100 p-1 rounded-xl self-start sm:self-auto">
+              <button id="btnViewMonthly" type="button" onclick="setInvoiceHistoryView('monthly')"
+                class="px-3 py-1.5 rounded-lg text-xs font-bold transition">
+                Tổng hợp tháng
+              </button>
+              <button id="btnViewRoom" type="button" onclick="setInvoiceHistoryView('room')"
+                class="px-3 py-1.5 rounded-lg text-xs font-bold transition">
+                Chi tiết theo phòng
+              </button>
+            </div>
+          </div>
+
+          <!-- Bộ lọc Năm & Phòng -->
+          <div class="flex flex-wrap items-center gap-2">
+            <select id="invHistFilterYear" onchange="state.invFilterYear = this.value; renderInvoiceHistory();"
+              class="px-3 py-2 rounded-xl border border-slate-200 bg-slate-50 text-xs sm:text-sm font-semibold text-slate-700 outline-none focus:border-indigo-500">
+              <!-- JS fill -->
+            </select>
+            <select id="invHistFilterRoom" onchange="onInvHistoryRoomFilterChange(this.value)"
+              class="px-3 py-2 rounded-xl border border-slate-200 bg-slate-50 text-xs sm:text-sm font-semibold text-slate-700 outline-none focus:border-indigo-500">
+              <option value="ALL">Tất cả 9 phòng</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Nội dung bảng lịch sử hóa đơn -->
+        <div id="invHistoryContainer" class="overflow-x-auto thin-scroll">
+          <!-- JS render chế độ Tổng hợp tháng hoặc Chi tiết phòng -->
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ===================================================================== -->
+  <!-- MODAL 1: CÀI ĐẶT (LINK GOOGLE SHEETS, VIETQR, MÃ APPS SCRIPT, SAO LƯU) -->
+  <!-- ===================================================================== -->
+  <div id="settingsModal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-end sm:items-center justify-center p-0 sm:p-4">
+    <div class="bg-white w-full sm:max-w-2xl rounded-t-3xl sm:rounded-3xl shadow-2xl max-h-[92vh] flex flex-col overflow-hidden animate-fade-in">
+      <!-- Header modal -->
+      <div class="px-5 py-4 border-b border-slate-100 flex items-center justify-between shrink-0">
+        <div>
+          <h3 class="text-lg font-extrabold text-slate-900">Cài đặt hệ thống</h3>
+          <p class="text-xs text-slate-500">Kết nối Google Sheets, tài khoản nhận tiền VietQR & sao lưu</p>
+        </div>
+        <button type="button" onclick="closeSettingsModal()" class="p-2 rounded-xl text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.4" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+
+      <!-- Tabs nhỏ trong Modal Cài đặt -->
+      <div class="px-5 pt-3 shrink-0">
+        <div class="grid grid-cols-3 gap-1 bg-slate-100 p-1 rounded-xl">
+          <button id="setTabBtn-general" type="button" onclick="switchSettingsTab('general')" class="py-2 rounded-lg text-xs font-bold transition bg-white text-indigo-700 shadow-xs">
+            Sheet & VietQR
+          </button>
+          <button id="setTabBtn-script" type="button" onclick="switchSettingsTab('script')" class="py-2 rounded-lg text-xs font-bold transition text-slate-600 hover:text-slate-900">
+            Code Apps Script
+          </button>
+          <button id="setTabBtn-backup" type="button" onclick="switchSettingsTab('backup')" class="py-2 rounded-lg text-xs font-bold transition text-slate-600 hover:text-slate-900">
+            Sao lưu JSON
+          </button>
+        </div>
+      </div>
+
+      <!-- Body modal -->
+      <div class="p-5 overflow-y-auto space-y-5 flex-1">
+        <!-- Tab nhỏ 1: URL Google Apps Script + Tài khoản VietQR -->
+        <div id="setTab-general" class="space-y-5">
+          <!-- Khối Google Sheets -->
+          <div class="rounded-2xl border border-slate-200 p-4 space-y-3">
+            <div class="flex items-center justify-between">
+              <h4 class="text-sm font-bold text-slate-900 flex items-center gap-2">
+                <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
+                Link đồng bộ Google Apps Script
+              </h4>
+              <button type="button" onclick="switchSettingsTab('script')" class="text-xs font-semibold text-indigo-600 hover:underline">
+                Xem hướng dẫn lấy link →
+              </button>
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-slate-600 mb-1">Web App URL (kết thúc bằng /exec)</label>
+              <input id="inputGasUrl" type="url" placeholder="https://script.google.com/macros/s/.../exec"
+                class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 outline-none text-sm text-slate-800" />
+            </div>
+            <div class="flex flex-wrap gap-2">
+              <button type="button" onclick="testGasConnection()" class="px-3 py-2 rounded-xl bg-indigo-50 text-indigo-700 hover:bg-indigo-100 text-xs font-bold transition">
+                Kiểm tra kết nối & Tải thử
+              </button>
+              <button type="button" onclick="document.getElementById('inputGasUrl').value=''" class="px-3 py-2 rounded-xl bg-slate-100 text-slate-600 hover:bg-slate-200 text-xs font-semibold transition">
+                Xóa link (Chạy offline)
+              </button>
+            </div>
+          </div>
+
+          <!-- Khối Ngân hàng VietQR -->
+          <div class="rounded-2xl border border-slate-200 p-4 space-y-3">
+            <h4 class="text-sm font-bold text-slate-900 flex items-center gap-2">
+              <span class="w-2.5 h-2.5 rounded-full bg-indigo-500"></span>
+              Tài khoản nhận tiền (Tạo mã VietQR trên phiếu thu)
+            </h4>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div class="sm:col-span-2">
+                <label class="block text-xs font-semibold text-slate-600 mb-1">Ngân hàng</label>
+                <select id="inputBankId" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:border-indigo-500 outline-none text-sm font-semibold text-slate-800">
+                  <!-- JS fill BANKS -->
+                </select>
+              </div>
+              <div>
+                <label class="block text-xs font-semibold text-slate-600 mb-1">Số tài khoản</label>
+                <input id="inputAccountNo" type="text" inputmode="numeric" placeholder="VD: 0987654321"
+                  class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:border-indigo-500 outline-none text-sm font-semibold text-slate-800" />
+              </div>
+              <div>
+                <label class="block text-xs font-semibold text-slate-600 mb-1">Tên chủ tài khoản (không dấu)</label>
+                <input id="inputAccountName" type="text" placeholder="VD: NGUYEN VAN A"
+                  oninput="this.value = this.value.toUpperCase()"
+                  class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:border-indigo-500 outline-none text-sm font-semibold text-slate-800 uppercase" />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tab nhỏ 2: Hướng dẫn + Mã Google Apps Script chuẩn 4 sheet -->
+        <div id="setTab-script" class="hidden space-y-3">
+          <div class="rounded-2xl bg-indigo-50/70 border border-indigo-100 p-3.5 text-xs text-indigo-950 space-y-1.5">
+            <div class="font-bold text-sm text-indigo-800">Cách gắn Google Sheets trong 2 phút:</div>
+            <ol class="list-decimal pl-4 space-y-1">
+              <li>Tạo 1 file Google Sheets mới trên Google Drive của bạn.</li>
+              <li>Trên thanh menu chọn <b>Tiện ích mở rộng (Extensions) → Apps Script</b>.</li>
+              <li>Xóa code cũ, bấm <b>Copy mã Apps Script</b> bên dưới rồi dán vào, nhấn <b>Lưu</b>.</li>
+              <li>Bấm <b>Triển khai (Deploy) → Tùy chọn triển khai mới → Ứng dụng web (Web app)</b>.</li>
+              <li>Mục <i>Thực thi với tư cách</i> chọn <b>Tôi (Me)</b>; mục <i>Ai có quyền truy cập</i> chọn <b>Bất kỳ ai (Anyone)</b> → Bấm Triển khai và cấp quyền.</li>
+              <li>Copy URL Web App (đuôi <code>/exec</code>) dán sang tab <b>Sheet & VietQR</b>. Khi đồng bộ lần đầu, hệ thống tự tạo đủ 4 sheet trực quan: <code>Cau_Hinh</code>, <code>Chi_So_Dien</code>, <code>Lich_Su_Hoa_Don</code>, <code>Bao_Cao_Thang</code>.</li>
+            </ol>
+          </div>
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold text-slate-700">Mã Google Apps Script (Code.gs)</span>
+            <button type="button" onclick="copyGasScriptCode()" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold transition">
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+              </svg>
+              Copy mã Apps Script
+            </button>
+          </div>
+          <pre id="gasCodePreview" class="bg-slate-900 text-slate-100 rounded-2xl p-3.5 text-[11px] leading-relaxed overflow-x-auto max-h-64 thin-scroll font-mono"></pre>
+        </div>
+
+        <!-- Tab nhỏ 3: Sao lưu / Khôi phục JSON -->
+        <div id="setTab-backup" class="hidden space-y-4">
+          <div class="rounded-2xl border border-slate-200 p-4 space-y-3">
+            <h4 class="text-sm font-bold text-slate-900">Xuất / Nhập tệp dữ liệu dự phòng (.json)</h4>
+            <p class="text-xs text-slate-500">Hữu ích khi bạn muốn chuyển dữ liệu sang điện thoại khác hoặc lưu bản dự phòng thủ công mà chưa cần Google Sheets.</p>
+            <div class="flex flex-wrap gap-2.5">
+              <button type="button" onclick="exportBackupJson()" class="px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-900 text-white text-xs font-bold transition">
+                Tải file sao lưu (.json)
+              </button>
+              <label class="px-4 py-2.5 rounded-xl bg-indigo-50 hover:bg-indigo-100 text-indigo-700 text-xs font-bold transition cursor-pointer">
+                Nhập từ file (.json)
+                <input type="file" accept=".json,application/json" class="hidden" onchange="importBackupJson(event)" />
+              </label>
+            </div>
+          </div>
+          <div class="rounded-2xl border border-rose-200 bg-rose-50/50 p-4 space-y-2">
+            <h4 class="text-sm font-bold text-rose-800">Khôi phục mặc định</h4>
+            <p class="text-xs text-rose-600">Xóa toàn bộ dữ liệu đang lưu trên trình duyệt này và đưa 9 phòng về cấu hình ban đầu.</p>
+            <button type="button" onclick="confirmResetAppData()" class="px-4 py-2 rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-xs font-bold transition">
+              Đặt lại dữ liệu trình duyệt
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Footer modal -->
+      <div class="px-5 py-3.5 border-t border-slate-100 bg-slate-50 flex items-center justify-end gap-2 shrink-0">
+        <button type="button" onclick="closeSettingsModal()" class="px-4 py-2.5 rounded-xl text-sm font-semibold text-slate-600 hover:bg-slate-200 transition">
+          Đóng
+        </button>
+        <button type="button" onclick="saveSettings()" class="px-5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-bold shadow-sm transition">
+          Lưu cài đặt
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================================================================== -->
+  <!-- MODAL 2: PHIẾU THU & VIETQR (XUẤT ẢNH PNG / COPY ZALO)                -->
+  <!-- ===================================================================== -->
+  <div id="receiptModal" class="hidden fixed inset-0 z-50 bg-slate-900/70 backdrop-blur-xs flex items-end sm:items-center justify-center p-0 sm:p-4">
+    <div class="bg-slate-100 w-full sm:max-w-md rounded-t-3xl sm:rounded-3xl shadow-2xl max-h-[94vh] flex flex-col overflow-hidden animate-fade-in">
+      <!-- Header modal -->
+      <div class="px-4 py-3.5 bg-white border-b border-slate-200 flex items-center justify-between shrink-0">
+        <h3 class="text-base font-extrabold text-slate-900">Phiếu báo tiền phòng</h3>
+        <button type="button" onclick="closeReceiptModal()" class="p-2 rounded-xl text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.4" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+
+      <!-- Vùng chứa Phiếu thu sẽ được chụp thành ảnh PNG -->
+      <div class="p-4 overflow-y-auto flex-1">
+        <div id="receiptCaptureArea" class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+          <!-- JS render nội dung phiếu thu & mã VietQR -->
+        </div>
+      </div>
+
+      <!-- Thanh nút Tải ảnh PNG & Copy Zalo -->
+      <div class="p-4 bg-white border-t border-slate-200 grid grid-cols-2 gap-2.5 shrink-0">
+        <button id="btnDownloadPng" type="button" onclick="downloadReceiptPng()"
+          class="inline-flex items-center justify-center gap-1.5 py-3 px-3 rounded-xl bg-indigo-600 hover:bg-indigo-700 active:scale-[0.98] text-white font-bold text-sm shadow-sm transition min-h-[46px]">
+          <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+          </svg>
+          <span>Tải ảnh PNG</span>
+        </button>
+        <button type="button" onclick="copyCurrentModalZalo()"
+          class="inline-flex items-center justify-center gap-1.5 py-3 px-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 active:scale-[0.98] text-white font-bold text-sm shadow-sm transition min-h-[46px]">
+          <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+          </svg>
+          <span>Copy Zalo</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================================================================== -->
+  <!-- MODAL 3: HỘP THOẠI XÁC NHẬN TÙY CHỈNH (THAY THẾ HOÀN TOÀN CONFIRM)    -->
+  <!-- ===================================================================== -->
+  <div id="confirmModal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
+    <div class="bg-white w-full max-w-sm rounded-3xl shadow-2xl p-5 space-y-4 animate-fade-in">
+      <div class="flex items-start gap-3">
+        <div id="confirmIconBox" class="w-10 h-10 rounded-2xl bg-amber-100 text-amber-600 flex items-center justify-center shrink-0">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+          </svg>
+        </div>
+        <div>
+          <h4 id="confirmTitle" class="text-base font-extrabold text-slate-900">Xác nhận thao tác</h4>
+          <p id="confirmMessage" class="text-sm text-slate-600 mt-1 leading-relaxed"></p>
+        </div>
+      </div>
+      <div class="flex items-center justify-end gap-2 pt-1">
+        <button type="button" onclick="closeConfirmModal(false)" class="px-4 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-sm font-semibold transition">
+          Hủy
+        </button>
+        <button id="confirmOkBtn" type="button" onclick="closeConfirmModal(true)" class="px-4 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-bold transition">
+          Đồng ý
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================================================================== -->
+  <!-- TOAST THÔNG BÁO (THAY THẾ HOÀN TOÀN ALERT)                            -->
+  <!-- ===================================================================== -->
+  <div id="toastContainer" class="fixed top-20 right-3 left-3 sm:left-auto sm:right-5 z-50 flex flex-col items-end gap-2 pointer-events-none">
+    <!-- JS đẩy các thông báo toast vào đây -->
+  </div>
+
+  <!-- ===================================================================== -->
+  <!-- JAVASCRIPT - LOGIC ỨNG DỤNG, ĐỒNG BỘ 2 CHIỀU, VIETQR & LỊCH SỬ       -->
+  <!-- ===================================================================== -->
+  <script>
+    /*************************************************************************
+     * 1. HẰNG SỐ & CẤU HÌNH MẶC ĐỊNH
+     *************************************************************************/
+    const STORAGE_KEY = 'tro_app_data_v1';
+    const GAS_URL_KEY = 'tro_gas_url';
+
+    // Danh sách ngân hàng phổ biến hỗ trợ chuẩn VietQR (img.vietqr.io)
+    const BANKS = [
+      { id: 'MB', name: 'MB Bank (Quân Đội)' },
+      { id: 'VCB', name: 'Vietcombank' },
+      { id: 'TCB', name: 'Techcombank' },
+      { id: 'BIDV', name: 'BIDV' },
+      { id: 'ICB', name: 'VietinBank' },
+      { id: 'VPB', name: 'VPBank' },
+      { id: 'ACB', name: 'ACB (Á Châu)' },
+      { id: 'TPB', name: 'TPBank' },
+      { id: 'VBA', name: 'Agribank' },
+      { id: 'STB', name: 'Sacombank' },
+      { id: 'HDB', name: 'HDBank' },
+      { id: 'VIB', name: 'VIB' },
+      { id: 'SHB', name: 'SHB' },
+      { id: 'MSB', name: 'MSB (Hàng Hải)' },
+      { id: 'OCB', name: 'OCB (Phương Đông)' },
+      { id: 'SEAB', name: 'SeABank' },
+      { id: 'LPB', name: 'LPBank' },
+      { id: 'EIB', name: 'Eximbank' },
+      { id: 'CAKE', name: 'CAKE by VPBank' },
+      { id: 'TIMO', name: 'Timo by BVBank' },
+    ];
+
+    /**
+     * Tạo danh sách 9 phòng mặc định theo đúng yêu cầu:
+     * - P01 -> P09 (Phòng 101 -> Phòng 109)
+     * - Trạng thái: occupied, Số người: 1
+     * - Tiền nhà: 3.000.000đ, Tiền nước: 100.000đ/người, Tiền điện: 4.000đ/số
+     * - Không có mục wifi / phí khác
+     */
+    function createDefaultRooms() {
+      const list = [];
+      for (let i = 1; i <= 9; i++) {
+        list.push({
+          id: 'P' + String(i).padStart(2, '0'),
+          name: 'Phòng ' + (100 + i),
+          status: 'occupied',
+          tenant: '',
+          people: 1,
+          rent: 3000000,
+          waterPrice: 100000,
+          elecPrice: 4000
+        });
+      }
+      return list;
+    }
+
+    function createDefaultData() {
+      return {
+        bank: { bankId: 'MB', accountNo: '', accountName: '' },
+        rooms: createDefaultRooms(),
+        electricHistory: [],
+        invoiceHistory: []
+      };
+    }
+
+    /*************************************************************************
+     * 2. TRẠNG THÁI TOÀN CỤC CỦA ỨNG DỤNG
+     *************************************************************************/
+    const now = new Date();
+    const state = {
+      activeTab: 'config', // 'config' | 'electric' | 'invoice'
+      selectedMonth: now.getMonth() + 1,
+      selectedYear: now.getFullYear(),
+      gasUrl: '',
+      syncStatus: 'none', // 'none' | 'synced' | 'syncing' | 'error' | 'local'
+      lastSyncText: '',
+      // Bản nháp nhập số điện của kỳ đang chọn { [roomId]: { oldIndex, newIndex, note } }
+      elecDrafts: {},
+      // Bộ lọc lịch sử Tab 2
+      elecFilterPeriod: 'ALL',
+      elecFilterRoom: 'ALL',
+      // Bộ lọc lịch sử Tab 3
+      invFilterYear: String(now.getFullYear()),
+      invFilterRoom: 'ALL',
+      invHistoryView: 'monthly', // 'monthly' | 'room'
+      // Modal phiếu thu đang mở
+      currentReceiptInvoiceId: null,
+      // Dữ liệu chính đồng bộ với localStorage & Google Sheets
+      data: createDefaultData()
+    };
+
+    let confirmResolver = null;
+
+    /*************************************************************************
+     * 3. HÀM TIỆN ÍCH ĐỊNH DẠNG TIỀN, NGÀY, CHUỖI & CLIPBOARD
+     *************************************************************************/
+    function formatVND(num) {
+      const n = Number(num) || 0;
+      return n.toLocaleString('vi-VN');
+    }
+
+    function formatMoneySigned(num) {
+      const n = Number(num) || 0;
+      if (n > 0) return '+' + formatVND(n);
+      return formatVND(n);
+    }
+
+    function parseUnsignedInt(val) {
+      if (val === null || val === undefined || val === '') return 0;
+      const cleaned = String(val).replace(/[^\d]/g, '');
+      return cleaned ? parseInt(cleaned, 10) : 0;
+    }
+
+    function parseSignedInt(val) {
+      if (val === null || val === undefined || val === '') return 0;
+      const str = String(val).trim();
+      const isNeg = str.startsWith('-');
+      const cleaned = str.replace(/[^\d]/g, '');
+      if (!cleaned) return 0;
+      const num = parseInt(cleaned, 10);
+      return isNeg ? -num : num;
+    }
+
+    function formatMoneyInputEl(el) {
+      const num = parseUnsignedInt(el.value);
+      el.value = el.value.trim() === '' ? '' : formatVND(num);
+    }
+
+    function getPeriodStr(month, year) {
+      return String(month).padStart(2, '0') + '/' + year;
+    }
+
+    function getElecKey(year, month, roomId) {
+      return `${year}-${String(month).padStart(2, '0')}_${roomId}`;
+    }
+
+    function getInvoiceId(year, month, roomId) {
+      return `${year}${String(month).padStart(2, '0')}-${roomId}`;
+    }
+
+    function getPrevPeriod(month, year) {
+      if (month === 1) return { month: 12, year: year - 1 };
+      return { month: month - 1, year };
+    }
+
+    function getTodayDDMMYYYY() {
+      const d = new Date();
+      return `${String(d.getDate()).padStart(2, '0')}/${String(d.getMonth() + 1).padStart(2, '0')}/${d.getFullYear()}`;
+    }
+
+    function escapeHtml(str) {
+      return String(str ?? '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
+    // Bỏ dấu tiếng Việt cho nội dung chuyển khoản VietQR để mọi ngân hàng đọc chuẩn
+    function removeVietnameseTones(str) {
+      return String(str || '')
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .replace(/đ/g, 'd')
+        .replace(/Đ/g, 'D')
+        .replace(/[^a-zA-Z0-9\s\-\/]/g, ' ')
+        .replace(/\s+/g, ' ')
+        .trim();
+    }
+
+    // Sao chép vào clipboard an toàn trong mọi trình duyệt & iframe (dùng execCommand)
+    function copyTextToClipboard(text) {
+      try {
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        ta.style.position = 'fixed';
+        ta.style.top = '-9999px';
+        ta.style.left = '-9999px';
+        document.body.appendChild(ta);
+        ta.focus();
+        ta.select();
+        const ok = document.execCommand('copy');
+        document.body.removeChild(ta);
+        return ok;
+      } catch (err) {
+        console.error('Copy error:', err);
+        return false;
+      }
+    }
+
+    /*************************************************************************
+     * 4. HỆ THỐNG THÔNG BÁO TOAST & HỘP THOẠI XÁC NHẬN (KHÔNG DÙNG ALERT)
+     *************************************************************************/
+    function showToast(message, type = 'info') {
+      const container = document.getElementById('toastContainer');
+      const styles = {
+        success: 'bg-emerald-600 text-white shadow-emerald-200',
+        error: 'bg-rose-600 text-white shadow-rose-200',
+        warning: 'bg-amber-500 text-white shadow-amber-200',
+        info: 'bg-slate-800 text-white shadow-slate-300'
+      };
+      const icons = {
+        success: '<path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />',
+        error: '<path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />',
+        warning: '<path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z" />',
+        info: '<path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />'
+      };
+
+      const toast = document.createElement('div');
+      toast.className = `pointer-events-auto max-w-sm w-full sm:w-auto flex items-center gap-2.5 px-4 py-3 rounded-2xl shadow-lg text-sm font-semibold animate-fade-in ${styles[type] || styles.info}`;
+      toast.innerHTML = `
+        <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">${icons[type] || icons.info}</svg>
+        <span class="leading-snug">${escapeHtml(message)}</span>
+      `;
+      container.appendChild(toast);
+
+      setTimeout(() => {
+        toast.style.opacity = '0';
+        toast.style.transform = 'translateY(-6px)';
+        toast.style.transition = 'all 0.25s ease';
+        setTimeout(() => toast.remove(), 260);
+      }, 3200);
+    }
+
+    function openConfirmModal({ title, message, okText = 'Đồng ý', danger = false }) {
+      document.getElementById('confirmTitle').textContent = title;
+      document.getElementById('confirmMessage').textContent = message;
+      const okBtn = document.getElementById('confirmOkBtn');
+      okBtn.textContent = okText;
+      okBtn.className = danger
+        ? 'px-4 py-2.5 rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-sm font-bold transition'
+        : 'px-4 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-bold transition';
+      const iconBox = document.getElementById('confirmIconBox');
+      iconBox.className = danger
+        ? 'w-10 h-10 rounded-2xl bg-rose-100 text-rose-600 flex items-center justify-center shrink-0'
+        : 'w-10 h-10 rounded-2xl bg-amber-100 text-amber-600 flex items-center justify-center shrink-0';
+
+      document.getElementById('confirmModal').classList.remove('hidden');
+      return new Promise((resolve) => {
+        confirmResolver = resolve;
+      });
+    }
+
+    function closeConfirmModal(result) {
+      document.getElementById('confirmModal').classList.add('hidden');
+      if (confirmResolver) {
+        const fn = confirmResolver;
+        confirmResolver = null;
+        fn(result);
+      }
+    }
+
+    /*************************************************************************
+     * 5. LƯU TRỮ LOCALSTORAGE & CHUẨN HÓA DỮ LIỆU
+     *************************************************************************/
+    function normalizeAppData(raw) {
+      const def = createDefaultData();
+      if (!raw || typeof raw !== 'object') return def;
+
+      const bank = {
+        bankId: raw.bank?.bankId || 'MB',
+        accountNo: String(raw.bank?.accountNo || ''),
+        accountName: String(raw.bank?.accountName || '')
+      };
+
+      // Bảo đảm luôn đủ 9 phòng P01..P09
+      let rooms = Array.isArray(raw.rooms) && raw.rooms.length > 0 ? raw.rooms : def.rooms;
+      rooms = def.rooms.map((defRoom, idx) => {
+        const found = rooms.find(r => r.id === defRoom.id) || rooms[idx] || defRoom;
+        return {
+          id: defRoom.id,
+          name: String(found.name || defRoom.name),
+          status: found.status === 'vacant' ? 'vacant' : 'occupied',
+          tenant: String(found.tenant || ''),
+          people: Math.max(0, Number(found.people ?? 1)),
+          rent: Math.max(0, Number(found.rent ?? 3000000)),
+          waterPrice: Math.max(0, Number(found.waterPrice ?? 100000)),
+          elecPrice: Math.max(0, Number(found.elecPrice ?? 4000))
+        };
+      });
+
+      const electricHistory = Array.isArray(raw.electricHistory)
+        ? raw.electricHistory.map(r => ({
+            key: String(r.key || getElecKey(Number(r.year), Number(r.month), r.roomId)),
+            period: String(r.period || getPeriodStr(Number(r.month), Number(r.year))),
+            year: Number(r.year),
+            month: Number(r.month),
+            roomId: String(r.roomId),
+            roomName: String(r.roomName || r.roomId),
+            oldIndex: Number(r.oldIndex) || 0,
+            newIndex: Number(r.newIndex) || 0,
+            usage: Number(r.usage) || 0,
+            recordedAt: String(r.recordedAt || ''),
+            note: String(r.note || '')
+          }))
+        : [];
+
+      const invoiceHistory = Array.isArray(raw.invoiceHistory)
+        ? raw.invoiceHistory.map(inv => {
+            const rent = Number(inv.rent) || 0;
+            const waterPrice = Number(inv.waterPrice) || 0;
+            const people = Number(inv.people) || 0;
+            const waterTotal = inv.waterTotal !== undefined ? (Number(inv.waterTotal) || 0) : people * waterPrice;
+            const elecOld = Number(inv.elecOld) || 0;
+            const elecNew = Number(inv.elecNew) || 0;
+            const elecUsage = Number(inv.elecUsage) || 0;
+            const elecPrice = Number(inv.elecPrice) || 0;
+            const elecTotal = inv.elecTotal !== undefined ? (Number(inv.elecTotal) || 0) : elecUsage * elecPrice;
+            const extra = Number(inv.extra) || 0;
+            const oldDebt = Number(inv.oldDebt) || 0;
+            const total = inv.total !== undefined ? (Number(inv.total) || 0) : (rent + waterTotal + elecTotal + extra + oldDebt);
+            const paidAmount = Number(inv.paidAmount) || 0;
+            const paymentStatus = ['unpaid', 'partial', 'paid'].includes(inv.paymentStatus)
+              ? inv.paymentStatus
+              : (paidAmount >= total && total > 0 ? 'paid' : (paidAmount > 0 ? 'partial' : 'unpaid'));
+
+            return {
+              id: String(inv.id || getInvoiceId(Number(inv.year), Number(inv.month), inv.roomId)),
+              period: String(inv.period || getPeriodStr(Number(inv.month), Number(inv.year))),
+              year: Number(inv.year),
+              month: Number(inv.month),
+              roomId: String(inv.roomId),
+              roomName: String(inv.roomName || inv.roomId),
+              tenant: String(inv.tenant || ''),
+              statusRoom: inv.statusRoom === 'vacant' ? 'vacant' : 'occupied',
+              people,
+              rent,
+              waterPrice,
+              waterTotal,
+              elecOld,
+              elecNew,
+              elecUsage,
+              elecPrice,
+              elecTotal,
+              extra,
+              extraNote: String(inv.extraNote || ''),
+              oldDebt,
+              total,
+              paidAmount,
+              paymentStatus,
+              paidDate: String(inv.paidDate || '')
+            };
+          })
+        : [];
+
+      return { bank, rooms, electricHistory, invoiceHistory };
+    }
+
+    function loadFromLocalStorage() {
+      try {
+        state.gasUrl = (localStorage.getItem(GAS_URL_KEY) || '').trim();
+        const saved = localStorage.getItem(STORAGE_KEY);
+        if (saved) {
+          state.data = normalizeAppData(JSON.parse(saved));
+        } else {
+          state.data = createDefaultData();
+          saveToLocalStorage();
+        }
+        state.syncStatus = state.gasUrl ? 'local' : 'none';
+      } catch (e) {
+        console.error('Lỗi đọc localStorage:', e);
+        state.data = createDefaultData();
+      }
+    }
+
+    function saveToLocalStorage() {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(state.data));
+      } catch (e) {
+        console.error('Lỗi ghi localStorage:', e);
+        showToast('Không thể lưu vào bộ nhớ trình duyệt!', 'error');
+      }
+    }
+
+    /*************************************************************************
+     * 6. ĐỒNG BỘ 2 CHIỀU VỚI GOOGLE APPS SCRIPT (CHUẨN API CONTRACT)
+     *************************************************************************/
+    function updateSyncStatusUI() {
+      const badge = document.getElementById('syncStatusBadge');
+      const icon = document.getElementById('syncHeaderIcon');
+      const sub = document.getElementById('syncDropdownSub');
+
+      if (!state.gasUrl) {
+        badge.innerHTML = `<span class="w-2 h-2 rounded-full bg-slate-400"></span><span>Chưa gắn link Sheet (Offline)</span>`;
+        icon.classList.remove('animate-spin');
+        sub.textContent = 'Chưa cấu hình URL Apps Script';
+        return;
+      }
+
+      sub.textContent = state.gasUrl;
+
+      if (state.syncStatus === 'syncing') {
+        badge.innerHTML = `<span class="w-2 h-2 rounded-full bg-amber-500 animate-pulse"></span><span class="text-amber-600">Đang đồng bộ...</span>`;
+        icon.classList.add('animate-spin');
+      } else if (state.syncStatus === 'synced') {
+        badge.innerHTML = `<span class="w-2 h-2 rounded-full bg-emerald-500"></span><span class="text-emerald-600">Đã đồng bộ ${state.lastSyncText}</span>`;
+        icon.classList.remove('animate-spin');
+      } else if (state.syncStatus === 'error') {
+        badge.innerHTML = `<span class="w-2 h-2 rounded-full bg-rose-500"></span><span class="text-rose-600">Lỗi đồng bộ (Đã lưu máy)</span>`;
+        icon.classList.remove('animate-spin');
+      } else {
+        badge.innerHTML = `<span class="w-2 h-2 rounded-full bg-indigo-500"></span><span class="text-indigo-600">Đã gắn Sheet • Sẵn sàng</span>`;
+        icon.classList.remove('animate-spin');
+      }
+    }
+
+    function getCurrentTimeShort() {
+      const d = new Date();
+      return `${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`;
+    }
+
+    async function callGasPost(action, payload) {
+      if (!state.gasUrl) return { skipped: true };
+      state.syncStatus = 'syncing';
+      updateSyncStatusUI();
+
+      try {
+        const res = await fetch(state.gasUrl, {
+          method: 'POST',
+          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+          body: JSON.stringify({ action, payload })
+        });
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        const json = await res.json();
+        if (json.status !== 'ok') {
+          throw new Error(json.message || 'Phản hồi từ Apps Script không hợp lệ');
+        }
+        state.syncStatus = 'synced';
+        state.lastSyncText = getCurrentTimeShort();
+        updateSyncStatusUI();
+        return { ok: true, json };
+      } catch (err) {
+        console.error('Sync POST error:', err);
+        state.syncStatus = 'error';
+        updateSyncStatusUI();
+        return { ok: false, error: err.message };
+      }
+    }
+
+    async function pullFromSheet(silent = false) {
+      closeSyncDropdown();
+      if (!state.gasUrl) {
+        showToast('Vui lòng gắn Link Google Apps Script trong phần Cài đặt trước!', 'warning');
+        openSettingsModal();
+        return false;
+      }
+
+      state.syncStatus = 'syncing';
+      updateSyncStatusUI();
+
+      try {
+        const sep = state.gasUrl.includes('?') ? '&' : '?';
+        const res = await fetch(`${state.gasUrl}${sep}action=loadAll`, { method: 'GET' });
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        const json = await res.json();
+
+        if (json.status !== 'ok' || !json.data) {
+          throw new Error(json.message || 'Cấu trúc dữ liệu trả về chưa đúng');
+        }
+
+        // Chỉ ghi đè nếu Sheet có dữ liệu hợp lệ (nếu Sheet mới tinh chưa có phòng thì giữ phòng mặc định)
+        const incoming = normalizeAppData(json.data);
+        state.data = incoming;
+        saveToLocalStorage();
+        loadElectricDraftsForPeriod(state.selectedMonth, state.selectedYear);
+
+        state.syncStatus = 'synced';
+        state.lastSyncText = getCurrentTimeShort();
+        updateSyncStatusUI();
+        renderAllViews();
+
+        if (!silent) showToast('Đã tải dữ liệu mới nhất từ Google Sheets!', 'success');
+        return true;
+      } catch (err) {
+        console.error('Pull error:', err);
+        state.syncStatus = 'error';
+        updateSyncStatusUI();
+        if (!silent) showToast('Không thể tải từ Sheet: ' + err.message, 'error');
+        return false;
+      }
+    }
+
+    async function pushAllToSheet() {
+      closeSyncDropdown();
+      if (!state.gasUrl) {
+        showToast('Chưa có Link Google Apps Script. Dữ liệu vẫn đang được lưu an toàn trên máy.', 'warning');
+        openSettingsModal();
+        return;
+      }
+      saveToLocalStorage();
+      const res = await callGasPost('syncAll', {
+        bank: state.data.bank,
+        rooms: state.data.rooms,
+        electricHistory: state.data.electricHistory,
+        invoiceHistory: state.data.invoiceHistory
+      });
+      if (res.ok) {
+        showToast('Đã đồng bộ toàn bộ dữ liệu lên Google Sheets!', 'success');
+      } else {
+        showToast('Lỗi đồng bộ lên Sheet: ' + (res.error || 'Kiểm tra lại kết nối mạng'), 'error');
+      }
+    }
+
+    function toggleSyncDropdown(e) {
+      e.stopPropagation();
+      document.getElementById('syncDropdown').classList.toggle('hidden');
+    }
+
+    function closeSyncDropdown() {
+      document.getElementById('syncDropdown').classList.add('hidden');
+    }
+
+    document.addEventListener('click', (e) => {
+      const dd = document.getElementById('syncDropdown');
+      const btn = document.getElementById('btnSyncMenu');
+      if (!dd.classList.contains('hidden') && !dd.contains(e.target) && !btn.contains(e.target)) {
+        closeSyncDropdown();
+      }
+    });
+
+    /*************************************************************************
+     * 7. ĐIỀU HƯỚNG TAB & ĐỒNG BỘ KỲ CHỌN GIỮA TAB 2 VÀ TAB 3
+     *************************************************************************/
+    function switchTab(tab) {
+      state.activeTab = tab;
+      ['config', 'electric', 'invoice'].forEach(t => {
+        const sec = document.getElementById('tab-' + t);
+        const btn = document.getElementById('navTab-' + t);
+        if (t === tab) {
+          sec.classList.remove('hidden');
+          btn.className = 'flex items-center justify-center gap-1.5 py-2.5 px-2 rounded-xl text-xs sm:text-sm font-bold transition min-h-[42px] bg-white text-indigo-700 shadow-sm';
+        } else {
+          sec.classList.add('hidden');
+          btn.className = 'flex items-center justify-center gap-1.5 py-2.5 px-2 rounded-xl text-xs sm:text-sm font-bold transition min-h-[42px] text-slate-600 hover:text-slate-900';
+        }
+      });
+
+      if (tab === 'config') renderConfigTab();
+      if (tab === 'electric') {
+        renderElectricTab();
+        renderElectricHistory();
+      }
+      if (tab === 'invoice') {
+        renderInvoiceTab();
+        renderInvoiceHistory();
+      }
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function populatePeriodSelectors() {
+      const monthOptions = Array.from({ length: 12 }, (_, i) =>
+        `<option value="${i + 1}">Tháng ${i + 1}</option>`
+      ).join('');
+
+      const curY = now.getFullYear();
+      const years = new Set([curY - 1, curY, curY + 1, curY + 2, state.selectedYear]);
+      state.data.electricHistory.forEach(r => years.add(r.year));
+      state.data.invoiceHistory.forEach(r => years.add(r.year));
+      const sortedYears = Array.from(years).sort((a, b) => b - a);
+      const yearOptions = sortedYears.map(y => `<option value="${y}">${y}</option>`).join('');
+
+      ['elecSelectMonth', 'invSelectMonth'].forEach(id => {
+        const el = document.getElementById(id);
+        el.innerHTML = monthOptions;
+        el.value = String(state.selectedMonth);
+      });
+      ['elecSelectYear', 'invSelectYear'].forEach(id => {
+        const el = document.getElementById(id);
+        el.innerHTML = yearOptions;
+        el.value = String(state.selectedYear);
+      });
+
+      updateDynamicPeriodLabels();
+    }
+
+    function updateDynamicPeriodLabels() {
+      const shortPeriod = `T${state.selectedMonth}/${state.selectedYear}`;
+      document.getElementById('navTabInvoiceLabel').textContent = `Tiền ${shortPeriod}`;
+      document.getElementById('btnFinalizeElectricText').textContent = `Chốt số điện & Kết tiền sang Tab Tiền ${shortPeriod}`;
+      document.getElementById('invoicePeriodHeading').textContent = `Tiền phòng Tháng ${state.selectedMonth}/${state.selectedYear}`;
+      document.getElementById('btnSaveInvoicesText').textContent = `Lưu & Đồng bộ Hóa đơn ${shortPeriod}`;
+    }
+
+    function onPeriodChange(newMonth, newYear) {
+      if (newMonth !== null) state.selectedMonth = parseInt(newMonth, 10);
+      if (newYear !== null) state.selectedYear = parseInt(newYear, 10);
+
+      document.getElementById('elecSelectMonth').value = String(state.selectedMonth);
+      document.getElementById('invSelectMonth').value = String(state.selectedMonth);
+      document.getElementById('elecSelectYear').value = String(state.selectedYear);
+      document.getElementById('invSelectYear').value = String(state.selectedYear);
+
+      updateDynamicPeriodLabels();
+      loadElectricDraftsForPeriod(state.selectedMonth, state.selectedYear);
+
+      if (state.activeTab === 'electric') renderElectricTab();
+      if (state.activeTab === 'invoice') renderInvoiceTab();
+    }
+
+    /*************************************************************************
+     * 8. TAB 1: DỮ LIỆU (CẤU HÌNH 9 PHÒNG)
+     *************************************************************************/
+    function renderConfigTab() {
+      const grid = document.getElementById('roomsConfigGrid');
+      const occupiedCount = state.data.rooms.filter(r => r.status === 'occupied').length;
+      const totalPeople = state.data.rooms.reduce((s, r) => s + (r.status === 'occupied' ? r.people : 0), 0);
+
+      document.getElementById('configSummaryPill').innerHTML = `
+        <span>${occupiedCount}/9 phòng đang thuê</span>
+        <span class="opacity-40">•</span>
+        <span>${totalPeople} người</span>
+      `;
+
+      grid.innerHTML = state.data.rooms.map((room, idx) => {
+        const isVacant = room.status === 'vacant';
+        const waterMonthly = isVacant ? 0 : room.people * room.waterPrice;
+
+        return `
+          <div class="bg-white rounded-2xl border ${isVacant ? 'border-slate-200 bg-slate-50/70' : 'border-slate-200'} p-4 shadow-sm transition space-y-3.5">
+            <!-- Header thẻ: Mã phòng, Tên phòng, Nút Trạng thái -->
+            <div class="flex items-center justify-between gap-2">
+              <div class="flex items-center gap-2 min-w-0 flex-1">
+                <span class="px-2.5 py-1 rounded-lg text-xs font-extrabold ${isVacant ? 'bg-slate-200 text-slate-600' : 'bg-indigo-100 text-indigo-700'} shrink-0">
+                  ${room.id}
+                </span>
+                <input type="text" value="${escapeHtml(room.name)}"
+                  oninput="updateRoomField(${idx}, 'name', this.value)"
+                  class="w-full font-bold text-slate-900 bg-transparent border-b border-transparent hover:border-slate-200 focus:border-indigo-500 outline-none py-0.5 text-sm sm:text-base truncate" />
+              </div>
+
+              <button type="button" onclick="toggleRoomStatus(${idx})"
+                class="shrink-0 px-2.5 py-1.5 rounded-xl text-xs font-bold transition min-h-[34px] ${
+                  isVacant
+                    ? 'bg-slate-200 text-slate-600 hover:bg-slate-300'
+                    : 'bg-emerald-100 text-emerald-700 hover:bg-emerald-200'
+                }">
+                ${isVacant ? 'Trống' : 'Đang thuê'}
+              </button>
+            </div>
+
+            <!-- Khách thuê & SĐT -->
+            <div>
+              <label class="block text-[11px] font-semibold text-slate-500 mb-1">Tên khách thuê & SĐT</label>
+              <input type="text" value="${escapeHtml(room.tenant)}" placeholder="VD: Anh Nam - 0912..."
+                oninput="updateRoomField(${idx}, 'tenant', this.value)"
+                class="w-full px-3 py-2 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:border-indigo-500 outline-none text-sm text-slate-800" />
+            </div>
+
+            <!-- Số người ở & Tiền phòng -->
+            <div class="grid grid-cols-5 gap-2.5">
+              <div class="col-span-2">
+                <label class="block text-[11px] font-semibold text-slate-500 mb-1">Số người</label>
+                <div class="flex items-center border border-slate-200 rounded-xl bg-slate-50 overflow-hidden h-[40px]">
+                  <button type="button" onclick="stepRoomPeople(${idx}, -1)"
+                    class="w-9 h-full flex items-center justify-center text-slate-600 hover:bg-slate-200 font-bold text-base active:bg-slate-300">−</button>
+                  <input id="cfg-people-${idx}" type="number" inputmode="numeric" min="0" max="20" value="${room.people}"
+                    oninput="updateRoomNumeric(${idx}, 'people', this)"
+                    class="w-full text-center bg-transparent font-bold text-sm text-slate-900 outline-none" />
+                  <button type="button" onclick="stepRoomPeople(${idx}, 1)"
+                    class="w-9 h-full flex items-center justify-center text-slate-600 hover:bg-slate-200 font-bold text-base active:bg-slate-300">+</button>
+                </div>
+              </div>
+
+              <div class="col-span-3">
+                <label class="block text-[11px] font-semibold text-slate-500 mb-1">Tiền phòng / tháng (đ)</label>
+                <input type="text" inputmode="numeric" value="${formatVND(room.rent)}"
+                  oninput="updateRoomMoney(${idx}, 'rent', this)"
+                  class="w-full px-3 py-2 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:border-indigo-500 outline-none text-sm font-bold text-slate-900 text-right h-[40px]" />
+              </div>
+            </div>
+
+            <!-- Giá nước/người & Giá điện/số -->
+            <div class="grid grid-cols-2 gap-2.5">
+              <div>
+                <label class="block text-[11px] font-semibold text-slate-500 mb-1">Giá nước / người (đ)</label>
+                <input type="text" inputmode="numeric" value="${formatVND(room.waterPrice)}"
+                  oninput="updateRoomMoney(${idx}, 'waterPrice', this)"
+                  class="w-full px-3 py-2 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:border-indigo-500 outline-none text-sm font-bold text-slate-900 text-right h-[40px]" />
+              </div>
+              <div>
+                <label class="block text-[11px] font-semibold text-slate-500 mb-1">Giá điện / số (đ)</label>
+                <input type="text" inputmode="numeric" value="${formatVND(room.elecPrice)}"
+                  oninput="updateRoomMoney(${idx}, 'elecPrice', this)"
+                  class="w-full px-3 py-2 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:border-indigo-500 outline-none text-sm font-bold text-slate-900 text-right h-[40px]" />
+              </div>
+            </div>
+
+            <!-- Dòng tính nhanh tiền nước tháng -->
+            <div class="pt-2.5 border-t border-slate-100 flex items-center justify-between text-xs">
+              <span class="text-slate-500">Tiền nước tháng:</span>
+              <span id="cfg-water-preview-${idx}" class="font-bold ${isVacant ? 'text-slate-400' : 'text-blue-600'}">
+                ${isVacant ? '0 đ (Phòng trống)' : `${formatVND(waterMonthly)} đ (${room.people} người)`}
+              </span>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function updateRoomField(idx, field, val) {
+      state.data.rooms[idx][field] = val;
+      saveToLocalStorage();
+    }
+
+    function toggleRoomStatus(idx) {
+      const r = state.data.rooms[idx];
+      r.status = r.status === 'occupied' ? 'vacant' : 'occupied';
+      if (r.status === 'occupied' && r.people === 0) r.people = 1;
+      saveToLocalStorage();
+      renderConfigTab();
+    }
+
+    function stepRoomPeople(idx, delta) {
+      const r = state.data.rooms[idx];
+      r.people = Math.max(0, (Number(r.people) || 0) + delta);
+      saveToLocalStorage();
+      const input = document.getElementById(`cfg-people-${idx}`);
+      if (input) input.value = r.people;
+      refreshRoomWaterPreview(idx);
+    }
+
+    function updateRoomNumeric(idx, field, el) {
+      const val = Math.max(0, parseUnsignedInt(el.value));
+      state.data.rooms[idx][field] = val;
+      saveToLocalStorage();
+      refreshRoomWaterPreview(idx);
+    }
+
+    function updateRoomMoney(idx, field, el) {
+      const val = parseUnsignedInt(el.value);
+      state.data.rooms[idx][field] = val;
+      el.value = el.value.trim() === '' ? '' : formatVND(val);
+      saveToLocalStorage();
+      if (field === 'waterPrice') refreshRoomWaterPreview(idx);
+    }
+
+    function refreshRoomWaterPreview(idx) {
+      const r = state.data.rooms[idx];
+      const el = document.getElementById(`cfg-water-preview-${idx}`);
+      if (el) {
+        const isVacant = r.status === 'vacant';
+        el.textContent = isVacant
+          ? '0 đ (Phòng trống)'
+          : `${formatVND(r.people * r.waterPrice)} đ (${r.people} người)`;
+      }
+      const occupiedCount = state.data.rooms.filter(x => x.status === 'occupied').length;
+      const totalPeople = state.data.rooms.reduce((s, x) => s + (x.status === 'occupied' ? x.people : 0), 0);
+      document.getElementById('configSummaryPill').innerHTML = `
+        <span>${occupiedCount}/9 phòng đang thuê</span>
+        <span class="opacity-40">•</span>
+        <span>${totalPeople} người</span>
+      `;
+    }
+
+    function applyBulkConfig() {
+      const rentStr = document.getElementById('bulkRent').value.trim();
+      const waterStr = document.getElementById('bulkWater').value.trim();
+      const elecStr = document.getElementById('bulkElec').value.trim();
+
+      if (!rentStr && !waterStr && !elecStr) {
+        showToast('Vui lòng nhập ít nhất 1 mức giá muốn áp dụng hàng loạt!', 'warning');
+        return;
+      }
+
+      state.data.rooms.forEach(r => {
+        if (rentStr) r.rent = parseUnsignedInt(rentStr);
+        if (waterStr) r.waterPrice = parseUnsignedInt(waterStr);
+        if (elecStr) r.elecPrice = parseUnsignedInt(elecStr);
+      });
+
+      saveToLocalStorage();
+      renderConfigTab();
+      showToast('Đã cập nhật mức giá chung cho cả 9 phòng!', 'success');
+    }
+
+    async function saveConfigAndSync() {
+      saveToLocalStorage();
+      if (!state.gasUrl) {
+        showToast('Đã lưu cấu hình 9 phòng trên máy (chưa gắn Google Sheets).', 'success');
+        return;
+      }
+      const res = await callGasPost('saveConfig', {
+        bank: state.data.bank,
+        rooms: state.data.rooms
+      });
+      if (res.ok) {
+        showToast('Đã lưu cấu hình & đồng bộ lên Google Sheets!', 'success');
+      } else {
+        showToast('Đã lưu trên máy, nhưng đồng bộ Sheet gặp lỗi: ' + res.error, 'warning');
+      }
+    }
+
+    /*************************************************************************
+     * 9. TAB 2: NHẬP SỐ ĐIỆN & LỊCH SỬ SỐ ĐIỆN
+     *************************************************************************/
+    function loadElectricDraftsForPeriod(month, year, forceFromPrev = false) {
+      const period = getPeriodStr(month, year);
+      const prev = getPrevPeriod(month, year);
+      const prevPeriod = getPeriodStr(prev.month, prev.year);
+
+      const drafts = {};
+      let pulledPrevCount = 0;
+      let existingCount = 0;
+
+      state.data.rooms.forEach(room => {
+        const existing = state.data.electricHistory.find(
+          e => e.period === period && e.roomId === room.id
+        );
+        const prevRec = state.data.electricHistory.find(
+          e => e.period === prevPeriod && e.roomId === room.id
+        );
+
+        if (existing && !forceFromPrev) {
+          existingCount++;
+          drafts[room.id] = {
+            oldIndex: String(existing.oldIndex),
+            newIndex: String(existing.newIndex),
+            note: existing.note || ''
+          };
+        } else {
+          const oldVal = prevRec ? String(prevRec.newIndex) : (existing ? String(existing.oldIndex) : '0');
+          if (prevRec) pulledPrevCount++;
+          drafts[room.id] = {
+            oldIndex: oldVal,
+            // Phòng trống mặc định số mới = số cũ cho nhanh, phòng đang thuê để trống chờ chủ nhà gõ
+            newIndex: existing && !forceFromPrev
+              ? String(existing.newIndex)
+              : (room.status === 'vacant' ? oldVal : ''),
+            note: existing ? (existing.note || '') : (room.status === 'vacant' ? 'Phòng trống' : '')
+          };
+        }
+      });
+
+      state.elecDrafts = drafts;
+      state.elecDraftMeta = { existingCount, pulledPrevCount, prevPeriod };
+    }
+
+    function refillOldIndexFromPrevious() {
+      const prev = getPrevPeriod(state.selectedMonth, state.selectedYear);
+      const prevPeriod = getPeriodStr(prev.month, prev.year);
+      let count = 0;
+      state.data.rooms.forEach(room => {
+        const prevRec = state.data.electricHistory.find(
+          e => e.period === prevPeriod && e.roomId === room.id
+        );
+        if (prevRec) {
+          count++;
+          if (!state.elecDrafts[room.id]) state.elecDrafts[room.id] = { oldIndex: '0', newIndex: '', note: '' };
+          state.elecDrafts[room.id].oldIndex = String(prevRec.newIndex);
+        }
+      });
+      renderElectricTab();
+      if (count > 0) {
+        showToast(`Đã kéo số điện cũ cho ${count} phòng từ kỳ ${prevPeriod}.`, 'success');
+      } else {
+        showToast(`Không tìm thấy dữ liệu điện kỳ ${prevPeriod} để kéo số cũ.`, 'warning');
+      }
+    }
+
+    function renderElectricTab() {
+      const period = getPeriodStr(state.selectedMonth, state.selectedYear);
+      const existingInPeriod = state.data.electricHistory.filter(e => e.period === period);
+      const prev = getPrevPeriod(state.selectedMonth, state.selectedYear);
+      const prevPeriod = getPeriodStr(prev.month, prev.year);
+
+      const hintEl = document.getElementById('elecPrevHint');
+      if (existingInPeriod.length > 0) {
+        hintEl.textContent = `Đang xem/chỉnh sửa dữ liệu đã chốt của kỳ ${period} (ghi ngày ${existingInPeriod[0].recordedAt || '—'}).`;
+      } else {
+        hintEl.textContent = `Kỳ mới ${period}: Số cũ tự động lấy từ số mới kỳ ${prevPeriod} (nếu có).`;
+      }
+
+      const savedBadge = document.getElementById('elecPeriodSavedBadge');
+      if (existingInPeriod.length > 0) {
+        savedBadge.textContent = 'Đã chốt sổ';
+        savedBadge.className = 'text-xs sm:text-sm font-bold text-emerald-600 sm:mt-1';
+      } else {
+        savedBadge.textContent = 'Chưa chốt sổ';
+        savedBadge.className = 'text-xs sm:text-sm font-bold text-amber-600 sm:mt-1';
+      }
+
+      const listEl = document.getElementById('electricInputsList');
+      listEl.innerHTML = state.data.rooms.map(room => {
+        const draft = state.elecDrafts[room.id] || { oldIndex: '0', newIndex: '', note: '' };
+        const isVacant = room.status === 'vacant';
+        const calc = calcElectricDraftRow(room, draft);
+
+        return `
+          <div id="elec-card-${room.id}" class="bg-white rounded-2xl border ${calc.borderClass} ${isVacant ? 'opacity-75 bg-slate-50/70' : ''} p-3.5 sm:p-4 shadow-sm transition">
+            <div class="flex flex-col md:flex-row md:items-center gap-3">
+              <!-- Thông tin phòng -->
+              <div class="flex items-center justify-between md:w-44 shrink-0">
+                <div class="flex items-center gap-2 min-w-0">
+                  <span class="px-2 py-1 rounded-lg text-xs font-extrabold ${isVacant ? 'bg-slate-200 text-slate-600' : 'bg-indigo-100 text-indigo-700'} shrink-0">${room.id}</span>
+                  <div class="min-w-0">
+                    <div class="font-bold text-slate-900 text-sm truncate">${escapeHtml(room.name)}</div>
+                    <div class="text-[11px] text-slate-400 truncate">${isVacant ? 'Phòng trống' : (escapeHtml(room.tenant) || `${formatVND(room.elecPrice)}đ/số`)}</div>
+                  </div>
+                </div>
+                ${isVacant ? '<span class="px-2 py-0.5 rounded-full bg-slate-200 text-slate-600 text-[11px] font-bold md:hidden">Trống</span>' : ''}
+              </div>
+
+              <!-- Ô nhập Số cũ, Số mới, Tiêu thụ & Thành tiền -->
+              <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5 flex-1">
+                <div>
+                  <label class="block text-[11px] font-semibold text-slate-500 mb-1">Số cũ</label>
+                  <input type="number" inputmode="numeric" value="${escapeHtml(draft.oldIndex)}"
+                    oninput="onElectricDraftInput('${room.id}', 'oldIndex', this.value)"
+                    class="w-full px-3 py-2 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:border-indigo-500 outline-none text-sm font-bold text-slate-700 text-right h-[42px]" />
+                </div>
+
+                <div>
+                  <label class="block text-[11px] font-semibold text-indigo-600 mb-1">Số mới</label>
+                  <input type="number" inputmode="numeric" value="${escapeHtml(draft.newIndex)}" placeholder="Nhập số..."
+                    oninput="onElectricDraftInput('${room.id}', 'newIndex', this.value)"
+                    class="w-full px-3 py-2 rounded-xl border border-indigo-200 bg-white focus:border-indigo-600 focus:ring-2 focus:ring-indigo-100 outline-none text-sm font-extrabold text-slate-900 text-right h-[42px]" />
+                </div>
+
+                <div class="rounded-xl bg-slate-50 border border-slate-200/80 px-3 py-1.5 flex flex-col justify-center">
+                  <span class="text-[10px] font-semibold text-slate-500 uppercase">Tiêu thụ</span>
+                  <span id="elec-usage-${room.id}" class="text-sm font-extrabold ${calc.usageClass}">${calc.usageText}</span>
+                </div>
+
+                <div class="rounded-xl bg-slate-50 border border-slate-200/80 px-3 py-1.5 flex flex-col justify-center">
+                  <span class="text-[10px] font-semibold text-slate-500 uppercase">Tạm tính (${formatVND(room.elecPrice)}đ)</span>
+                  <span id="elec-money-${room.id}" class="text-sm font-extrabold text-slate-900">${formatVND(calc.money)} đ</span>
+                </div>
+              </div>
+
+              <!-- Ghi chú nhanh -->
+              <div class="md:w-40 shrink-0">
+                <input type="text" value="${escapeHtml(draft.note)}" placeholder="Ghi chú..."
+                  oninput="onElectricDraftInput('${room.id}', 'note', this.value)"
+                  class="w-full px-3 py-2 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:border-indigo-500 outline-none text-xs text-slate-700 h-[40px]" />
+              </div>
+            </div>
+
+            <!-- Dòng cảnh báo (Số mới < Số cũ hoặc > 250 số) -->
+            <div id="elec-alert-${room.id}" class="${calc.alertHtml ? 'mt-2.5' : 'hidden'}">
+              ${calc.alertHtml}
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      refreshElectricSummaryBar();
+    }
+
+    function calcElectricDraftRow(room, draft) {
+      const oldVal = parseInt(draft.oldIndex, 10);
+      const newVal = parseInt(draft.newIndex, 10);
+      const hasNew = draft.newIndex !== '' && !isNaN(newVal);
+      const safeOld = isNaN(oldVal) ? 0 : oldVal;
+
+      if (!hasNew) {
+        return {
+          usage: 0,
+          money: 0,
+          isNegative: false,
+          isHigh: false,
+          usageText: '— kWh',
+          usageClass: 'text-slate-400',
+          borderClass: 'border-slate-200',
+          alertHtml: ''
+        };
+      }
+
+      const diff = newVal - safeOld;
+      if (diff < 0) {
+        return {
+          usage: diff,
+          money: 0,
+          isNegative: true,
+          isHigh: false,
+          usageText: `${diff} kWh`,
+          usageClass: 'text-rose-600',
+          borderClass: 'border-rose-400 ring-1 ring-rose-200',
+          alertHtml: `<div class="flex items-center gap-1.5 text-xs font-bold text-rose-600 bg-rose-50 px-3 py-1.5 rounded-xl">
+            <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" stroke-width="2.4" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/></svg>
+            Số mới (${newVal}) nhỏ hơn số cũ (${safeOld})! Vui lòng kiểm tra lại.
+          </div>`
+        };
+      }
+
+      const money = diff * room.elecPrice;
+      const isHigh = diff > 250;
+      return {
+        usage: diff,
+        money,
+        isNegative: false,
+        isHigh,
+        usageText: `${diff} kWh`,
+        usageClass: isHigh ? 'text-amber-600' : 'text-indigo-700',
+        borderClass: isHigh ? 'border-amber-400 ring-1 ring-amber-100' : 'border-slate-200',
+        alertHtml: isHigh
+          ? `<div class="flex items-center gap-1.5 text-xs font-semibold text-amber-700 bg-amber-50 px-3 py-1.5 rounded-xl">
+              <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/></svg>
+              Cảnh báo: Tiêu thụ cao bất thường (${diff} số > 250 số). Nên kiểm tra lại công tơ!
+            </div>`
+          : ''
+      };
+    }
+
+    function onElectricDraftInput(roomId, field, value) {
+      if (!state.elecDrafts[roomId]) state.elecDrafts[roomId] = { oldIndex: '0', newIndex: '', note: '' };
+      state.elecDrafts[roomId][field] = value;
+
+      const room = state.data.rooms.find(r => r.id === roomId);
+      if (!room) return;
+      const calc = calcElectricDraftRow(room, state.elecDrafts[roomId]);
+
+      const usageEl = document.getElementById(`elec-usage-${roomId}`);
+      const moneyEl = document.getElementById(`elec-money-${roomId}`);
+      const alertEl = document.getElementById(`elec-alert-${roomId}`);
+      const cardEl = document.getElementById(`elec-card-${roomId}`);
+
+      if (usageEl) {
+        usageEl.textContent = calc.usageText;
+        usageEl.className = `text-sm font-extrabold ${calc.usageClass}`;
+      }
+      if (moneyEl) moneyEl.textContent = `${formatVND(calc.money)} đ`;
+      if (alertEl) {
+        alertEl.innerHTML = calc.alertHtml;
+        alertEl.className = calc.alertHtml ? 'mt-2.5' : 'hidden';
+      }
+      if (cardEl) {
+        const isVacant = room.status === 'vacant';
+        cardEl.className = `bg-white rounded-2xl border ${calc.borderClass} ${isVacant ? 'opacity-75 bg-slate-50/70' : ''} p-3.5 sm:p-4 shadow-sm transition`;
+      }
+
+      refreshElectricSummaryBar();
+    }
+
+    function refreshElectricSummaryBar() {
+      let totalUsage = 0;
+      let totalMoney = 0;
+      let negCount = 0;
+      let highCount = 0;
+
+      state.data.rooms.forEach(room => {
+        const calc = calcElectricDraftRow(room, state.elecDrafts[room.id] || { oldIndex: '0', newIndex: '' });
+        if (calc.isNegative) {
+          negCount++;
+        } else {
+          totalUsage += Math.max(0, calc.usage);
+          totalMoney += calc.money;
+          if (calc.isHigh) highCount++;
+        }
+      });
+
+      document.getElementById('elecTotalUsageSum').textContent = `${formatVND(totalUsage)} kWh`;
+      document.getElementById('elecTotalMoneySum').textContent = `${formatVND(totalMoney)} đ`;
+
+      const warnEl = document.getElementById('elecWarningSummary');
+      if (negCount > 0) {
+        warnEl.innerHTML = `<span class="text-rose-600 font-bold">Có ${negCount} phòng có số mới nhỏ hơn số cũ! Vui lòng sửa trước khi chốt.</span>`;
+      } else if (highCount > 0) {
+        warnEl.innerHTML = `<span class="text-amber-600 font-semibold">Lưu ý: Có ${highCount} phòng dùng trên 250 số điện.</span>`;
+      } else {
+        warnEl.textContent = 'Kiểm tra kỹ số mới trước khi chốt sang hóa đơn tháng.';
+      }
+    }
+
+    /**
+     * CHỐT SỐ ĐIỆN & KẾT TIỀN SANG TAB TIỀN THÁNG X
+     * - Ghi đè electricHistory theo key
+     * - Kết hợp Tab Dữ liệu tạo/cập nhật 9 hóa đơn trong invoiceHistory (giữ lại extra/paidAmount/paymentStatus nếu đã có)
+     * - Tự động kéo Nợ cũ từ kỳ liền trước
+     * - Đồng bộ Sheet nếu đã cấu hình URL và chuyển sang Tab 3
+     */
+    async function finalizeElectricAndBuildInvoices() {
+      const month = state.selectedMonth;
+      const year = state.selectedYear;
+      const period = getPeriodStr(month, year);
+      const prev = getPrevPeriod(month, year);
+      const prevPeriod = getPeriodStr(prev.month, prev.year);
+      const today = getTodayDDMMYYYY();
+
+      // Kiểm tra lỗi số âm
+      const negativeRooms = [];
+      const emptyOccupiedRooms = [];
+
+      state.data.rooms.forEach(room => {
+        const draft = state.elecDrafts[room.id] || { oldIndex: '0', newIndex: '', note: '' };
+        const calc = calcElectricDraftRow(room, draft);
+        if (calc.isNegative) negativeRooms.push(room.name);
+        if (room.status === 'occupied' && draft.newIndex === '') emptyOccupiedRooms.push(room.name);
+      });
+
+      if (negativeRooms.length > 0) {
+        showToast(`Không thể chốt: ${negativeRooms.join(', ')} có số mới nhỏ hơn số cũ!`, 'error');
+        return;
+      }
+
+      if (emptyOccupiedRooms.length > 0) {
+        const ok = await openConfirmModal({
+          title: 'Còn phòng chưa nhập số điện mới',
+          message: `Các phòng đang thuê sau chưa nhập số mới: ${emptyOccupiedRooms.join(', ')}. Nếu tiếp tục, số mới sẽ tạm lấy bằng số cũ (0 kWh). Bạn có muốn tiếp tục không?`,
+          okText: 'Vẫn chốt số'
+        });
+        if (!ok) return;
+      }
+
+      const newElecRecords = [];
+      const newInvoiceRecords = [];
+
+      state.data.rooms.forEach(room => {
+        const draft = state.elecDrafts[room.id] || { oldIndex: '0', newIndex: '', note: '' };
+        const oldIdx = parseInt(draft.oldIndex, 10) || 0;
+        const newIdx = draft.newIndex === '' ? oldIdx : (parseInt(draft.newIndex, 10) || oldIdx);
+        const usage = Math.max(0, newIdx - oldIdx);
+
+        // 1. Bản ghi điện
+        const elecKey = getElecKey(year, month, room.id);
+        const elecRec = {
+          key: elecKey,
+          period,
+          year,
+          month,
+          roomId: room.id,
+          roomName: room.name,
+          oldIndex: oldIdx,
+          newIndex: newIdx,
+          usage,
+          recordedAt: today,
+          note: (draft.note || '').trim()
+        };
+        newElecRecords.push(elecRec);
+
+        // Upsert vào state.data.electricHistory
+        const eIdx = state.data.electricHistory.findIndex(e => e.key === elecKey);
+        if (eIdx >= 0) state.data.electricHistory[eIdx] = elecRec;
+        else state.data.electricHistory.push(elecRec);
+
+        // 2. Bản ghi hóa đơn kết hợp với Tab Dữ liệu
+        const invId = getInvoiceId(year, month, room.id);
+        const existingInv = state.data.invoiceHistory.find(i => i.id === invId);
+        const prevInv = state.data.invoiceHistory.find(i => i.period === prevPeriod && i.roomId === room.id);
+
+        const isVacant = room.status === 'vacant';
+        const people = isVacant ? 0 : (Number(room.people) || 0);
+        const rent = isVacant ? 0 : (Number(room.rent) || 0);
+        const waterPrice = Number(room.waterPrice) || 0;
+        const waterTotal = isVacant ? 0 : people * waterPrice;
+        const elecPrice = Number(room.elecPrice) || 0;
+        const elecTotal = usage * elecPrice;
+
+        // Giữ lại thông tin thanh toán / phát sinh nếu hóa đơn kỳ này đã tồn tại
+        const extra = existingInv ? (Number(existingInv.extra) || 0) : 0;
+        const extraNote = existingInv ? (existingInv.extraNote || '') : '';
+        const prevDebtAuto = prevInv ? Math.max(0, (Number(prevInv.total) || 0) - (Number(prevInv.paidAmount) || 0)) : 0;
+        const oldDebt = existingInv ? (Number(existingInv.oldDebt) || 0) : prevDebtAuto;
+
+        const total = rent + waterTotal + elecTotal + extra + oldDebt;
+        const paidAmount = existingInv ? (Number(existingInv.paidAmount) || 0) : 0;
+        let paymentStatus = existingInv ? existingInv.paymentStatus : 'unpaid';
+        let paidDate = existingInv ? (existingInv.paidDate || '') : '';
+
+        // Chuẩn hóa lại paymentStatus theo tổng mới
+        if (total <= 0) {
+          paymentStatus = 'paid';
+        } else if (paidAmount >= total) {
+          paymentStatus = 'paid';
+          if (!paidDate) paidDate = today;
+        } else if (paidAmount > 0) {
+          paymentStatus = 'partial';
+        } else {
+          paymentStatus = 'unpaid';
+        }
+
+        const invRec = {
+          id: invId,
+          period,
+          year,
+          month,
+          roomId: room.id,
+          roomName: room.name,
+          tenant: room.tenant || '',
+          statusRoom: room.status,
+          people,
+          rent,
+          waterPrice,
+          waterTotal,
+          elecOld: oldIdx,
+          elecNew: newIdx,
+          elecUsage: usage,
+          elecPrice,
+          elecTotal,
+          extra,
+          extraNote,
+          oldDebt,
+          total,
+          paidAmount,
+          paymentStatus,
+          paidDate
+        };
+        newInvoiceRecords.push(invRec);
+
+        // Upsert vào state.data.invoiceHistory
+        const iIdx = state.data.invoiceHistory.findIndex(i => i.id === invId);
+        if (iIdx >= 0) state.data.invoiceHistory[iIdx] = invRec;
+        else state.data.invoiceHistory.push(invRec);
+      });
+
+      saveToLocalStorage();
+      loadElectricDraftsForPeriod(month, year);
+
+      // Đồng bộ Google Sheets nếu đã gắn link
+      if (state.gasUrl) {
+        const r1 = await callGasPost('upsertElectric', { records: newElecRecords });
+        const r2 = await callGasPost('upsertInvoices', { records: newInvoiceRecords });
+        if (r1.ok && r2.ok) {
+          showToast(`Đã chốt số điện, kết hóa đơn T${month}/${year} và đồng bộ Google Sheets!`, 'success');
+        } else {
+          showToast(`Đã chốt hóa đơn T${month}/${year} trên máy (đồng bộ Sheet lỗi).`, 'warning');
+        }
+      } else {
+        showToast(`Đã chốt số điện và kết tiền sang Tab Tiền T${month}/${year}!`, 'success');
+      }
+
+      // Chuyển ngay sang Tab 3 Tiền tháng X
+      switchTab('invoice');
+    }
+
+    /**
+     * RENDER LỊCH SỬ SỐ ĐIỆN (BÊN DƯỚI TAB 2)
+     */
+    function renderElectricHistory() {
+      const periodSelect = document.getElementById('elecHistFilterPeriod');
+      const roomSelect = document.getElementById('elecHistFilterRoom');
+
+      // Tập hợp các kỳ đã có lịch sử (sắp xếp mới nhất lên đầu)
+      const periodMap = new Map();
+      state.data.electricHistory.forEach(r => {
+        const sortVal = r.year * 100 + r.month;
+        if (!periodMap.has(r.period)) {
+          periodMap.set(r.period, { period: r.period, year: r.year, month: r.month, sortVal, totalUsage: 0, count: 0 });
+        }
+        const item = periodMap.get(r.period);
+        item.totalUsage += Number(r.usage) || 0;
+        item.count++;
+      });
+      const periods = Array.from(periodMap.values()).sort((a, b) => b.sortVal - a.sortVal);
+
+      // Cập nhật dropdown kỳ
+      periodSelect.innerHTML = `<option value="ALL">Tất cả các kỳ (${periods.length})</option>` +
+        periods.map(p => `<option value="${p.period}">Kỳ ${p.period}</option>`).join('');
+      if (state.elecFilterPeriod !== 'ALL' && !periodMap.has(state.elecFilterPeriod)) {
+        state.elecFilterPeriod = 'ALL';
+      }
+      periodSelect.value = state.elecFilterPeriod;
+
+      // Cập nhật dropdown phòng
+      roomSelect.innerHTML = `<option value="ALL">Tất cả 9 phòng</option>` +
+        state.data.rooms.map(r => `<option value="${r.id}">${r.id} - ${escapeHtml(r.name)}</option>`).join('');
+      roomSelect.value = state.elecFilterRoom;
+
+      // Thanh chip các kỳ đã lưu (nút Mở sửa & Xóa kỳ)
+      const chipsBox = document.getElementById('elecPeriodChips');
+      if (periods.length > 0) {
+        chipsBox.classList.remove('hidden');
+        chipsBox.innerHTML = periods.map(p => `
+          <div class="inline-flex items-center gap-1.5 bg-white border border-slate-200 rounded-xl px-2.5 py-1.5 shadow-2xs text-xs">
+            <span class="font-bold text-slate-800">${p.period}</span>
+            <span class="text-slate-400">(${formatVND(p.totalUsage)} số)</span>
+            <button type="button" onclick="openElectricPeriodForEdit(${p.month}, ${p.year})"
+              class="ml-1 px-2 py-0.5 rounded-lg bg-indigo-50 hover:bg-indigo-100 text-indigo-700 font-bold transition">
+              Mở sửa
+            </button>
+            <button type="button" onclick="deleteElectricPeriod('${p.period}')"
+              class="px-1.5 py-0.5 rounded-lg bg-rose-50 hover:bg-rose-100 text-rose-600 font-bold transition" title="Xóa lịch sử điện kỳ này">
+              Xóa
+            </button>
+          </div>
+        `).join('');
+      } else {
+        chipsBox.classList.add('hidden');
+      }
+
+      // Lọc bảng chi tiết
+      let rows = [...state.data.electricHistory];
+      if (state.elecFilterPeriod !== 'ALL') {
+        rows = rows.filter(r => r.period === state.elecFilterPeriod);
+      }
+      if (state.elecFilterRoom !== 'ALL') {
+        rows = rows.filter(r => r.roomId === state.elecFilterRoom);
+      }
+
+      // Sắp xếp kỳ mới nhất lên đầu, cùng kỳ xếp P01 -> P09
+      rows.sort((a, b) => {
+        const diff = (b.year * 100 + b.month) - (a.year * 100 + a.month);
+        if (diff !== 0) return diff;
+        return a.roomId.localeCompare(b.roomId);
+      });
+
+      const tbody = document.getElementById('elecHistoryTableBody');
+      if (rows.length === 0) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="8" class="py-10 text-center text-slate-400 text-sm">
+              Chưa có lịch sử số điện nào được lưu. Nhập số điện ở trên và bấm "Chốt số điện" để lưu lại.
+            </td>
+          </tr>
+        `;
+        return;
+      }
+
+      tbody.innerHTML = rows.map(r => `
+        <tr class="hover:bg-slate-50/80 transition">
+          <td class="py-2.5 px-4 font-bold text-indigo-700 whitespace-nowrap">${r.period}</td>
+          <td class="py-2.5 px-3 whitespace-nowrap">
+            <span class="font-bold text-slate-800">${escapeHtml(r.roomName)}</span>
+            <span class="text-xs text-slate-400 ml-1">(${r.roomId})</span>
+          </td>
+          <td class="py-2.5 px-3 text-right font-medium text-slate-600">${formatVND(r.oldIndex)}</td>
+          <td class="py-2.5 px-3 text-right font-bold text-slate-900">${formatVND(r.newIndex)}</td>
+          <td class="py-2.5 px-3 text-right">
+            <span class="inline-block px-2 py-0.5 rounded-lg text-xs font-extrabold ${r.usage > 250 ? 'bg-amber-100 text-amber-800' : 'bg-indigo-50 text-indigo-700'}">
+              ${formatVND(r.usage)} kWh
+            </span>
+          </td>
+          <td class="py-2.5 px-3 text-xs text-slate-500 whitespace-nowrap">${escapeHtml(r.recordedAt || '—')}</td>
+          <td class="py-2.5 px-3 text-xs text-slate-500 max-w-[160px] truncate">${escapeHtml(r.note || '')}</td>
+          <td class="py-2.5 px-4 text-right whitespace-nowrap">
+            <button type="button" onclick="openElectricPeriodForEdit(${r.month}, ${r.year})"
+              class="text-xs font-bold text-indigo-600 hover:text-indigo-800 hover:underline">
+              Mở sửa
+            </button>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    function openElectricPeriodForEdit(month, year) {
+      onPeriodChange(month, year);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      showToast(`Đã nạp chỉ số điện kỳ ${getPeriodStr(month, year)} lên biểu mẫu phía trên.`, 'info');
+    }
+
+    async function deleteElectricPeriod(period) {
+      const ok = await openConfirmModal({
+        title: `Xóa lịch sử điện kỳ ${period}?`,
+        message: `Thao tác này sẽ xóa các bản ghi chỉ số điện kỳ ${period} trên máy (hóa đơn đã chốt ở Tab Tiền tháng vẫn được giữ nguyên nếu bạn không xóa riêng).`,
+        okText: 'Xóa kỳ này',
+        danger: true
+      });
+      if (!ok) return;
+
+      state.data.electricHistory = state.data.electricHistory.filter(e => e.period !== period);
+      saveToLocalStorage();
+      loadElectricDraftsForPeriod(state.selectedMonth, state.selectedYear);
+      renderElectricTab();
+      renderElectricHistory();
+      showToast(`Đã xóa lịch sử điện kỳ ${period}.`, 'success');
+    }
+
+    /*************************************************************************
+     * 10. TAB 3: TIỀN THÁNG X & LỊCH SỬ HÓA ĐƠN
+     *************************************************************************/
+    function getCurrentPeriodInvoices() {
+      const period = getPeriodStr(state.selectedMonth, state.selectedYear);
+      return state.data.invoiceHistory
+        .filter(inv => inv.period === period)
+        .sort((a, b) => a.roomId.localeCompare(b.roomId));
+    }
+
+    function renderInvoiceTab() {
+      const period = getPeriodStr(state.selectedMonth, state.selectedYear);
+      const invoices = getCurrentPeriodInvoices();
+      const grid = document.getElementById('invoicesGrid');
+      const saveBar = document.getElementById('invoiceStickySaveBar');
+
+      refreshInvoiceStats();
+
+      if (invoices.length === 0) {
+        saveBar.classList.add('hidden');
+        grid.innerHTML = `
+          <div class="lg:col-span-2 bg-white rounded-3xl border border-dashed border-slate-300 p-8 text-center space-y-3">
+            <div class="w-14 h-14 mx-auto rounded-2xl bg-indigo-50 text-indigo-600 flex items-center justify-center">
+              <svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+              </svg>
+            </div>
+            <h3 class="text-base font-extrabold text-slate-900">Chưa có hóa đơn cho kỳ ${period}</h3>
+            <p class="text-sm text-slate-500 max-w-md mx-auto">
+              Hãy sang Tab <b>Số điện</b> nhập chỉ số điện cho 9 phòng và bấm <b>Chốt số điện</b> để hệ thống tự động kết hợp với dữ liệu phòng tạo hóa đơn tháng này.
+            </p>
+            <div class="pt-1">
+              <button type="button" onclick="switchTab('electric')"
+                class="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-sm shadow-md shadow-indigo-200 transition">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.4" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                </svg>
+                <span>Sang Tab Số điện kỳ ${period}</span>
+              </button>
+            </div>
+          </div>
+        `;
+        return;
+      }
+
+      saveBar.classList.remove('hidden');
+
+      grid.innerHTML = invoices.map(inv => {
+        const isVacant = inv.statusRoom === 'vacant' && inv.total === 0;
+        const remain = Math.max(0, inv.total - inv.paidAmount);
+
+        const statusBadge = isVacant
+          ? `<span class="px-2.5 py-1 rounded-full text-xs font-bold bg-slate-200 text-slate-600">Phòng trống</span>`
+          : inv.paymentStatus === 'paid'
+            ? `<span class="px-2.5 py-1 rounded-full text-xs font-bold bg-emerald-100 text-emerald-700">Đã đóng đủ</span>`
+            : inv.paymentStatus === 'partial'
+              ? `<span class="px-2.5 py-1 rounded-full text-xs font-bold bg-amber-100 text-amber-800">Đóng 1 phần</span>`
+              : `<span class="px-2.5 py-1 rounded-full text-xs font-bold bg-rose-100 text-rose-700">Chưa đóng</span>`;
+
+        const cardBorder = isVacant
+          ? 'border-slate-200 bg-slate-50/70'
+          : inv.paymentStatus === 'paid'
+            ? 'border-emerald-200'
+            : inv.paymentStatus === 'partial'
+              ? 'border-amber-200'
+              : 'border-slate-200';
+
+        return `
+          <div id="inv-card-${inv.id}" class="bg-white rounded-2xl border ${cardBorder} shadow-sm overflow-hidden flex flex-col">
+            <!-- Header thẻ hóa đơn -->
+            <div class="px-4 py-3 border-b border-slate-100 flex items-center justify-between gap-2 ${inv.paymentStatus === 'paid' && !isVacant ? 'bg-emerald-50/40' : ''}">
+              <div class="flex items-center gap-2.5 min-w-0">
+                <span class="px-2.5 py-1 rounded-lg text-xs font-extrabold ${isVacant ? 'bg-slate-200 text-slate-600' : 'bg-indigo-100 text-indigo-700'} shrink-0">${inv.roomId}</span>
+                <div class="min-w-0">
+                  <div class="font-extrabold text-slate-900 text-sm sm:text-base truncate">${escapeHtml(inv.roomName)}</div>
+                  <div class="text-xs text-slate-500 truncate">${escapeHtml(inv.tenant) || (isVacant ? 'Không có khách' : 'Chưa nhập tên khách')}</div>
+                </div>
+              </div>
+              <div id="inv-badge-${inv.id}" class="shrink-0">${statusBadge}</div>
+            </div>
+
+            <!-- Chi tiết các khoản tiền -->
+            <div class="p-4 space-y-2.5 text-sm flex-1">
+              <div class="flex items-center justify-between">
+                <span class="text-slate-600">Tiền nhà</span>
+                <span class="font-bold text-slate-900">${formatVND(inv.rent)} đ</span>
+              </div>
+
+              <div class="flex items-center justify-between">
+                <span class="text-slate-600">
+                  Tiền nước <span class="text-xs text-slate-400">(${inv.people} ng × ${formatVND(inv.waterPrice)})</span>
+                </span>
+                <span class="font-bold text-slate-900">${formatVND(inv.waterTotal)} đ</span>
+              </div>
+
+              <div class="flex items-center justify-between">
+                <span class="text-slate-600">
+                  Tiền điện <span class="text-xs text-slate-400">(${inv.elecOld}→${inv.elecNew} = ${inv.elecUsage} số × ${formatVND(inv.elecPrice)})</span>
+                </span>
+                <span class="font-bold text-slate-900">${formatVND(inv.elecTotal)} đ</span>
+              </div>
+
+              <!-- Phát sinh (+/-) + Lý do -->
+              <div class="pt-2 border-t border-dashed border-slate-200 grid grid-cols-12 gap-2 items-center">
+                <div class="col-span-7">
+                  <label class="block text-[11px] font-semibold text-slate-500 mb-0.5">Phát sinh / Giảm trừ (lý do)</label>
+                  <input type="text" value="${escapeHtml(inv.extraNote)}" placeholder="VD: Sửa vòi, trừ tiền..."
+                    oninput="onInvoiceExtraNoteChange('${inv.id}', this.value)"
+                    class="w-full px-2.5 py-1.5 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:border-indigo-500 outline-none text-xs text-slate-700" />
+                </div>
+                <div class="col-span-5">
+                  <label class="block text-[11px] font-semibold text-slate-500 mb-0.5 text-right">Số tiền (+/-)</label>
+                  <input type="text" inputmode="text" value="${inv.extra === 0 ? '' : formatMoneySigned(inv.extra)}" placeholder="0"
+                    onfocus="this.value = getInvoiceById('${inv.id}').extra || ''"
+                    onblur="formatExtraOnBlur('${inv.id}', this)"
+                    oninput="onInvoiceExtraChange('${inv.id}', this.value)"
+                    class="w-full px-2.5 py-1.5 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:border-indigo-500 outline-none text-xs font-bold text-right text-slate-800" />
+                </div>
+              </div>
+
+              <!-- Nợ cũ -->
+              <div class="flex items-center justify-between gap-3">
+                <span class="text-xs font-semibold text-slate-500">Nợ cũ tháng trước</span>
+                <input type="text" inputmode="numeric" value="${inv.oldDebt === 0 ? '' : formatVND(inv.oldDebt)}" placeholder="0"
+                  oninput="onInvoiceOldDebtChange('${inv.id}', this)"
+                  class="w-32 px-2.5 py-1.5 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:border-indigo-500 outline-none text-xs font-bold text-right ${inv.oldDebt > 0 ? 'text-rose-600' : 'text-slate-800'}" />
+              </div>
+
+              <!-- TỔNG CỘNG -->
+              <div class="pt-2.5 border-t border-slate-200 flex items-center justify-between">
+                <span class="text-sm font-extrabold text-slate-900">TỔNG CỘNG</span>
+                <span id="inv-total-${inv.id}" class="text-lg font-extrabold text-indigo-700">${formatVND(inv.total)} đ</span>
+              </div>
+
+              <!-- KHU VỰC THU TIỀN -->
+              <div class="mt-3 p-3 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-2.5">
+                <!-- 3 nút trạng thái thu tiền nhanh -->
+                <div id="inv-status-btns-${inv.id}" class="grid grid-cols-3 gap-1.5">
+                  ${renderPaymentStatusButtonsHtml(inv)}
+                </div>
+
+                <!-- Thực thu & Còn nợ -->
+                <div class="grid grid-cols-2 gap-2.5 items-center pt-1">
+                  <div>
+                    <label class="block text-[11px] font-semibold text-slate-500 mb-0.5">Thực thu (đ)</label>
+                    <input id="inv-paid-input-${inv.id}" type="text" inputmode="numeric"
+                      value="${inv.paidAmount === 0 ? '' : formatVND(inv.paidAmount)}" placeholder="0"
+                      oninput="onInvoicePaidAmountChange('${inv.id}', this)"
+                      class="w-full px-2.5 py-1.5 rounded-xl border border-slate-200 bg-white focus:border-emerald-500 outline-none text-sm font-bold text-emerald-700 text-right" />
+                  </div>
+                  <div class="text-right">
+                    <div class="text-[11px] font-semibold text-slate-500">Còn nợ chuyển kỳ sau</div>
+                    <div id="inv-remain-${inv.id}" class="text-sm font-extrabold ${remain > 0 ? 'text-rose-600' : 'text-emerald-600'} mt-0.5">
+                      ${formatVND(remain)} đ
+                    </div>
+                    <div id="inv-paiddate-${inv.id}" class="text-[10px] text-slate-400">
+                      ${inv.paidDate ? 'Đóng ngày ' + escapeHtml(inv.paidDate) : ''}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Footer thẻ: 2 nút Phiếu thu & QR + Copy Zalo -->
+            <div class="px-4 py-3 bg-slate-50/90 border-t border-slate-100 grid grid-cols-2 gap-2">
+              <button type="button" onclick="openReceiptModal('${inv.id}')"
+                class="inline-flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-xl bg-indigo-600 hover:bg-indigo-700 active:scale-[0.98] text-white text-xs sm:text-sm font-bold shadow-xs transition min-h-[42px]">
+                <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z" />
+                </svg>
+                <span>Phiếu thu & QR</span>
+              </button>
+              <button type="button" onclick="copyZaloMessageById('${inv.id}')"
+                class="inline-flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-xl bg-white hover:bg-emerald-50 text-emerald-700 border border-emerald-200 active:scale-[0.98] text-xs sm:text-sm font-bold transition min-h-[42px]">
+                <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
+                </svg>
+                <span>Copy Zalo</span>
+              </button>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function renderPaymentStatusButtonsHtml(inv) {
+      const btnBase = 'py-2 px-1.5 rounded-xl text-[11px] sm:text-xs font-bold transition min-h-[36px] text-center';
+      return `
+        <button type="button" onclick="setInvoicePaymentStatus('${inv.id}', 'unpaid')"
+          class="${btnBase} ${inv.paymentStatus === 'unpaid' ? 'bg-rose-600 text-white shadow-xs' : 'bg-white text-slate-600 border border-slate-200 hover:bg-rose-50'}">
+          Chưa đóng
+        </button>
+        <button type="button" onclick="setInvoicePaymentStatus('${inv.id}', 'partial')"
+          class="${btnBase} ${inv.paymentStatus === 'partial' ? 'bg-amber-500 text-white shadow-xs' : 'bg-white text-slate-600 border border-slate-200 hover:bg-amber-50'}">
+          Đóng 1 phần
+        </button>
+        <button type="button" onclick="setInvoicePaymentStatus('${inv.id}', 'paid')"
+          class="${btnBase} ${inv.paymentStatus === 'paid' ? 'bg-emerald-600 text-white shadow-xs' : 'bg-white text-slate-600 border border-slate-200 hover:bg-emerald-50'}">
+          Đã đóng đủ
+        </button>
+      `;
+    }
+
+    function getInvoiceById(id) {
+      return state.data.invoiceHistory.find(i => i.id === id);
+    }
+
+    function recalcInvoiceAndPatchDom(inv) {
+      inv.total = inv.rent + inv.waterTotal + inv.elecTotal + (Number(inv.extra) || 0) + (Number(inv.oldDebt) || 0);
+      if (inv.total < 0) inv.total = 0;
+
+      // Nếu đã đóng đủ trước đó mà tổng thay đổi, cập nhật lại trạng thái hợp lý
+      if (inv.total === 0) {
+        inv.paymentStatus = 'paid';
+      } else if (inv.paidAmount >= inv.total) {
+        inv.paymentStatus = 'paid';
+        if (!inv.paidDate) inv.paidDate = getTodayDDMMYYYY();
+      } else if (inv.paidAmount > 0) {
+        inv.paymentStatus = 'partial';
+      } else if (inv.paymentStatus !== 'partial') {
+        inv.paymentStatus = 'unpaid';
+      }
+
+      saveToLocalStorage();
+      patchInvoiceCardDom(inv);
+      refreshInvoiceStats();
+    }
+
+    function patchInvoiceCardDom(inv) {
+      const remain = Math.max(0, inv.total - inv.paidAmount);
+      const isVacant = inv.statusRoom === 'vacant' && inv.total === 0;
+
+      const totalEl = document.getElementById(`inv-total-${inv.id}`);
+      if (totalEl) totalEl.textContent = `${formatVND(inv.total)} đ`;
+
+      const remainEl = document.getElementById(`inv-remain-${inv.id}`);
+      if (remainEl) {
+        remainEl.textContent = `${formatVND(remain)} đ`;
+        remainEl.className = `text-sm font-extrabold ${remain > 0 ? 'text-rose-600' : 'text-emerald-600'} mt-0.5`;
+      }
+
+      const dateEl = document.getElementById(`inv-paiddate-${inv.id}`);
+      if (dateEl) dateEl.textContent = inv.paidDate ? `Đóng ngày ${inv.paidDate}` : '';
+
+      const btnsEl = document.getElementById(`inv-status-btns-${inv.id}`);
+      if (btnsEl) btnsEl.innerHTML = renderPaymentStatusButtonsHtml(inv);
+
+      const badgeEl = document.getElementById(`inv-badge-${inv.id}`);
+      if (badgeEl) {
+        badgeEl.innerHTML = isVacant
+          ? `<span class="px-2.5 py-1 rounded-full text-xs font-bold bg-slate-200 text-slate-600">Phòng trống</span>`
+          : inv.paymentStatus === 'paid'
+            ? `<span class="px-2.5 py-1 rounded-full text-xs font-bold bg-emerald-100 text-emerald-700">Đã đóng đủ</span>`
+            : inv.paymentStatus === 'partial'
+              ? `<span class="px-2.5 py-1 rounded-full text-xs font-bold bg-amber-100 text-amber-800">Đóng 1 phần</span>`
+              : `<span class="px-2.5 py-1 rounded-full text-xs font-bold bg-rose-100 text-rose-700">Chưa đóng</span>`;
+      }
+    }
+
+    function onInvoiceExtraNoteChange(id, val) {
+      const inv = getInvoiceById(id);
+      if (!inv) return;
+      inv.extraNote = val;
+      saveToLocalStorage();
+    }
+
+    function onInvoiceExtraChange(id, rawVal) {
+      const inv = getInvoiceById(id);
+      if (!inv) return;
+      inv.extra = parseSignedInt(rawVal);
+      recalcInvoiceAndPatchDom(inv);
+    }
+
+    function formatExtraOnBlur(id, el) {
+      const inv = getInvoiceById(id);
+      if (!inv) return;
+      el.value = inv.extra === 0 ? '' : formatMoneySigned(inv.extra);
+    }
+
+    function onInvoiceOldDebtChange(id, el) {
+      const inv = getInvoiceById(id);
+      if (!inv) return;
+      inv.oldDebt = parseUnsignedInt(el.value);
+      el.value = el.value.trim() === '' ? '' : formatVND(inv.oldDebt);
+      recalcInvoiceAndPatchDom(inv);
+    }
+
+    function onInvoicePaidAmountChange(id, el) {
+      const inv = getInvoiceById(id);
+      if (!inv) return;
+      inv.paidAmount = parseUnsignedInt(el.value);
+      el.value = el.value.trim() === '' ? '' : formatVND(inv.paidAmount);
+      if (inv.paidAmount > 0 && !inv.paidDate) inv.paidDate = getTodayDDMMYYYY();
+      if (inv.paidAmount === 0) inv.paidDate = '';
+      recalcInvoiceAndPatchDom(inv);
+    }
+
+    function setInvoicePaymentStatus(id, status) {
+      const inv = getInvoiceById(id);
+      if (!inv) return;
+
+      inv.paymentStatus = status;
+      const paidInput = document.getElementById(`inv-paid-input-${inv.id}`);
+
+      if (status === 'paid') {
+        inv.paidAmount = inv.total;
+        inv.paidDate = getTodayDDMMYYYY();
+        if (paidInput) paidInput.value = inv.paidAmount === 0 ? '' : formatVND(inv.paidAmount);
+      } else if (status === 'unpaid') {
+        inv.paidAmount = 0;
+        inv.paidDate = '';
+        if (paidInput) paidInput.value = '';
+      } else if (status === 'partial') {
+        if (inv.paidAmount >= inv.total) {
+          inv.paidAmount = 0;
+          if (paidInput) paidInput.value = '';
+        }
+        if (!inv.paidDate) inv.paidDate = getTodayDDMMYYYY();
+        if (paidInput) paidInput.focus();
+      }
+
+      saveToLocalStorage();
+      patchInvoiceCardDom(inv);
+      refreshInvoiceStats();
+      renderInvoiceHistory();
+    }
+
+    function refreshInvoiceStats() {
+      const invoices = getCurrentPeriodInvoices();
+      const totalDue = invoices.reduce((s, i) => s + (Number(i.total) || 0), 0);
+      const totalPaid = invoices.reduce((s, i) => s + (Number(i.paidAmount) || 0), 0);
+      const totalRemain = Math.max(0, totalDue - totalPaid);
+
+      // Tính tiến độ theo các phòng có phát sinh tiền (total > 0)
+      const billable = invoices.filter(i => i.total > 0);
+      const paidCount = billable.filter(i => i.paymentStatus === 'paid').length;
+      const pct = billable.length > 0 ? Math.round((paidCount / billable.length) * 100) : 0;
+
+      document.getElementById('statTotalDue').textContent = `${formatVND(totalDue)} đ`;
+      document.getElementById('statTotalPaid').textContent = `${formatVND(totalPaid)} đ`;
+      document.getElementById('statTotalRemain').textContent = `${formatVND(totalRemain)} đ`;
+      document.getElementById('statProgressText').textContent = `${paidCount}/${billable.length} phòng`;
+      document.getElementById('statProgressPct').textContent = `${pct}%`;
+      document.getElementById('statProgressBar').style.width = `${pct}%`;
+    }
+
+    async function saveInvoicesAndSync() {
+      saveToLocalStorage();
+      renderInvoiceHistory();
+      const records = getCurrentPeriodInvoices();
+      if (!state.gasUrl) {
+        showToast(`Đã lưu hóa đơn T${state.selectedMonth}/${state.selectedYear} trên máy.`, 'success');
+        return;
+      }
+      const res = await callGasPost('upsertInvoices', { records });
+      if (res.ok) {
+        showToast(`Đã đồng bộ hóa đơn T${state.selectedMonth}/${state.selectedYear} lên Google Sheets!`, 'success');
+      } else {
+        showToast('Đã lưu trên máy, nhưng đồng bộ Sheet gặp lỗi: ' + res.error, 'warning');
+      }
+    }
+
+    /**
+     * RENDER LỊCH SỬ TIỀN PHÒNG (BÊN DƯỚI TAB 3)
+     * 2 chế độ: Tổng hợp theo tháng (1..12/Năm) & Chi tiết theo phòng
+     */
+    function setInvoiceHistoryView(view) {
+      state.invHistoryView = view;
+      renderInvoiceHistory();
+    }
+
+    function onInvHistoryRoomFilterChange(roomVal) {
+      state.invFilterRoom = roomVal;
+      if (roomVal !== 'ALL') {
+        state.invHistoryView = 'room';
+      }
+      renderInvoiceHistory();
+    }
+
+    function renderInvoiceHistory() {
+      // Nút chuyển view
+      const btnM = document.getElementById('btnViewMonthly');
+      const btnR = document.getElementById('btnViewRoom');
+      btnM.className = state.invHistoryView === 'monthly'
+        ? 'px-3 py-1.5 rounded-lg text-xs font-bold transition bg-white text-indigo-700 shadow-xs'
+        : 'px-3 py-1.5 rounded-lg text-xs font-bold transition text-slate-600 hover:text-slate-900';
+      btnR.className = state.invHistoryView === 'room'
+        ? 'px-3 py-1.5 rounded-lg text-xs font-bold transition bg-white text-indigo-700 shadow-xs'
+        : 'px-3 py-1.5 rounded-lg text-xs font-bold transition text-slate-600 hover:text-slate-900';
+
+      // Bộ lọc Năm
+      const yearsSet = new Set([state.selectedYear, now.getFullYear()]);
+      state.data.invoiceHistory.forEach(i => yearsSet.add(i.year));
+      const years = Array.from(yearsSet).sort((a, b) => b - a);
+      const yearSelect = document.getElementById('invHistFilterYear');
+      yearSelect.innerHTML = `<option value="ALL">Tất cả các năm</option>` +
+        years.map(y => `<option value="${y}">Năm ${y}</option>`).join('');
+      if (state.invFilterYear !== 'ALL' && !years.includes(Number(state.invFilterYear))) {
+        state.invFilterYear = String(state.selectedYear);
+      }
+      yearSelect.value = state.invFilterYear;
+
+      // Bộ lọc Phòng
+      const roomSelect = document.getElementById('invHistFilterRoom');
+      roomSelect.innerHTML = `<option value="ALL">Tất cả 9 phòng</option>` +
+        state.data.rooms.map(r => `<option value="${r.id}">${r.id} - ${escapeHtml(r.name)}</option>`).join('');
+      roomSelect.value = state.invFilterRoom;
+
+      const container = document.getElementById('invHistoryContainer');
+
+      // Chế độ 1: Tổng hợp theo từng tháng
+      if (state.invHistoryView === 'monthly') {
+        const targetYear = state.invFilterYear === 'ALL' ? null : Number(state.invFilterYear);
+        const filtered = state.data.invoiceHistory.filter(inv => {
+          if (targetYear && inv.year !== targetYear) return false;
+          if (state.invFilterRoom !== 'ALL' && inv.roomId !== state.invFilterRoom) return false;
+          return true;
+        });
+
+        // Gom theo Kỳ (MM/YYYY)
+        const groups = new Map();
+        filtered.forEach(inv => {
+          const key = `${inv.year}-${String(inv.month).padStart(2, '0')}`;
+          if (!groups.has(key)) {
+            groups.set(key, {
+              year: inv.year,
+              month: inv.month,
+              period: inv.period,
+              sortVal: inv.year * 100 + inv.month,
+              due: 0,
+              paid: 0,
+              billableRooms: 0,
+              paidRooms: 0
+            });
+          }
+          const g = groups.get(key);
+          g.due += inv.total;
+          g.paid += inv.paidAmount;
+          if (inv.total > 0) {
+            g.billableRooms++;
+            if (inv.paymentStatus === 'paid') g.paidRooms++;
+          }
+        });
+
+        const list = Array.from(groups.values()).sort((a, b) => b.sortVal - a.sortVal);
+        if (list.length === 0) {
+          container.innerHTML = `<div class="py-10 text-center text-sm text-slate-400">Chưa có lịch sử hóa đơn nào trong bộ lọc này.</div>`;
+          return;
+        }
+
+        const sumDue = list.reduce((s, g) => s + g.due, 0);
+        const sumPaid = list.reduce((s, g) => s + g.paid, 0);
+        const sumRemain = Math.max(0, sumDue - sumPaid);
+
+        container.innerHTML = `
+          <table class="w-full text-left border-collapse min-w-[620px]">
+            <thead>
+              <tr class="bg-slate-50 text-[11px] font-bold uppercase tracking-wider text-slate-500 border-b border-slate-200">
+                <th class="py-3 px-4">Kỳ thanh toán</th>
+                <th class="py-3 px-3 text-right">Tổng phải thu</th>
+                <th class="py-3 px-3 text-right">Đã thu</th>
+                <th class="py-3 px-3 text-right">Còn nợ</th>
+                <th class="py-3 px-3 text-center">Đã đóng</th>
+                <th class="py-3 px-4 text-right">Thao tác</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-100 text-sm">
+              ${list.map(g => {
+                const remain = Math.max(0, g.due - g.paid);
+                const isDone = remain === 0 && g.due > 0;
+                return `
+                  <tr class="hover:bg-slate-50/80 transition">
+                    <td class="py-3 px-4 font-extrabold text-slate-900">Tháng ${g.month}/${g.year}</td>
+                    <td class="py-3 px-3 text-right font-bold text-slate-800">${formatVND(g.due)} đ</td>
+                    <td class="py-3 px-3 text-right font-bold text-emerald-700">${formatVND(g.paid)} đ</td>
+                    <td class="py-3 px-3 text-right font-bold ${remain > 0 ? 'text-rose-600' : 'text-slate-400'}">${formatVND(remain)} đ</td>
+                    <td class="py-3 px-3 text-center">
+                      <span class="inline-block px-2.5 py-0.5 rounded-full text-xs font-bold ${isDone ? 'bg-emerald-100 text-emerald-700' : 'bg-indigo-50 text-indigo-700'}">
+                        ${g.paidRooms}/${g.billableRooms} phòng
+                      </span>
+                    </td>
+                    <td class="py-3 px-4 text-right">
+                      <button type="button" onclick="jumpToInvoicePeriod(${g.month}, ${g.year})"
+                        class="px-3 py-1.5 rounded-xl bg-indigo-50 hover:bg-indigo-100 text-indigo-700 text-xs font-bold transition">
+                        Xem kỳ này
+                      </button>
+                    </td>
+                  </tr>
+                `;
+              }).join('')}
+            </tbody>
+            <tfoot>
+              <tr class="bg-slate-50 font-extrabold text-sm border-t-2 border-slate-200">
+                <td class="py-3 px-4 text-slate-900">TỔNG CỘNG (${list.length} kỳ)</td>
+                <td class="py-3 px-3 text-right text-indigo-800">${formatVND(sumDue)} đ</td>
+                <td class="py-3 px-3 text-right text-emerald-700">${formatVND(sumPaid)} đ</td>
+                <td class="py-3 px-3 text-right text-rose-600">${formatVND(sumRemain)} đ</td>
+                <td colspan="2"></td>
+              </tr>
+            </tfoot>
+          </table>
+        `;
+        return;
+      }
+
+      // Chế độ 2: Chi tiết theo từng phòng / từng hóa đơn
+      let rows = [...state.data.invoiceHistory];
+      if (state.invFilterYear !== 'ALL') {
+        rows = rows.filter(i => i.year === Number(state.invFilterYear));
+      }
+      if (state.invFilterRoom !== 'ALL') {
+        rows = rows.filter(i => i.roomId === state.invFilterRoom);
+      }
+      rows.sort((a, b) => {
+        const diff = (b.year * 100 + b.month) - (a.year * 100 + a.month);
+        if (diff !== 0) return diff;
+        return a.roomId.localeCompare(b.roomId);
+      });
+
+      if (rows.length === 0) {
+        container.innerHTML = `<div class="py-10 text-center text-sm text-slate-400">Không có hóa đơn chi tiết nào khớp bộ lọc.</div>`;
+        return;
+      }
+
+      container.innerHTML = `
+        <table class="w-full text-left border-collapse min-w-[780px]">
+          <thead>
+            <tr class="bg-slate-50 text-[11px] font-bold uppercase tracking-wider text-slate-500 border-b border-slate-200">
+              <th class="py-3 px-4">Kỳ</th>
+              <th class="py-3 px-3">Phòng</th>
+              <th class="py-3 px-3 text-right">Phòng + Nước</th>
+              <th class="py-3 px-3 text-right">Điện</th>
+              <th class="py-3 px-3 text-right">Tổng cộng</th>
+              <th class="py-3 px-3 text-right">Đã đóng</th>
+              <th class="py-3 px-3 text-center">Trạng thái</th>
+              <th class="py-3 px-4 text-right">Phiếu</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-100 text-sm">
+            ${rows.map(inv => {
+              const badge = inv.statusRoom === 'vacant' && inv.total === 0
+                ? '<span class="px-2 py-0.5 rounded-full text-[11px] font-bold bg-slate-200 text-slate-600">Trống</span>'
+                : inv.paymentStatus === 'paid'
+                  ? `<span class="px-2 py-0.5 rounded-full text-[11px] font-bold bg-emerald-100 text-emerald-700">Đã đóng</span>`
+                  : inv.paymentStatus === 'partial'
+                    ? `<span class="px-2 py-0.5 rounded-full text-[11px] font-bold bg-amber-100 text-amber-800">1 phần</span>`
+                    : `<span class="px-2 py-0.5 rounded-full text-[11px] font-bold bg-rose-100 text-rose-700">Chưa đóng</span>`;
+
+              return `
+                <tr class="hover:bg-slate-50/80 transition">
+                  <td class="py-2.5 px-4 font-bold text-indigo-700 whitespace-nowrap">${inv.period}</td>
+                  <td class="py-2.5 px-3 whitespace-nowrap">
+                    <span class="font-bold text-slate-900">${escapeHtml(inv.roomName)}</span>
+                    <div class="text-[11px] text-slate-400">${escapeHtml(inv.tenant)}</div>
+                  </td>
+                  <td class="py-2.5 px-3 text-right text-slate-600">${formatVND(inv.rent + inv.waterTotal)} đ</td>
+                  <td class="py-2.5 px-3 text-right">
+                    <div class="font-semibold text-slate-800">${formatVND(inv.elecTotal)} đ</div>
+                    <div class="text-[11px] text-slate-400">${inv.elecUsage} số</div>
+                  </td>
+                  <td class="py-2.5 px-3 text-right font-extrabold text-slate-900">${formatVND(inv.total)} đ</td>
+                  <td class="py-2.5 px-3 text-right">
+                    <div class="font-bold text-emerald-700">${formatVND(inv.paidAmount)} đ</div>
+                    <div class="text-[10px] text-slate-400">${escapeHtml(inv.paidDate)}</div>
+                  </td>
+                  <td class="py-2.5 px-3 text-center">${badge}</td>
+                  <td class="py-2.5 px-4 text-right whitespace-nowrap">
+                    <button type="button" onclick="openReceiptModal('${inv.id}')" class="text-xs font-bold text-indigo-600 hover:underline">Xem QR</button>
+                  </td>
+                </tr>
+              `;
+            }).join('')}
+          </tbody>
+        </table>
+      `;
+    }
+
+    function jumpToInvoicePeriod(month, year) {
+      onPeriodChange(month, year);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    /*************************************************************************
+     * 11. PHIẾU THU & VIETQR + XUẤT ẢNH PNG + COPY TIN NHẮN ZALO
+     *************************************************************************/
+    function buildZaloMessage(inv) {
+      const remain = Math.max(0, inv.total - inv.paidAmount);
+      const bank = state.data.bank;
+      const bankObj = BANKS.find(b => b.id === bank.bankId);
+      const lines = [
+        `🏠 THÔNG BÁO TIỀN PHÒNG THÁNG ${inv.month}/${inv.year}`,
+        `Phòng: ${inv.roomName}${inv.tenant ? ' (' + inv.tenant + ')' : ''}`,
+        `--------------------------`,
+        `• Tiền phòng: ${formatVND(inv.rent)} đ`,
+        `• Tiền nước: ${formatVND(inv.waterTotal)} đ (${inv.people} người × ${formatVND(inv.waterPrice)} đ)`,
+        `• Tiền điện: ${formatVND(inv.elecTotal)} đ (${inv.elecOld} → ${inv.elecNew} = ${inv.elecUsage} số × ${formatVND(inv.elecPrice)} đ)`
+      ];
+      if (inv.extra !== 0) {
+        lines.push(`• Phát sinh: ${formatMoneySigned(inv.extra)} đ${inv.extraNote ? ' (' + inv.extraNote + ')' : ''}`);
+      }
+      if (inv.oldDebt > 0) {
+        lines.push(`• Nợ cũ: ${formatVND(inv.oldDebt)} đ`);
+      }
+      lines.push(`--------------------------`);
+      lines.push(`💰 TỔNG CỘNG: ${formatVND(inv.total)} đ`);
+      if (inv.paidAmount > 0 && remain > 0) {
+        lines.push(`✅ Đã thanh toán: ${formatVND(inv.paidAmount)} đ`);
+        lines.push(`❗ CÒN PHẢI ĐÓNG: ${formatVND(remain)} đ`);
+      } else if (inv.paymentStatus === 'paid' && inv.total > 0) {
+        lines.push(`✅ Trạng thái: Đã thanh toán đủ${inv.paidDate ? ' (' + inv.paidDate + ')' : ''}`);
+      }
+      if (bank.accountNo) {
+        const transferNote = removeVietnameseTones(`${inv.roomId} tien phong T${inv.month}/${inv.year}`);
+        lines.push(``);
+        lines.push(`🏦 Thông tin chuyển khoản:`);
+        lines.push(`• Ngân hàng: ${bankObj ? bankObj.name : bank.bankId}`);
+        lines.push(`• STK: ${bank.accountNo}`);
+        if (bank.accountName) lines.push(`• Chủ TK: ${bank.accountName}`);
+        lines.push(`• Nội dung: ${transferNote}`);
+      }
+      lines.push(`Cảm ơn bạn đã thanh toán đúng hạn!`);
+      return lines.join('\n');
+    }
+
+    function copyZaloMessageById(invId) {
+      const inv = getInvoiceById(invId);
+      if (!inv) return;
+      const text = buildZaloMessage(inv);
+      const ok = copyTextToClipboard(text);
+      if (ok) {
+        showToast(`Đã copy tin nhắn Zalo cho ${inv.roomName}!`, 'success');
+      } else {
+        showToast('Không thể copy tự động trên trình duyệt này.', 'error');
+      }
+    }
+
+    function openReceiptModal(invId) {
+      const inv = getInvoiceById(invId);
+      if (!inv) return;
+      state.currentReceiptInvoiceId = invId;
+
+      const remain = Math.max(0, inv.total - inv.paidAmount);
+      const amountForQr = remain > 0 ? remain : inv.total;
+      const bank = state.data.bank;
+      const bankObj = BANKS.find(b => b.id === bank.bankId);
+      const addInfo = removeVietnameseTones(`${inv.roomId} tien phong T${inv.month}/${inv.year}`);
+
+      let qrSectionHtml = '';
+      if (bank.bankId && bank.accountNo) {
+        const qrUrl = `https://img.vietqr.io/image/${encodeURIComponent(bank.bankId)}-${encodeURIComponent(bank.accountNo)}-compact2.png?amount=${amountForQr}&addInfo=${encodeURIComponent(addInfo)}&accountName=${encodeURIComponent(bank.accountName || '')}`;
+        qrSectionHtml = `
+          <div class="mt-4 pt-4 border-t border-dashed border-slate-200 text-center">
+            <div class="text-[11px] font-bold uppercase tracking-wider text-slate-500 mb-2">Quét mã VietQR để chuyển khoản nhanh</div>
+            <div class="inline-block p-2 bg-white rounded-2xl border border-slate-200 shadow-2xs">
+              <img id="receiptQrImg" src="${qrUrl}" crossorigin="anonymous" alt="Mã VietQR thanh toán"
+                onerror="this.style.display='none'; document.getElementById('qrFallbackMsg').classList.remove('hidden');"
+                class="w-52 h-auto mx-auto rounded-xl object-contain" />
+              <div id="qrFallbackMsg" class="hidden py-6 px-4 text-xs text-rose-600 font-semibold">
+                Không tải được ảnh QR. Vui lòng kiểm tra kết nối mạng hoặc Số tài khoản trong Cài đặt.
+              </div>
+            </div>
+            <div class="mt-2.5 text-xs text-slate-600 space-y-0.5">
+              <div class="font-bold text-slate-900">${escapeHtml(bankObj ? bankObj.name : bank.bankId)} • ${escapeHtml(bank.accountNo)}</div>
+              ${bank.accountName ? `<div class="font-semibold text-slate-700">${escapeHtml(bank.accountName)}</div>` : ''}
+              <div class="text-[11px] text-slate-400">Nội dung: <span class="font-semibold text-slate-700">${escapeHtml(addInfo)}</span></div>
+            </div>
+          </div>
+        `;
+      } else {
+        qrSectionHtml = `
+          <div class="mt-4 pt-4 border-t border-dashed border-slate-200 text-center">
+            <div class="rounded-xl bg-amber-50 border border-amber-200 p-3 text-xs text-amber-800 space-y-1.5">
+              <div class="font-bold">Chưa cấu hình tài khoản ngân hàng VietQR</div>
+              <div>Vào mục Cài đặt nhập Số tài khoản để tự động hiện mã QR chuyển khoản trên phiếu thu.</div>
+              <button type="button" onclick="closeReceiptModal(); openSettingsModal();" class="underline font-bold text-indigo-700">
+                Cài đặt ngân hàng ngay →
+              </button>
+            </div>
+          </div>
+        `;
+      }
+
+      const captureArea = document.getElementById('receiptCaptureArea');
+      captureArea.innerHTML = `
+        <!-- Banner đầu phiếu -->
+        <div class="bg-gradient-to-r from-indigo-700 to-blue-700 text-white px-5 py-4 text-center">
+          <div class="text-[11px] uppercase tracking-widest font-semibold opacity-85">PHIẾU BÁO TIỀN PHÒNG TRỌ</div>
+          <div class="text-xl font-extrabold mt-0.5">THÁNG ${inv.month}/${inv.year}</div>
+          <div class="mt-2 inline-flex items-center gap-1.5 bg-white/15 px-3 py-1 rounded-full text-xs font-bold">
+            <span>${escapeHtml(inv.roomName)}</span>
+            ${inv.tenant ? `<span class="opacity-60">•</span><span>${escapeHtml(inv.tenant)}</span>` : ''}
+          </div>
+        </div>
+
+        <!-- Chi tiết phiếu -->
+        <div class="p-5 text-sm">
+          <div class="space-y-2.5">
+            <div class="flex justify-between gap-2">
+              <span class="text-slate-600">1. Tiền phòng</span>
+              <span class="font-bold text-slate-900">${formatVND(inv.rent)} đ</span>
+            </div>
+            <div class="flex justify-between gap-2">
+              <div>
+                <div class="text-slate-600">2. Tiền nước</div>
+                <div class="text-[11px] text-slate-400">${inv.people} người × ${formatVND(inv.waterPrice)} đ</div>
+              </div>
+              <span class="font-bold text-slate-900">${formatVND(inv.waterTotal)} đ</span>
+            </div>
+            <div class="flex justify-between gap-2">
+              <div>
+                <div class="text-slate-600">3. Tiền điện</div>
+                <div class="text-[11px] text-slate-400">${inv.elecOld} → ${inv.elecNew} (${inv.elecUsage} số × ${formatVND(inv.elecPrice)} đ)</div>
+              </div>
+              <span class="font-bold text-slate-900">${formatVND(inv.elecTotal)} đ</span>
+            </div>
+            ${inv.extra !== 0 ? `
+              <div class="flex justify-between gap-2">
+                <div>
+                  <div class="text-slate-600">4. Phát sinh</div>
+                  ${inv.extraNote ? `<div class="text-[11px] text-slate-400">${escapeHtml(inv.extraNote)}</div>` : ''}
+                </div>
+                <span class="font-bold ${inv.extra > 0 ? 'text-slate-900' : 'text-emerald-600'}">${formatMoneySigned(inv.extra)} đ</span>
+              </div>
+            ` : ''}
+            ${inv.oldDebt > 0 ? `
+              <div class="flex justify-between gap-2">
+                <span class="text-rose-600 font-medium">Nợ cũ tháng trước</span>
+                <span class="font-bold text-rose-600">${formatVND(inv.oldDebt)} đ</span>
+              </div>
+            ` : ''}
+          </div>
+
+          <!-- Khung tổng tiền -->
+          <div class="mt-4 pt-3 border-t-2 border-slate-200 flex items-center justify-between">
+            <span class="font-extrabold text-slate-900 text-base">TỔNG CỘNG</span>
+            <span class="font-extrabold text-indigo-700 text-xl">${formatVND(inv.total)} đ</span>
+          </div>
+
+          ${inv.paidAmount > 0 && remain > 0 ? `
+            <div class="mt-2 pt-2 border-t border-slate-100 space-y-1 text-xs">
+              <div class="flex justify-between text-emerald-700 font-semibold">
+                <span>Đã thanh toán</span>
+                <span>− ${formatVND(inv.paidAmount)} đ</span>
+              </div>
+              <div class="flex justify-between text-rose-600 font-extrabold text-sm">
+                <span>CÒN PHẢI THANH TOÁN</span>
+                <span>${formatVND(remain)} đ</span>
+              </div>
+            </div>
+          ` : ''}
+
+          ${inv.paymentStatus === 'paid' && inv.total > 0 ? `
+            <div class="mt-3 rounded-xl bg-emerald-50 border border-emerald-200 py-2 px-3 text-center text-xs font-extrabold text-emerald-700">
+              ✓ ĐÃ THANH TOÁN ĐỦ ${inv.paidDate ? '(' + escapeHtml(inv.paidDate) + ')' : ''}
+            </div>
+          ` : ''}
+
+          ${qrSectionHtml}
+        </div>
+      `;
+
+      document.getElementById('receiptModal').classList.remove('hidden');
+    }
+
+    function closeReceiptModal() {
+      document.getElementById('receiptModal').classList.add('hidden');
+      state.currentReceiptInvoiceId = null;
+    }
+
+    function copyCurrentModalZalo() {
+      if (state.currentReceiptInvoiceId) {
+        copyZaloMessageById(state.currentReceiptInvoiceId);
+      }
+    }
+
+    async function downloadReceiptPng() {
+      if (typeof html2canvas === 'undefined') {
+        showToast('Thư viện xuất ảnh đang tải, vui lòng thử lại sau giây lát.', 'warning');
+        return;
+      }
+      const btn = document.getElementById('btnDownloadPng');
+      const oldHtml = btn.innerHTML;
+      btn.disabled = true;
+      btn.innerHTML = `<span>Đang xuất ảnh...</span>`;
+
+      try {
+        const inv = getInvoiceById(state.currentReceiptInvoiceId);
+        const target = document.getElementById('receiptCaptureArea');
+        const canvas = await html2canvas(target, {
+          scale: 2,
+          useCORS: true,
+          allowTaint: false,
+          backgroundColor: '#ffffff'
+        });
+
+        const link = document.createElement('a');
+        const fname = inv
+          ? `PhieuThu_${inv.roomId}_T${inv.month}_${inv.year}.png`
+          : `PhieuThu.png`;
+        link.download = fname;
+        link.href = canvas.toDataURL('image/png');
+        link.click();
+        showToast('Đã tải ảnh phiếu thu PNG thành công!', 'success');
+      } catch (err) {
+        console.error('Export PNG error:', err);
+        showToast('Lỗi xuất ảnh PNG (có thể do ảnh QR bị chặn CORS). Bạn có thể chụp màn hình trực tiếp.', 'warning');
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = oldHtml;
+      }
+    }
+
+    /*************************************************************************
+     * 12. MODAL CÀI ĐẶT, SAO LƯU JSON & MÃ GOOGLE APPS SCRIPT TÍCH HỢP SẴN
+     *************************************************************************/
+    const GOOGLE_APPS_SCRIPT_CODE = `/**
+ * GOOGLE APPS SCRIPT ĐỒNG BỘ 2 CHIỀU QUẢN LÝ 9 PHÒNG TRỌ
+ * Tự động khởi tạo 4 Sheet trực quan:
+ * 1. Cau_Hinh        (Cấu hình 9 phòng + Tài khoản VietQR)
+ * 2. Chi_So_Dien     (Lịch sử chỉ số điện)
+ * 3. Lich_Su_Hoa_Don (Lịch sử hóa đơn chốt cứng theo tháng)
+ * 4. Bao_Cao_Thang   (Bảng xem trực quan có sẵn công thức FILTER & SUMIFS)
+ */
+
+function doGet(e) {
+  try {
+    initSheets_();
+    var action = (e && e.parameter && e.parameter.action) || 'loadAll';
+    if (action === 'loadAll') {
+      return jsonResponse_({ status: 'ok', data: loadAllData_() });
+    }
+    return jsonResponse_({ status: 'error', message: 'Action không hợp lệ' });
+  } catch (err) {
+    return jsonResponse_({ status: 'error', message: err.toString() });
+  }
+}
+
+function doPost(e) {
+  try {
+    initSheets_();
+    var body = JSON.parse(e.postData.contents || '{}');
+    var action = body.action;
+    var payload = body.payload || {};
+
+    if (action === 'saveConfig') {
+      saveConfig_(payload.bank, payload.rooms);
+    } else if (action === 'upsertElectric') {
+      upsertElectric_(payload.records || []);
+    } else if (action === 'upsertInvoices') {
+      upsertInvoices_(payload.records || []);
+    } else if (action === 'syncAll') {
+      if (payload.bank || payload.rooms) saveConfig_(payload.bank, payload.rooms);
+      if (payload.electricHistory) upsertElectric_(payload.electricHistory);
+      if (payload.invoiceHistory) upsertInvoices_(payload.invoiceHistory);
+    } else {
+      return jsonResponse_({ status: 'error', message: 'Action POST không hỗ trợ: ' + action });
+    }
+    return jsonResponse_({ status: 'ok', message: 'Đồng bộ thành công' });
+  } catch (err) {
+    return jsonResponse_({ status: 'error', message: err.toString() });
+  }
+}
+
+function jsonResponse_(obj) {
+  return ContentService.createTextOutput(JSON.stringify(obj))
+    .setMimeType(ContentService.MimeType.JSON);
+}
+
+function initSheets_() {
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+
+  // Sheet 1: Cau_Hinh
+  var s1 = ss.getSheetByName('Cau_Hinh');
+  if (!s1) {
+    s1 = ss.insertSheet('Cau_Hinh');
+    s1.getRange('A1:H1').setValues([['id','name','status','tenant','people','rent','waterPrice','elecPrice']])
+      .setFontWeight('bold').setBackground('#e0e7ff');
+    s1.getRange('J1:K1').setValues([['VietQR_Key','Value']])
+      .setFontWeight('bold').setBackground('#dcfce7');
+    s1.getRange('J2:K4').setValues([['bankId','MB'],['accountNo',''],['accountName','']]);
+    s1.setFrozenRows(1);
+  }
+
+  // Sheet 2: Chi_So_Dien
+  var s2 = ss.getSheetByName('Chi_So_Dien');
+  if (!s2) {
+    s2 = ss.insertSheet('Chi_So_Dien');
+    s2.getRange('A1:K1').setValues([[
+      'key','period','year','month','roomId','roomName','oldIndex','newIndex','usage','recordedAt','note'
+    ]]).setFontWeight('bold').setBackground('#e0e7ff');
+    s2.setFrozenRows(1);
+  }
+
+  // Sheet 3: Lich_Su_Hoa_Don
+  var s3 = ss.getSheetByName('Lich_Su_Hoa_Don');
+  if (!s3) {
+    s3 = ss.insertSheet('Lich_Su_Hoa_Don');
+    s3.getRange('A1:X1').setValues([[
+      'id','period','year','month','roomId','roomName','tenant','statusRoom',
+      'people','rent','waterPrice','waterTotal','elecOld','elecNew','elecUsage',
+      'elecPrice','elecTotal','extra','extraNote','oldDebt','total','paidAmount','paymentStatus','paidDate'
+    ]]).setFontWeight('bold').setBackground('#e0e7ff');
+    s3.setFrozenRows(1);
+  }
+
+  // Sheet 4: Bao_Cao_Thang (Trực quan với công thức tự lọc)
+  var s4 = ss.getSheetByName('Bao_Cao_Thang');
+  if (!s4) {
+    s4 = ss.insertSheet('Bao_Cao_Thang');
+    var now = new Date();
+    var defaultPeriod = ('0' + (now.getMonth() + 1)).slice(-2) + '/' + now.getFullYear();
+    s4.getRange('A1').setValue('BÁO CÁO TIỀN PHÒNG TRỌ THEO THÁNG').setFontSize(14).setFontWeight('bold');
+    s4.getRange('A2').setValue('Nhập Kỳ (MM/YYYY):').setFontWeight('bold');
+    s4.getRange('B2').setValue(defaultPeriod).setBackground('#fef3c7').setFontWeight('bold');
+
+    s4.getRange('D2:F2').setValues([['Tổng phải thu','Đã thu','Còn thiếu']]).setFontWeight('bold').setBackground('#e0e7ff');
+    s4.getRange('D3').setFormula('=SUMIF(Lich_Su_Hoa_Don!B:B, B2, Lich_Su_Hoa_Don!U:U)').setNumberFormat('#,##0');
+    s4.getRange('E3').setFormula('=SUMIF(Lich_Su_Hoa_Don!B:B, B2, Lich_Su_Hoa_Don!V:V)').setNumberFormat('#,##0');
+    s4.getRange('F3').setFormula('=D3-E3').setNumberFormat('#,##0');
+
+    s4.getRange('A5:J5').setValues([[
+      'Phòng','Khách','Tiền nhà','Tiền nước','Số điện','Tiền điện','Phát sinh','Nợ cũ','Tổng cộng','Đã đóng'
+    ]]).setFontWeight('bold').setBackground('#1e3a8a').setFontColor('#ffffff');
+
+    s4.getRange('A6').setFormula(
+      '=IFERROR(FILTER({Lich_Su_Hoa_Don!F2:G,Lich_Su_Hoa_Don!J2:J,Lich_Su_Hoa_Don!L2:L,Lich_Su_Hoa_Don!O2:O,Lich_Su_Hoa_Don!Q2:R,Lich_Su_Hoa_Don!T2:V}, Lich_Su_Hoa_Don!B2:B=B2), "Chưa có dữ liệu kỳ " & B2)'
+    );
+    s4.getRange('C6:J20').setNumberFormat('#,##0');
+  }
+}
+
+function loadAllData_() {
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var s1 = ss.getSheetByName('Cau_Hinh');
+  var bankVals = s1.getRange('J2:K4').getValues();
+  var bank = { bankId: 'MB', accountNo: '', accountName: '' };
+  bankVals.forEach(function(r) { if (r[0]) bank[r[0]] = String(r[1] || ''); });
+
+  var rooms = [];
+  var lastR1 = s1.getLastRow();
+  if (lastR1 >= 2) {
+    var rVals = s1.getRange(2, 1, Math.min(lastR1 - 1, 20), 8).getValues();
+    rVals.forEach(function(r) {
+      if (!r[0]) return;
+      rooms.push({
+        id: String(r[0]), name: String(r[1]), status: String(r[2] || 'occupied'),
+        tenant: String(r[3] || ''), people: Number(r[4]) || 0,
+        rent: Number(r[5]) || 0, waterPrice: Number(r[6]) || 0, elecPrice: Number(r[7]) || 0
+      });
+    });
+  }
+
+  var s2 = ss.getSheetByName('Chi_So_Dien');
+  var electricHistory = [];
+  if (s2.getLastRow() >= 2) {
+    s2.getRange(2, 1, s2.getLastRow() - 1, 11).getValues().forEach(function(r) {
+      if (!r[0]) return;
+      electricHistory.push({
+        key: String(r[0]), period: String(r[1]), year: Number(r[2]), month: Number(r[3]),
+        roomId: String(r[4]), roomName: String(r[5]), oldIndex: Number(r[6]) || 0,
+        newIndex: Number(r[7]) || 0, usage: Number(r[8]) || 0,
+        recordedAt: String(r[9] || ''), note: String(r[10] || '')
+      });
+    });
+  }
+
+  var s3 = ss.getSheetByName('Lich_Su_Hoa_Don');
+  var invoiceHistory = [];
+  if (s3.getLastRow() >= 2) {
+    s3.getRange(2, 1, s3.getLastRow() - 1, 24).getValues().forEach(function(r) {
+      if (!r[0]) return;
+      invoiceHistory.push({
+        id: String(r[0]), period: String(r[1]), year: Number(r[2]), month: Number(r[3]),
+        roomId: String(r[4]), roomName: String(r[5]), tenant: String(r[6] || ''),
+        statusRoom: String(r[7] || 'occupied'), people: Number(r[8]) || 0,
+        rent: Number(r[9]) || 0, waterPrice: Number(r[10]) || 0, waterTotal: Number(r[11]) || 0,
+        elecOld: Number(r[12]) || 0, elecNew: Number(r[13]) || 0, elecUsage: Number(r[14]) || 0,
+        elecPrice: Number(r[15]) || 0, elecTotal: Number(r[16]) || 0,
+        extra: Number(r[17]) || 0, extraNote: String(r[18] || ''), oldDebt: Number(r[19]) || 0,
+        total: Number(r[20]) || 0, paidAmount: Number(r[21]) || 0,
+        paymentStatus: String(r[22] || 'unpaid'), paidDate: String(r[23] || '')
+      });
+    });
+  }
+
+  return { bank: bank, rooms: rooms, electricHistory: electricHistory, invoiceHistory: invoiceHistory };
+}
+
+function saveConfig_(bank, rooms) {
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var s1 = ss.getSheetByName('Cau_Hinh');
+  if (bank) {
+    s1.getRange('J2:K4').setValues([
+      ['bankId', bank.bankId || 'MB'],
+      ['accountNo', "'" + (bank.accountNo || '')],
+      ['accountName', bank.accountName || '']
+    ]);
+  }
+  if (Array.isArray(rooms) && rooms.length > 0) {
+    if (s1.getLastRow() >= 2) s1.getRange(2, 1, s1.getLastRow() - 1, 8).clearContent();
+    var rows = rooms.map(function(r) {
+      return [r.id, r.name, r.status, r.tenant || '', r.people, r.rent, r.waterPrice, r.elecPrice];
+    });
+    s1.getRange(2, 1, rows.length, 8).setValues(rows);
+    s1.getRange(2, 6, rows.length, 3).setNumberFormat('#,##0');
+  }
+}
+
+function upsertByKey_(sheet, records, colCount, toRowFn, keyGetter) {
+  if (!records || records.length === 0) return;
+  var lastRow = sheet.getLastRow();
+  var existingKeys = {};
+  if (lastRow >= 2) {
+    var keys = sheet.getRange(2, 1, lastRow - 1, 1).getValues();
+    for (var i = 0; i < keys.length; i++) {
+      if (keys[i][0]) existingKeys[String(keys[i][0])] = i + 2;
+    }
+  }
+  var toAppend = [];
+  records.forEach(function(rec) {
+    var k = String(keyGetter(rec));
+    var rowData = toRowFn(rec);
+    if (existingKeys[k]) {
+      sheet.getRange(existingKeys[k], 1, 1, colCount).setValues([rowData]);
+    } else {
+      toAppend.push(rowData);
+    }
+  });
+  if (toAppend.length > 0) {
+    sheet.getRange(sheet.getLastRow() + 1, 1, toAppend.length, colCount).setValues(toAppend);
+  }
+}
+
+function upsertElectric_(records) {
+  var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName('Chi_So_Dien');
+  upsertByKey_(sheet, records, 11, function(r) {
+    return [r.key, "'" + r.period, r.year, r.month, r.roomId, r.roomName, r.oldIndex, r.newIndex, r.usage, "'" + (r.recordedAt || ''), r.note || ''];
+  }, function(r) { return r.key; });
+}
+
+function upsertInvoices_(records) {
+  var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName('Lich_Su_Hoa_Don');
+  upsertByKey_(sheet, records, 24, function(r) {
+    return [
+      r.id, "'" + r.period, r.year, r.month, r.roomId, r.roomName, r.tenant || '', r.statusRoom || 'occupied',
+      r.people, r.rent, r.waterPrice, r.waterTotal, r.elecOld, r.elecNew, r.elecUsage,
+      r.elecPrice, r.elecTotal, r.extra, r.extraNote || '', r.oldDebt, r.total, r.paidAmount, r.paymentStatus, "'" + (r.paidDate || '')
+    ];
+  }, function(r) { return r.id; });
+}`;
+
+    function populateBankDropdown() {
+      const sel = document.getElementById('inputBankId');
+      sel.innerHTML = BANKS.map(b => `<option value="${b.id}">${b.id} — ${b.name}</option>`).join('');
+    }
+
+    function openSettingsModal() {
+      document.getElementById('inputGasUrl').value = state.gasUrl || '';
+      document.getElementById('inputBankId').value = state.data.bank.bankId || 'MB';
+      document.getElementById('inputAccountNo').value = state.data.bank.accountNo || '';
+      document.getElementById('inputAccountName').value = state.data.bank.accountName || '';
+      document.getElementById('gasCodePreview').textContent = GOOGLE_APPS_SCRIPT_CODE;
+      switchSettingsTab('general');
+      document.getElementById('settingsModal').classList.remove('hidden');
+    }
+
+    function closeSettingsModal() {
+      document.getElementById('settingsModal').classList.add('hidden');
+    }
+
+    function switchSettingsTab(tab) {
+      ['general', 'script', 'backup'].forEach(t => {
+        document.getElementById('setTab-' + t).classList.toggle('hidden', t !== tab);
+        document.getElementById('setTabBtn-' + t).className = t === tab
+          ? 'py-2 rounded-lg text-xs font-bold transition bg-white text-indigo-700 shadow-xs'
+          : 'py-2 rounded-lg text-xs font-bold transition text-slate-600 hover:text-slate-900';
+      });
+    }
+
+    async function saveSettings() {
+      const url = document.getElementById('inputGasUrl').value.trim();
+      const bankId = document.getElementById('inputBankId').value;
+      const accountNo = document.getElementById('inputAccountNo').value.trim();
+      const accountName = document.getElementById('inputAccountName').value.trim().toUpperCase();
+
+      state.gasUrl = url;
+      localStorage.setItem(GAS_URL_KEY, url);
+
+      state.data.bank = { bankId, accountNo, accountName };
+      saveToLocalStorage();
+
+      state.syncStatus = url ? 'local' : 'none';
+      updateSyncStatusUI();
+      closeSettingsModal();
+
+      if (url) {
+        const res = await callGasPost('saveConfig', { bank: state.data.bank, rooms: state.data.rooms });
+        if (res.ok) {
+          showToast('Đã lưu cài đặt & đồng bộ tài khoản VietQR lên Sheet!', 'success');
+        } else {
+          showToast('Đã lưu cài đặt trên máy (chưa đồng bộ được Sheet, hãy kiểm tra lại URL).', 'warning');
+        }
+      } else {
+        showToast('Đã lưu cài đặt thành công!', 'success');
+      }
+    }
+
+    async function testGasConnection() {
+      const url = document.getElementById('inputGasUrl').value.trim();
+      if (!url) {
+        showToast('Vui lòng dán Web App URL trước khi kiểm tra!', 'warning');
+        return;
+      }
+      state.gasUrl = url;
+      localStorage.setItem(GAS_URL_KEY, url);
+      const ok = await pullFromSheet(false);
+      if (ok) {
+        document.getElementById('inputBankId').value = state.data.bank.bankId || 'MB';
+        document.getElementById('inputAccountNo').value = state.data.bank.accountNo || '';
+        document.getElementById('inputAccountName').value = state.data.bank.accountName || '';
+      }
+    }
+
+    function copyGasScriptCode() {
+      const ok = copyTextToClipboard(GOOGLE_APPS_SCRIPT_CODE);
+      showToast(ok ? 'Đã copy toàn bộ mã Google Apps Script!' : 'Không thể copy tự động.', ok ? 'success' : 'error');
+    }
+
+    function exportBackupJson() {
+      const blob = new Blob([JSON.stringify(state.data, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `backup_phong_tro_${getTodayDDMMYYYY().replace(/\//g, '-')}.json`;
+      a.click();
+      URL.revokeObjectURL(url);
+      showToast('Đã tải tệp sao lưu dữ liệu (.json)!', 'success');
+    }
+
+    function importBackupJson(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        try {
+          const parsed = JSON.parse(e.target.result);
+          state.data = normalizeAppData(parsed);
+          saveToLocalStorage();
+          loadElectricDraftsForPeriod(state.selectedMonth, state.selectedYear);
+          renderAllViews();
+          closeSettingsModal();
+          showToast('Đã khôi phục dữ liệu từ file sao lưu thành công!', 'success');
+        } catch (err) {
+          showToast('File JSON không hợp lệ!', 'error');
+        }
+      };
+      reader.readAsText(file);
+      event.target.value = '';
+    }
+
+    async function confirmResetAppData() {
+      const ok = await openConfirmModal({
+        title: 'Đặt lại toàn bộ dữ liệu?',
+        message: 'Mọi cấu hình phòng, lịch sử điện và hóa đơn lưu trên trình duyệt này sẽ bị xóa sạch và đưa về 9 phòng mặc định. Bạn có chắc chắn không?',
+        okText: 'Đặt lại ngay',
+        danger: true
+      });
+      if (!ok) return;
+
+      state.data = createDefaultData();
+      saveToLocalStorage();
+      loadElectricDraftsForPeriod(state.selectedMonth, state.selectedYear);
+      renderAllViews();
+      closeSettingsModal();
+      showToast('Đã đặt lại dữ liệu mặc định cho 9 phòng.', 'info');
+    }
+
+    /*************************************************************************
+     * 13. KHỞI CHẠY ỨNG DỤNG
+     *************************************************************************/
+    function renderAllViews() {
+      populatePeriodSelectors();
+      updateSyncStatusUI();
+      renderConfigTab();
+      renderElectricTab();
+      renderElectricHistory();
+      renderInvoiceTab();
+      renderInvoiceHistory();
+    }
+
+    function initApp() {
+      populateBankDropdown();
+      loadFromLocalStorage();
+      loadElectricDraftsForPeriod(state.selectedMonth, state.selectedYear);
+      renderAllViews();
+      switchTab('config');
+    }
+
+    window.addEventListener('DOMContentLoaded', initApp);
+  </script>
+</body>
+</html>
