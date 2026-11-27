@@ -145,7 +145,7 @@
       display: flex; align-items: center; justify-content: space-between; gap: 8px; flex-wrap: nowrap;
     }
     .brand {
-      display: flex; align-items: center; gap: 9px; min-width: 0; flex-shrink: 1;
+      display: flex; align-items: center; gap: 9px; min-width: 0; flex: 1;
     }
     .brand-icon {
       width: 38px; height: 38px; border-radius: 11px; flex-shrink: 0; object-fit: cover;
@@ -160,25 +160,29 @@
       font-size: 11px; color: var(--text-soft); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
     }
 
-    /* Header Controls: Framed Sync Box + 3 Icons in 1 Straight Row */
+    /* Header Controls: Vertical Compact Stack (Sync Box on top, 3 small vibrant icons aligned below) */
     .header-controls {
-      display: flex; align-items: center; gap: 6px; flex-shrink: 0;
+      display: flex; flex-direction: column; align-items: flex-end; gap: 4px; flex-shrink: 0;
+    }
+    .header-icons-row {
+      display: flex; align-items: center; justify-content: flex-end; gap: 6px;
     }
     .sync-box {
-      height: 36px;
-      padding: 0 11px;
-      border-radius: 12px;
-      border: 1.5px solid var(--glass-border);
+      height: 22px;
+      min-width: 98px;
+      padding: 0 8px;
+      border-radius: 8px;
+      border: 1.2px solid var(--glass-border);
       background: var(--glass-bg-strong);
       color: var(--text-main);
-      font-size: 11.5px;
+      font-size: 10px;
       font-weight: 700;
       display: inline-flex;
       align-items: center;
       justify-content: center;
       white-space: nowrap;
       cursor: pointer;
-      box-shadow: inset 0 1px 0 var(--glass-specular), 0 3px 10px rgba(0,0,0,0.06);
+      box-shadow: inset 0 1px 0 var(--glass-specular), 0 2px 6px rgba(0,0,0,0.06);
       transition: transform 0.15s ease, background 0.25s ease, border-color 0.25s ease;
     }
     .sync-box:active { transform: scale(0.96); }
@@ -220,21 +224,32 @@
     html[data-theme="dark"] .sync-box.state-needs-pull { color: #ffffff; }
 
     .icon-btn {
-      width: 38px; height: 38px;
-      border-radius: 13px;
-      border: 1px solid rgba(255, 255, 255, 0.42);
+      width: 28px; height: 28px;
+      border-radius: 9px;
+      border: 1px solid rgba(255, 255, 255, 0.45);
       background: var(--glass-bg-strong);
       color: #ffffff;
       display: inline-flex; align-items: center; justify-content: center;
       cursor: pointer; position: relative; flex-shrink: 0;
       transition: transform 0.16s ease, box-shadow 0.22s ease, filter 0.2s ease;
     }
-    .icon-btn:hover { filter: brightness(1.07); }
-    .icon-btn:active { transform: scale(0.91); }
+    .icon-btn:hover { filter: brightness(1.08); }
+    .icon-btn:active { transform: scale(0.90); }
     .icon-btn svg {
-      width: 19px; height: 19px; stroke-width: 2.25;
+      width: 15px; height: 15px; stroke-width: 2.25;
       filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.22));
     }
+    .trash-btn {
+      width: 30px; height: 30px; border-radius: 9px;
+      border: 1px solid rgba(239, 68, 68, 0.32);
+      background: var(--danger-soft); color: var(--danger);
+      display: inline-flex; align-items: center; justify-content: center;
+      cursor: pointer; flex-shrink: 0;
+      transition: transform 0.14s ease, background 0.2s ease, color 0.2s ease;
+    }
+    .trash-btn:hover { background: var(--danger); color: #ffffff; }
+    .trash-btn:active { transform: scale(0.90); }
+    .trash-btn svg { width: 15px; height: 15px; stroke-width: 2.1; }
     /* 1. Icon Người đăng nhập — Xanh dương ngọc nổi bật */
     .icon-btn.icon-account {
       background: linear-gradient(135deg, #06b6d4 0%, #2563eb 100%);
@@ -256,7 +271,7 @@
     }
     .icon-btn .role-dot {
       position: absolute; top: 4px; right: 4px;
-      width: 8px; height: 8px; border-radius: 50%;
+      width: 6px; height: 6px; border-radius: 50%;
       background: #4ade80; box-shadow: 0 0 0 2px #ffffff;
     }
     .icon-btn .role-dot.tenant { background: #fde047; }
@@ -706,42 +721,44 @@
         </div>
       </div>
 
-      <!-- Framed Sync Box + 3 Colored Icons: 1. Người đăng nhập -> 2. Sáng/Tối -> 3. Cài đặt -->
+      <!-- Compact Vertical Stack: Sync Box on top, 3 small vibrant icons aligned below -->
       <div class="header-controls">
         <button id="syncBox" class="sync-box state-needs-pull" onclick="handleSyncClick()" title="Bấm để đồng bộ dữ liệu với máy chủ">
           Đồng bộ máy chủ
         </button>
 
-        <!-- 1. Icon Người đăng nhập -->
-        <button id="btnAccount" class="icon-btn icon-account" onclick="openAccountModal()" title="Tài khoản & Đăng nhập">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-            <circle cx="12" cy="7" r="4"></circle>
-          </svg>
-          <span id="accountDot" class="role-dot hidden"></span>
-        </button>
+        <div class="header-icons-row">
+          <!-- 1. Icon Người đăng nhập -->
+          <button id="btnAccount" class="icon-btn icon-account" onclick="openAccountModal()" title="Tài khoản & Đăng nhập">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+              <circle cx="12" cy="7" r="4"></circle>
+            </svg>
+            <span id="accountDot" class="role-dot hidden"></span>
+          </button>
 
-        <!-- 2. Icon Chuyển Sáng / Tối -->
-        <button id="btnTheme" class="icon-btn icon-theme" onclick="toggleTheme()" title="Chuyển chế độ Sáng / Tối">
-          <svg id="themeIconSun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="12" cy="12" r="5"></circle>
-            <line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line>
-            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
-            <line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line>
-            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
-          </svg>
-          <svg id="themeIconMoon" class="hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
-          </svg>
-        </button>
+          <!-- 2. Icon Chuyển Sáng / Tối -->
+          <button id="btnTheme" class="icon-btn icon-theme" onclick="toggleTheme()" title="Chuyển chế độ Sáng / Tối">
+            <svg id="themeIconSun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="5"></circle>
+              <line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line>
+              <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+              <line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line>
+              <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+            </svg>
+            <svg id="themeIconMoon" class="hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+            </svg>
+          </button>
 
-        <!-- 3. Icon Cài đặt quản trị viên -->
-        <button id="btnSettings" class="icon-btn icon-settings" onclick="openSettingsModal()" title="Cài đặt quản trị viên">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="12" cy="12" r="3"></circle>
-            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33h.01a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51h.01a1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82v.01a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
-          </svg>
-        </button>
+          <!-- 3. Icon Cài đặt quản trị viên -->
+          <button id="btnSettings" class="icon-btn icon-settings" onclick="openSettingsModal()" title="Cài đặt quản trị viên">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="3"></circle>
+              <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33h.01a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51h.01a1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82v.01a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+            </svg>
+          </button>
+        </div>
       </div>
     </div>
   </header>
@@ -749,13 +766,12 @@
   <!-- Main Swipeable Content -->
   <main class="main-wrap" id="swipeArea">
     <!-- Period Bar -->
-    <div class="period-bar glass">
+    <div class="period-bar glass" style="justify-content:center;">
       <div class="period-nav">
         <button class="period-btn" onclick="shiftPeriod(-1)" title="Tháng trước">&#8249;</button>
         <div class="period-label" id="periodLabel">Tháng 11/2026</div>
         <button class="period-btn" onclick="shiftPeriod(1)" title="Tháng sau">&#8250;</button>
       </div>
-      <div class="swipe-hint">Vuốt trái / phải để chuyển tab</div>
     </div>
 
     <!-- ==================== TAB 1: TIỀN PHÒNG MM/YYYY ==================== -->
@@ -882,6 +898,7 @@
                 <th>Ghi chú</th>
                 <th>Ảnh đồng hồ</th>
                 <th>Ngày ghi</th>
+                <th id="meterHistDelTh">Xóa</th>
               </tr>
             </thead>
             <tbody id="meterHistoryBody"></tbody>
@@ -910,9 +927,9 @@
             <input type="number" id="bulkElectric" value="4000" step="100" />
           </div>
         </div>
-        <div class="mt-3 flex-row">
+        <div class="mt-3 flex-row" style="justify-content:space-between;">
           <button class="btn btn-indigo btn-sm" onclick="applyBulkRates()">Áp dụng giá cho cả 9 phòng</button>
-          <button class="btn btn-emerald btn-sm" onclick="saveRoomsAndSync()">Lưu dữ liệu &amp; Đồng bộ</button>
+          <span class="muted">Mọi thay đổi thông tin phòng sẽ tự động đồng bộ lên máy chủ</span>
         </div>
       </div>
 
@@ -998,7 +1015,7 @@
           <button type="button" class="btn btn-amber btn-sm" id="btnToggleChangeAdminPass" onclick="toggleChangeAdminPassBox()">
             Thay đổi mật khẩu quản trị viên
           </button>
-          <span class="muted" style="margin-left:6px;">Khôi phục qua Gmail: <strong>tiencanh.ntc@gmail.com</strong></span>
+          <span class="muted" style="margin-left:6px;">Hỗ trợ khôi phục qua Gmail bảo mật khi quên mật khẩu</span>
         </div>
 
         <div id="changeAdminPassBox" class="change-pass-panel hidden">
@@ -1196,16 +1213,16 @@
 
         <div id="recoveryStepSend">
           <div class="muted" style="margin-bottom:10px; line-height:1.45;">
-            Bạn đã nhập sai mật khẩu Quản trị viên quá 5 lần. Bấm nút bên dưới để nhận mã xác nhận 6 số gửi về Gmail <strong>tiencanh.ntc@gmail.com</strong> và đặt mật khẩu mới.
+            Bạn đã nhập sai mật khẩu Quản trị viên quá 5 lần. Bấm nút bên dưới để nhận mã xác nhận 6 số gửi về <strong>Gmail quản trị đã đăng ký</strong> và đặt mật khẩu mới.
           </div>
           <button type="button" id="btnSendResetOtp" class="btn btn-amber" style="width:100%;" onclick="requestAdminResetOtp()">
-            Gửi mã về tiencanh.ntc@gmail.com
+            Gửi mã xác nhận về Gmail quản trị
           </button>
         </div>
 
         <div id="recoveryStepVerify" class="hidden">
           <div class="muted" style="margin-bottom:8px; line-height:1.4;">
-            Mã xác nhận 6 số đã được gửi tới <strong>tiencanh.ntc@gmail.com</strong> (hiệu lực 10 phút). Nhập mã từ Gmail để đặt mật khẩu mới:
+            Mã xác nhận 6 số đã được gửi tới <strong>Gmail quản trị</strong> (hiệu lực 10 phút). Nhập mã từ Gmail để đặt mật khẩu mới:
           </div>
           <div style="margin-bottom:8px;">
             <label class="field-label">Mã xác nhận 6 số từ Gmail</label>
@@ -1345,8 +1362,8 @@
           appTitle: (parsed.appTitle && String(parsed.appTitle).trim()) || "Nhà Cho Thuê",
           rooms,
           accounts: Array.isArray(parsed.accounts) && parsed.accounts.length ? parsed.accounts : def.accounts,
-          meters: Array.isArray(parsed.meters) ? parsed.meters.map((m) => ({ note: "", ...m })) : [],
-          bills: Array.isArray(parsed.bills) ? parsed.bills : [],
+          meters: Array.isArray(parsed.meters) ? parsed.meters.map((m) => ({ note: "", ...m, period: normalizePeriodStr(m.period), date: normalizeDateStr(m.date) })) : [],
+          bills: Array.isArray(parsed.bills) ? parsed.bills.map((b) => ({ ...b, period: normalizePeriodStr(b.period), paidDate: normalizeDateStr(b.paidDate) })) : [],
           pendingTenantSubmissions: Array.isArray(parsed.pendingTenantSubmissions) ? parsed.pendingTenantSubmissions : [],
           payment: { ...def.payment, ...(parsed.payment || {}) }
         };
@@ -1355,8 +1372,48 @@
       }
     }
 
+    function normalizePeriodStr(val) {
+      if (!val) return "";
+      const s = String(val).trim();
+      const m1 = s.match(/^(\d{1,2})[\/\-](\d{4})$/);
+      if (m1) return String(Number(m1[1])).padStart(2, "0") + "/" + m1[2];
+      const m2 = s.match(/^(\d{4})[\/\-](\d{1,2})$/);
+      if (m2) return String(Number(m2[2])).padStart(2, "0") + "/" + m2[1];
+      const d = new Date(s);
+      if (!isNaN(d.getTime()) && s.length > 10) {
+        return String(d.getMonth() + 1).padStart(2, "0") + "/" + d.getFullYear();
+      }
+      return s;
+    }
+
+    function normalizeDateStr(val) {
+      if (!val) return "";
+      const s = String(val).trim();
+      const m1 = s.match(/^(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{4})$/);
+      if (m1) return String(Number(m1[1])).padStart(2, "0") + "/" + String(Number(m1[2])).padStart(2, "0") + "/" + m1[3];
+      const d = new Date(s);
+      if (!isNaN(d.getTime()) && s.length > 10) {
+        return String(d.getDate()).padStart(2, "0") + "/" + String(d.getMonth() + 1).padStart(2, "0") + "/" + d.getFullYear();
+      }
+      return s;
+    }
+
+    function removeVietnameseTones(str) {
+      return String(str || "")
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .replace(/đ/g, "d")
+        .replace(/Đ/g, "D")
+        .replace(/[^a-zA-Z0-9\s\-]/g, " ")
+        .replace(/\s+/g, " ")
+        .trim();
+    }
+
     function saveState(markDirty = false) {
-      if (markDirty) hasLocalDirty = true;
+      if (markDirty) {
+        hasLocalDirty = true;
+        localMutationVersion += 1;
+      }
       try {
         localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
       } catch (e) {
@@ -1410,6 +1467,8 @@
     let editingTenantRoomId = null;
     let editingRoomNameId = null;
     let hasLocalDirty = false;
+    let localMutationVersion = 0;
+    let quickPushTimer = null;
     let isSyncing = false;
     let autoSyncTimer = null;
     let autoLoginDebounce = null;
@@ -1660,8 +1719,21 @@
       });
     }
 
+    function scheduleQuickPush(delayMs = 900) {
+      if (!isAdmin() || !hasInitialPulled) return;
+      if (quickPushTimer) clearTimeout(quickPushTimer);
+      quickPushTimer = setTimeout(async () => {
+        quickPushTimer = null;
+        if (!hasLocalDirty || !isAdmin() || !hasInitialPulled) return;
+        await pushToServer(true);
+      }, delayMs);
+    }
+
     async function pullFromServer(isFirstPull, silent = false) {
       if (!session || isSyncing) return false;
+      // Không bao giờ kéo đè khi máy đang có chỉnh sửa cục bộ chưa đẩy lên (trừ lần kéo bắt buộc đầu tiên)
+      if (!isFirstPull && hasLocalDirty) return false;
+      const startMutVer = localMutationVersion;
       isSyncing = true;
       updateSyncBoxUI("pulling");
       try {
@@ -1670,6 +1742,13 @@
           action: "pull",
           auth: { username: session.username, password: session.password }
         });
+
+        // Nếu trong lúc chờ mạng mà người dùng vừa nhập liệu trên máy -> hủy ghi đè để không mất dữ liệu!
+        if (!isFirstPull && (hasLocalDirty || localMutationVersion !== startMutVer)) {
+          updateSyncBoxUI("synced");
+          return false;
+        }
+
         if (typeof res.appTitle === "string" && res.appTitle.trim()) {
           state.appTitle = res.appTitle.trim();
         }
@@ -1677,17 +1756,33 @@
           state.rooms = res.rooms.map((r) => ({ ...r, status: normalizeRoomStatus(r.status) }));
         }
         if (Array.isArray(res.meters)) {
-          state.meters = res.meters.map((m) => ({ note: "", ...m }));
+          state.meters = res.meters.map((m) => ({
+            note: "",
+            ...m,
+            period: normalizePeriodStr(m.period),
+            date: normalizeDateStr(m.date)
+          }));
         }
         if (Array.isArray(res.bills)) {
-          state.bills = res.bills;
+          state.bills = res.bills.map((b) => ({
+            ...b,
+            period: normalizePeriodStr(b.period),
+            paidDate: normalizeDateStr(b.paidDate)
+          }));
         }
         if (res.payment) {
-          state.payment = { ...state.payment, ...res.payment };
+          const p = res.payment;
+          state.payment = {
+            bankBin: p.bankBin || state.payment.bankBin || "970422",
+            bankName: p.bankName || state.payment.bankName || "MB Bank",
+            accountNo: (typeof p.accountNo === "string" && p.accountNo.trim() !== "") ? p.accountNo : (isFirstPull ? p.accountNo || "" : state.payment.accountNo),
+            accountName: (typeof p.accountName === "string" && p.accountName.trim() !== "") ? p.accountName : (isFirstPull ? p.accountName || "" : state.payment.accountName),
+            customQrImage: (typeof p.customQrImage === "string" && p.customQrImage.trim() !== "") ? p.customQrImage : (isFirstPull ? p.customQrImage || "" : state.payment.customQrImage)
+          };
         }
         if (isAdmin()) {
           if (Array.isArray(res.accounts) && res.accounts.length) state.accounts = res.accounts;
-          if (typeof res.driveFolderUrl === "string") state.driveFolderUrl = res.driveFolderUrl;
+          if (typeof res.driveFolderUrl === "string" && (isFirstPull || res.driveFolderUrl)) state.driveFolderUrl = res.driveFolderUrl;
         }
 
         saveState(false);
@@ -1883,14 +1978,14 @@
         document.getElementById("resetOtpInput").value = "";
         document.getElementById("resetNewPassInput").value = "";
         document.getElementById("resetConfirmPassInput").value = "";
-        toast(res.message || "Đã gửi mã 6 số về tiencanh.ntc@gmail.com!", "ok");
+        toast(res.message || "Đã gửi mã 6 số về Gmail quản trị!", "ok");
         setTimeout(() => document.getElementById("resetOtpInput").focus(), 60);
       } catch (err) {
         toast("Không gửi được mã về Gmail: " + err.message, "err");
       } finally {
         if (btn) {
           btn.disabled = false;
-          btn.textContent = "Gửi mã về tiencanh.ntc@gmail.com";
+          btn.textContent = "Gửi mã xác nhận về Gmail quản trị";
         }
       }
     }
@@ -2337,7 +2432,8 @@
       });
       saveState(true);
       renderConfigTab();
-      toast("Đã áp dụng mức giá mới cho cả 9 phòng!", "ok");
+      toast("Đã áp dụng mức giá mới cho cả 9 phòng & đang tự đồng bộ!", "ok");
+      scheduleQuickPush(500);
     }
 
     function updateRoomField(roomId, field, value) {
@@ -2353,6 +2449,7 @@
       if (field === "people" || field === "waterRate" || field === "status" || field === "name") {
         renderAll();
       }
+      scheduleQuickPush(800);
     }
 
     function toggleRoomOccupied(roomId, isOccupied) {
@@ -2406,13 +2503,7 @@
       rm.people = Math.max(0, (Number(rm.people) || 0) + delta);
       saveState(true);
       renderConfigTab();
-    }
-
-    async function saveRoomsAndSync() {
-      if (!isAdmin()) return openPinModal();
-      saveState(true);
-      toast("Đã lưu dữ liệu 9 phòng.", "ok");
-      await pushToServer(false);
+      scheduleQuickPush(700);
     }
 
     function renderConfigTab() {
@@ -2537,8 +2628,21 @@
       return rec;
     }
 
-    function onMeterInputChange(roomId, field, rawVal) {
-      if (!isAdmin()) return openPinModal();
+    function updateMeterUsedCellUI(roomId, newVal, oldVal) {
+      const cell = document.getElementById("meterUsedCell_" + roomId);
+      if (!cell) return;
+      const used = newVal === "" ? 0 : (Number(newVal) - Number(oldVal || 0));
+      if (newVal !== "" && used < 0) {
+        cell.innerHTML = `<span class="warn-red">${used} (Lỗi!)</span>`;
+      } else if (used > 250) {
+        cell.innerHTML = `<span class="warn-amber">${used} kWh (Cao)</span>`;
+      } else {
+        cell.innerHTML = `<strong>${used} kWh</strong>`;
+      }
+    }
+
+    function onMeterInputLive(roomId, field, rawVal) {
+      if (!isAdmin()) return;
       const rec = ensureMeterDraft(currentPeriod, roomId);
       if (field === "note") {
         rec.note = rawVal;
@@ -2547,12 +2651,56 @@
         const nv = rec.newVal === "" ? null : Number(rec.newVal);
         const ov = rec.oldVal === "" ? 0 : Number(rec.oldVal);
         rec.used = nv === null ? 0 : (nv - ov);
-        if (field === "newVal") {
-          rec.date = todayStr(); // Ngày dương lịch Việt Nam khi nhập số điện mới
+        if (field === "newVal" && rawVal !== "") {
+          rec.date = todayStr();
         }
+        updateMeterUsedCellUI(roomId, rec.newVal, rec.oldVal);
       }
       saveState(true);
+    }
+
+    function onMeterInputChange(roomId, field, rawVal) {
+      if (!isAdmin()) return openPinModal();
+      onMeterInputLive(roomId, field, rawVal);
+      renderMeterHistory();
+      scheduleQuickPush(1200);
+    }
+
+    function flushMeterInputsFromDom() {
+      state.rooms.forEach((rm) => {
+        if (isRoomVacant(rm)) return;
+        const newEl = document.getElementById("meterNew_" + rm.id);
+        const oldEl = document.getElementById("meterOld_" + rm.id);
+        const noteEl = document.getElementById("meterNote_" + rm.id);
+        if (!newEl && !oldEl && !noteEl) return;
+        const newRaw = newEl ? newEl.value.trim() : "";
+        const oldRaw = oldEl ? oldEl.value.trim() : "";
+        const noteRaw = noteEl ? noteEl.value : "";
+        if (newRaw === "" && !getMeterRecord(currentPeriod, rm.id) && noteRaw === "") return;
+        const rec = ensureMeterDraft(currentPeriod, rm.id);
+        rec.oldVal = oldRaw === "" ? 0 : Number(oldRaw);
+        rec.newVal = newRaw === "" ? "" : Number(newRaw);
+        rec.used = rec.newVal === "" ? 0 : (Number(rec.newVal) - Number(rec.oldVal || 0));
+        rec.note = noteRaw;
+        if (rec.newVal !== "") rec.date = todayStr();
+      });
+    }
+
+    async function deleteMeterRecord(meterKey) {
+      if (!isAdmin()) return openPinModal();
+      const idx = state.meters.findIndex((m) => m.key === meterKey);
+      if (idx === -1) return;
+      const rec = state.meters[idx];
+      const rm = state.rooms.find((r) => r.id === rec.roomId);
+      const roomLabel = rm ? rm.name : rec.roomId;
+      if (!confirm(`Xóa lịch sử chỉ số điện kỳ ${formatElectricPeriodRange(rec.period)} của ${roomLabel}?`)) {
+        return;
+      }
+      state.meters.splice(idx, 1);
+      saveState(true);
       renderElectricTab();
+      toast("Đã xóa lịch sử chỉ số điện của " + roomLabel + "!", "ok");
+      if (hasInitialPulled) await pushToServer(true);
     }
 
     function triggerMeterPhotoUpload(roomId) {
@@ -2614,6 +2762,7 @@
 
     async function commitMetersAndBills() {
       if (!isAdmin()) return openPinModal();
+      flushMeterInputsFromDom();
       for (const rm of state.rooms) {
         if (isRoomVacant(rm)) continue;
         const rec = getMeterRecord(currentPeriod, rm.id);
@@ -2622,9 +2771,22 @@
           return;
         }
       }
+      if (quickPushTimer) { clearTimeout(quickPushTimer); quickPushTimer = null; }
+      stopAutoSync();
       generateBillsForPeriod(true);
-      toast("Đã chốt số điện & tự động kết tổng sang Tiền phòng " + currentPeriod + "!", "ok");
-      await pushToServer(false);
+      saveState(true);
+      renderAll();
+
+      const billCount = state.bills.filter((b) => b.period === currentPeriod && b.status !== "vacant").length;
+      if (hasInitialPulled) {
+        const ok = await pushToServer(false);
+        if (ok) {
+          toast(`Đã lưu số điện & kết xuất ${billCount} hóa đơn sang Tiền phòng ${currentPeriod}!`, "ok");
+        }
+      } else {
+        toast(`Đã tạo ${billCount} hóa đơn Tiền phòng ${currentPeriod} trên máy! Hãy bấm ô Đồng bộ để kết nối máy chủ.`, "warn");
+      }
+      if (hasInitialPulled) startAutoSync();
     }
 
     function renderElectricTab() {
@@ -2656,19 +2818,22 @@
                 <div class="muted">${escHtml(rm.tenantName || (vacant ? "Phòng trống" : "Chưa nhập tên"))}</div>
               </td>
               <td>
-                <input type="number" class="num-input" value="${newVal}" placeholder="Nhập mới"
+                <input type="number" id="meterNew_${rm.id}" class="num-input" value="${newVal}" placeholder="Nhập mới"
                   ${vacant ? "disabled" : ""}
+                  oninput="onMeterInputLive('${rm.id}','newVal',this.value)"
                   onchange="onMeterInputChange('${rm.id}','newVal',this.value)" />
               </td>
               <td>
-                <input type="number" class="num-input" value="${autoOld}"
+                <input type="number" id="meterOld_${rm.id}" class="num-input" value="${autoOld}"
                   ${vacant ? "disabled" : ""}
+                  oninput="onMeterInputLive('${rm.id}','oldVal',this.value)"
                   onchange="onMeterInputChange('${rm.id}','oldVal',this.value)" />
               </td>
-              <td>${vacant ? "0 kWh" : usedHtml}</td>
+              <td id="meterUsedCell_${rm.id}">${vacant ? "0 kWh" : usedHtml}</td>
               <td>
-                <input type="text" class="note-input" value="${escHtml(noteVal)}" placeholder="Ghi chú..."
+                <input type="text" id="meterNote_${rm.id}" class="note-input" value="${escHtml(noteVal)}" placeholder="Ghi chú..."
                   ${vacant ? "disabled" : ""}
+                  oninput="onMeterInputLive('${rm.id}','note',this.value)"
                   onchange="onMeterInputChange('${rm.id}','note',this.value)" />
               </td>
               <td>
@@ -2741,11 +2906,16 @@
         .filter((m) => (!isAdmin() || rSel.value === "ALL" || m.roomId === rSel.value))
         .sort((a, b) => periodToSortable(b.period) - periodToSortable(a.period) || a.roomId.localeCompare(b.roomId));
 
+      const delTh = document.getElementById("meterHistDelTh");
+      if (delTh) delTh.classList.toggle("hidden", !isAdmin());
+
       const tbody = document.getElementById("meterHistoryBody");
       if (!filtered.length) {
-        tbody.innerHTML = `<tr><td colspan="8" class="muted" style="text-align:center; padding:18px;">Chưa có lịch sử chỉ số điện.</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="${isAdmin() ? 9 : 8}" class="muted" style="text-align:center; padding:18px;">Chưa có lịch sử chỉ số điện.</td></tr>`;
         return;
       }
+
+      const trashSvg = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"></path><path d="M10 11v6"></path><path d="M14 11v6"></path><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"></path></svg>`;
 
       tbody.innerHTML = filtered.map((m) => {
         const rm = state.rooms.find((r) => r.id === m.roomId);
@@ -2767,6 +2937,7 @@
               }
             </td>
             <td>${escHtml(m.date || "—")}</td>
+            ${isAdmin() ? `<td><button type="button" class="trash-btn" onclick="deleteMeterRecord('${escHtml(m.key)}')" title="Xóa lịch sử chỉ số điện">${trashSvg}</button></td>` : ""}
           </tr>
         `;
       }).join("");
@@ -3021,6 +3192,46 @@
       if (activeReceiptBillId) copyReceiptText(activeReceiptBillId);
     }
 
+    async function deleteBillRecord(billId) {
+      if (!isAdmin()) return openPinModal();
+      const idx = state.bills.findIndex((b) => b.id === billId);
+      if (idx === -1) return;
+      const b = state.bills[idx];
+      const rm = state.rooms.find((r) => r.id === b.roomId);
+      const roomLabel = rm ? rm.name : b.roomId;
+      if (!confirm(`Xóa lịch sử hóa đơn kỳ ${b.period} của ${roomLabel}?`)) {
+        return;
+      }
+      state.bills.splice(idx, 1);
+      saveState(true);
+      renderBillingTab();
+      toast("Đã xóa hóa đơn của " + roomLabel + "!", "ok");
+      if (hasInitialPulled) await pushToServer(true);
+    }
+
+    function handleQrImgFallback(imgEl) {
+      const step = Number(imgEl.getAttribute("data-step") || "0");
+      const bank = imgEl.getAttribute("data-bank") || "";
+      const acc = imgEl.getAttribute("data-acc") || "";
+      const amount = imgEl.getAttribute("data-amount") || "0";
+      const info = imgEl.getAttribute("data-info") || "";
+      const name = imgEl.getAttribute("data-name") || "";
+      if (step === 0) {
+        imgEl.setAttribute("data-step", "1");
+        imgEl.src = `https://img.vietqr.io/image/${bank}-${acc}-compact2.png?amount=${amount}&addInfo=${encodeURIComponent(info)}&accountName=${encodeURIComponent(name)}`;
+      } else if (step === 1) {
+        imgEl.setAttribute("data-step", "2");
+        imgEl.src = `https://img.vietqr.io/image/${bank}-${acc}-compact.png?amount=${amount}&addInfo=${encodeURIComponent(info)}&accountName=${encodeURIComponent(name)}`;
+      } else if (step === 2) {
+        imgEl.setAttribute("data-step", "3");
+        imgEl.src = `https://img.vietqr.io/image/${bank}-${acc}-qr_only.png?amount=${amount}&addInfo=${encodeURIComponent(info)}`;
+      } else {
+        imgEl.style.display = "none";
+        const fb = document.getElementById("receiptQrFallbackMsg");
+        if (fb) fb.classList.remove("hidden");
+      }
+    }
+
     function openReceiptModal(billId) {
       const b = state.bills.find((x) => x.id === billId);
       if (!b) return;
@@ -3028,25 +3239,55 @@
       const rm = state.rooms.find((r) => r.id === b.roomId);
       const roomName = rm ? rm.name : b.roomId;
 
+      const cleanAccNo = String(state.payment.accountNo || "").replace(/[^a-zA-Z0-9]/g, "");
+      const bankBin = String(state.payment.bankBin || "970422").replace(/[^0-9]/g, "");
+      const accNameClean = removeVietnameseTones(state.payment.accountName || "").toUpperCase();
+      const addInfoClean = removeVietnameseTones(`${roomName} tien phong T${String(b.period || "").replace(/\//g, "-")}`);
+      const amountNum = Math.max(0, Math.round(Number(b.total) || 0));
+
       let qrHtml = "";
       if (state.payment.customQrImage) {
         qrHtml = `
           <div class="receipt-qr-box">
-            <img src="${state.payment.customQrImage}" alt="Mã QR chuyển khoản" />
-            <div style="font-size:11.5px; color:#475569; margin-top:5px;">
-              ${state.payment.accountNo ? `${escHtml(state.payment.accountNo)} · ${escHtml(state.payment.accountName)}` : "Quét mã QR để thanh toán"}
+            <img id="receiptQrImg" src="${state.payment.customQrImage}" alt="Mã QR chuyển khoản" />
+            <div style="font-size:11.5px; color:#475569; margin-top:6px;">
+              ${cleanAccNo ? `STK: <strong>${escHtml(cleanAccNo)}</strong>${state.payment.accountName ? " · " + escHtml(state.payment.accountName) : ""}` : "Quét mã QR để thanh toán"}
             </div>
           </div>
         `;
-      } else if (state.payment.bankBin && state.payment.accountNo) {
-        const addInfo = encodeURIComponent(`${roomName} tien phong T${b.period}`);
-        const accName = encodeURIComponent(state.payment.accountName || "");
-        const qrUrl = `https://img.vietqr.io/image/${state.payment.bankBin}-${state.payment.accountNo}-compact2.png?amount=${Math.max(0, b.total)}&addInfo=${addInfo}&accountName=${accName}`;
+      } else if (bankBin && cleanAccNo) {
+        const isWebOrigin = window.location.protocol.startsWith("http");
+        const proxyUrl = `/api?action=qrProxy&bank=${bankBin}&acc=${cleanAccNo}&amount=${amountNum}&info=${encodeURIComponent(addInfoClean)}&name=${encodeURIComponent(accNameClean)}&tpl=compact2`;
+        const directUrl = `https://img.vietqr.io/image/${bankBin}-${cleanAccNo}-compact2.png?amount=${amountNum}&addInfo=${encodeURIComponent(addInfoClean)}&accountName=${encodeURIComponent(accNameClean)}`;
+        const initialSrc = isWebOrigin ? proxyUrl : directUrl;
+        const initialStep = isWebOrigin ? "0" : "1";
+
         qrHtml = `
           <div class="receipt-qr-box">
-            <img src="${qrUrl}" crossorigin="anonymous" alt="VietQR" />
-            <div style="font-size:11.5px; color:#475569; margin-top:5px;">
-              STK: <strong>${escHtml(state.payment.accountNo)}</strong> · ${escHtml(state.payment.accountName || "")}
+            <img id="receiptQrImg"
+              src="${initialSrc}"
+              data-step="${initialStep}"
+              data-bank="${escHtml(bankBin)}"
+              data-acc="${escHtml(cleanAccNo)}"
+              data-amount="${amountNum}"
+              data-info="${escHtml(addInfoClean)}"
+              data-name="${escHtml(accNameClean)}"
+              onerror="handleQrImgFallback(this)"
+              alt="Mã VietQR thanh toán" />
+            <div id="receiptQrFallbackMsg" class="hidden" style="padding:10px; border-radius:10px; background:#fef2f2; color:#b91c1c; font-size:12px;">
+              Không tải được ảnh VietQR tự động. Bạn có thể tải ảnh mã QR trực tiếp trong Cài đặt quản trị viên.
+            </div>
+            <div style="font-size:11.5px; color:#475569; margin-top:6px;">
+              ${escHtml(state.payment.bankName || "")} · STK: <strong>${escHtml(cleanAccNo)}</strong>${state.payment.accountName ? " · " + escHtml(state.payment.accountName) : ""}
+            </div>
+          </div>
+        `;
+      } else {
+        qrHtml = `
+          <div class="receipt-qr-box">
+            <div style="padding:10px; border-radius:12px; background:#f8fafc; border:1px dashed #cbd5e1; color:#64748b; font-size:12px;">
+              Chưa cài đặt Số tài khoản ngân hàng hoặc Ảnh mã QR.
+              ${isAdmin() ? `<div style="margin-top:8px;"><button type="button" class="btn btn-indigo btn-sm" onclick="closeModal('receiptModal'); openSettingsModal();">Cài đặt mã QR ngay</button></div>` : ""}
             </div>
           </div>
         `;
@@ -3076,14 +3317,14 @@
         return;
       }
       try {
-        const canvas = await html2canvas(el, { scale: 2, useCORS: true, backgroundColor: "#ffffff" });
+        const canvas = await html2canvas(el, { scale: 2, useCORS: true, allowTaint: true, backgroundColor: "#ffffff" });
         const link = document.createElement("a");
         link.download = `PhieuThu_${activeReceiptBillId || "Phong"}.png`;
         link.href = canvas.toDataURL("image/png");
         link.click();
         toast("Đã xuất ảnh phiếu thu PNG!", "ok");
       } catch (err) {
-        toast("Lỗi xuất ảnh PNG: " + err.message, "err");
+        toast("Lỗi xuất ảnh PNG: Hãy tải ảnh mã QR trực tiếp trong Cài đặt để xuất ảnh ổn định nhất.", "err");
       }
     }
 
@@ -3261,6 +3502,7 @@
               <div class="flex-row" style="gap:5px; flex-wrap:nowrap;">
                 <button class="btn btn-glass btn-sm" onclick="openReceiptModal('${b.id}')">Phiếu</button>
                 ${isAdmin() && b.billPhotoUrl ? `<button class="btn btn-indigo btn-sm" onclick="openLightbox('${escHtml(b.billPhotoUrl)}')">Bill</button>` : ""}
+                ${isAdmin() ? `<button type="button" class="trash-btn" onclick="deleteBillRecord('${escHtml(b.id)}')" title="Xóa hóa đơn này"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"></path><path d="M10 11v6"></path><path d="M14 11v6"></path><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"></path></svg></button>` : ""}
               </div>
             </td>
           </tr>
@@ -3535,35 +3777,67 @@
       await waitForSyncIdle(5000);
 
       const oldAuth = { username: session.username, password: session.password };
+      const existingAdmin = state.accounts.find((a) => a.role === "admin" && a.status === "active");
+      const currentPin = (existingAdmin && existingAdmin.adminPin) || session.password;
       try {
         updateSyncBoxUI("pushing");
-        await apiCall({
-          action: "changeAdminPassword",
-          auth: oldAuth,
-          oldAuth: oldAuth,
-          newUsername: adminUser,
-          newPassword: newPass,
-          newAdminPin: adminPin
-        });
-
-        let adminAcc = state.accounts.find((a) => a.role === "admin" && a.status === "active");
-        if (!adminAcc) {
-          adminAcc = { id: "ADMIN_ROOT", role: "admin", roomId: "ALL", status: "active", createdAt: new Date().toISOString() };
-          state.accounts.unshift(adminAcc);
+        let changed = false;
+        try {
+          await apiCall({
+            action: "changeAdminPassword",
+            auth: oldAuth,
+            oldAuth: oldAuth,
+            currentAdminPin: currentPin,
+            newUsername: adminUser,
+            newPassword: newPass,
+            newAdminPin: adminPin
+          });
+          changed = true;
+        } catch (primaryErr) {
+          // Tự động tương thích ngược nếu máy chủ Apps Script chưa bấm triển khai phiên bản mới
+          const msg = String(primaryErr && primaryErr.message || "");
+          if (msg.indexOf("Action") !== -1) {
+            const tempAccounts = state.accounts.map((a) => ({ ...a }));
+            let target = tempAccounts.find((a) => a.role === "admin" && a.status === "active");
+            if (!target) {
+              target = { id: "ADMIN_ROOT", role: "admin", roomId: "ALL", displayName: "Quản trị viên", status: "active", createdAt: new Date().toISOString() };
+              tempAccounts.unshift(target);
+            }
+            target.username = adminUser;
+            target.password = newPass;
+            target.adminPin = adminPin;
+            await apiCall({
+              action: "push",
+              auth: oldAuth,
+              oldAuth: oldAuth,
+              data: { accounts: tempAccounts }
+            });
+            changed = true;
+          } else {
+            throw primaryErr;
+          }
         }
-        adminAcc.username = adminUser;
-        adminAcc.password = newPass;
-        adminAcc.adminPin = adminPin;
-        adminAcc.displayName = "Quản trị viên";
 
-        session.username = adminUser;
-        session.password = newPass;
-        saveSession(session);
-        saveState(false);
+        if (changed) {
+          let adminAcc = state.accounts.find((a) => a.role === "admin" && a.status === "active");
+          if (!adminAcc) {
+            adminAcc = { id: "ADMIN_ROOT", role: "admin", roomId: "ALL", status: "active", createdAt: new Date().toISOString() };
+            state.accounts.unshift(adminAcc);
+          }
+          adminAcc.username = adminUser;
+          adminAcc.password = newPass;
+          adminAcc.adminPin = adminPin;
+          adminAcc.displayName = "Quản trị viên";
 
-        updateSyncBoxUI(hasInitialPulled ? "synced" : "needs-pull");
-        toggleChangeAdminPassBox(false);
-        toast("Đã thay đổi mật khẩu Quản trị viên và đồng bộ lên máy chủ thành công!", "ok");
+          session.username = adminUser;
+          session.password = newPass;
+          saveSession(session);
+          saveState(false);
+
+          updateSyncBoxUI(hasInitialPulled ? "synced" : "needs-pull");
+          toggleChangeAdminPassBox(false);
+          toast("Đã thay đổi mật khẩu Quản trị viên và đồng bộ lên máy chủ thành công!", "ok");
+        }
       } catch (err) {
         updateSyncBoxUI(hasInitialPulled ? "synced" : "needs-pull");
         toast("Không thể đổi mật khẩu lên máy chủ: " + err.message, "err");
