@@ -1,13 +1,13 @@
 {
-  "name": "Nhà Cho Thuê V2",
+  "name": "Nhà Cho Thuê",
   "short_name": "Nhà Cho Thuê",
-  "description": "Ứng dụng quản lý 9 phòng trọ, chốt số điện, hóa đơn VietQR và đồng bộ Google Sheets / Drive.",
+  "description": "Ứng dụng quản lý 9 phòng trọ, chốt số điện, phiếu thu VietQR và đồng bộ máy chủ tự động.",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
   "orientation": "portrait",
   "background_color": "#0f172a",
-  "theme_color": "#10b981",
+  "theme_color": "#dc2626",
   "icons": [
     {
       "src": "./icon-192.png",

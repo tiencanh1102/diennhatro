@@ -3,28 +3,31 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
-  <title>Nhà Cho Thuê V2</title>
-  <meta name="theme-color" content="#10b981" />
+  <title>Nhà Cho Thuê</title>
+  <meta name="theme-color" content="#dc2626" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <link rel="manifest" href="./manifest.json" />
   <link rel="icon" type="image/png" href="./icon-192.png" />
   <link rel="apple-touch-icon" href="./icon-192.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js" defer></script>
   <style>
     :root {
+      --font-vi: "Be Vietnam Pro", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
       --bg-base: #eef4f9;
       --text-main: #0f172a;
       --text-muted: #475569;
       --text-soft: #64748b;
-      --glass-bg: rgba(255, 255, 255, 0.58);
-      --glass-bg-strong: rgba(255, 255, 255, 0.78);
-      --glass-bg-subtle: rgba(255, 255, 255, 0.36);
-      --glass-border: rgba(255, 255, 255, 0.72);
-      --glass-border-outer: rgba(15, 23, 42, 0.08);
+      --glass-bg: rgba(255, 255, 255, 0.60);
+      --glass-bg-strong: rgba(255, 255, 255, 0.80);
+      --glass-bg-subtle: rgba(255, 255, 255, 0.38);
+      --glass-border: rgba(255, 255, 255, 0.74);
       --glass-specular: rgba(255, 255, 255, 0.92);
       --glass-shadow: 0 10px 32px rgba(15, 23, 42, 0.08), 0 2px 6px rgba(15, 23, 42, 0.04);
-      --input-bg: rgba(255, 255, 255, 0.72);
+      --input-bg: rgba(255, 255, 255, 0.76);
       --input-border: rgba(15, 23, 42, 0.14);
       --divider: rgba(15, 23, 42, 0.08);
       --emerald: #059669;
@@ -35,10 +38,10 @@
       --indigo-soft: rgba(99, 102, 241, 0.16);
       --danger: #dc2626;
       --danger-soft: rgba(239, 68, 68, 0.15);
-      --blob-1: rgba(16, 185, 129, 0.32);
-      --blob-2: rgba(14, 165, 233, 0.30);
-      --blob-3: rgba(139, 92, 246, 0.24);
-      --blob-4: rgba(245, 158, 11, 0.22);
+      --blob-1: rgba(16, 185, 129, 0.30);
+      --blob-2: rgba(14, 165, 233, 0.28);
+      --blob-3: rgba(139, 92, 246, 0.22);
+      --blob-4: rgba(245, 158, 11, 0.20);
       --radius-lg: 22px;
       --radius-md: 16px;
       --radius-sm: 12px;
@@ -49,14 +52,13 @@
       --text-main: #f1f5f9;
       --text-muted: #cbd5e1;
       --text-soft: #94a3b8;
-      --glass-bg: rgba(15, 23, 42, 0.56);
-      --glass-bg-strong: rgba(15, 23, 42, 0.80);
-      --glass-bg-subtle: rgba(30, 41, 59, 0.42);
+      --glass-bg: rgba(15, 23, 42, 0.58);
+      --glass-bg-strong: rgba(15, 23, 42, 0.82);
+      --glass-bg-subtle: rgba(30, 41, 59, 0.44);
       --glass-border: rgba(255, 255, 255, 0.16);
-      --glass-border-outer: rgba(255, 255, 255, 0.08);
       --glass-specular: rgba(255, 255, 255, 0.20);
-      --glass-shadow: 0 14px 40px rgba(0, 0, 0, 0.45), 0 2px 10px rgba(0, 0, 0, 0.3);
-      --input-bg: rgba(15, 23, 42, 0.68);
+      --glass-shadow: 0 14px 40px rgba(0, 0, 0, 0.45), 0 2px 10px rgba(0, 0, 0, 0.30);
+      --input-bg: rgba(15, 23, 42, 0.70);
       --input-border: rgba(255, 255, 255, 0.16);
       --divider: rgba(255, 255, 255, 0.10);
       --emerald: #34d399;
@@ -67,22 +69,25 @@
       --indigo-soft: rgba(99, 102, 241, 0.24);
       --danger: #f87171;
       --danger-soft: rgba(239, 68, 68, 0.22);
-      --blob-1: rgba(16, 185, 129, 0.24);
-      --blob-2: rgba(14, 165, 233, 0.22);
-      --blob-3: rgba(99, 102, 241, 0.26);
-      --blob-4: rgba(245, 158, 11, 0.18);
+      --blob-1: rgba(16, 185, 129, 0.22);
+      --blob-2: rgba(14, 165, 233, 0.20);
+      --blob-3: rgba(99, 102, 241, 0.24);
+      --blob-4: rgba(245, 158, 11, 0.16);
     }
 
     * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
     html, body {
       margin: 0; padding: 0;
-      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif;
+      font-family: var(--font-vi);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
       color: var(--text-main);
       background: var(--bg-base);
       min-height: 100vh;
       overflow-x: hidden;
       transition: background 0.35s ease, color 0.25s ease;
     }
+    button, input, select, textarea { font-family: var(--font-vi); }
 
     /* Ambient Liquid Glass Mesh Background */
     .ambient-bg {
@@ -127,7 +132,7 @@
       margin-bottom: 14px;
     }
 
-    /* Sticky Liquid Glass Top Header */
+    /* Sticky Top Header */
     .app-header {
       position: sticky; top: 0; z-index: 40;
       padding: 10px 12px;
@@ -143,23 +148,19 @@
       display: flex; align-items: center; gap: 9px; min-width: 0; flex-shrink: 1;
     }
     .brand-icon {
-      width: 36px; height: 36px; border-radius: 11px; flex-shrink: 0;
-      box-shadow: 0 4px 12px rgba(16, 185, 129, 0.35);
+      width: 38px; height: 38px; border-radius: 11px; flex-shrink: 0; object-fit: cover;
+      box-shadow: 0 4px 12px rgba(220, 38, 38, 0.30);
     }
     .brand-text { min-width: 0; }
     .brand-title {
       font-size: 15px; font-weight: 800; letter-spacing: -0.2px;
-      display: flex; align-items: center; gap: 5px; white-space: nowrap;
-    }
-    .v-badge {
-      font-size: 10px; font-weight: 800; padding: 1px 6px; border-radius: 99px;
-      background: linear-gradient(135deg, #10b981, #4f46e5); color: #fff;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
     }
     .brand-sub {
       font-size: 11px; color: var(--text-soft); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
     }
 
-    /* Header Right: Framed Sync Box + 3 Icons in a Straight Row */
+    /* Header Controls: Framed Sync Box + 3 Icons in 1 Straight Row */
     .header-controls {
       display: flex; align-items: center; gap: 6px; flex-shrink: 0;
     }
@@ -216,9 +217,7 @@
         box-shadow: 0 0 12px rgba(239, 68, 68, 0.55);
       }
     }
-    html[data-theme="dark"] .sync-box.state-needs-pull {
-      color: #ffffff;
-    }
+    html[data-theme="dark"] .sync-box.state-needs-pull { color: #ffffff; }
 
     .icon-btn {
       width: 36px; height: 36px;
@@ -243,16 +242,14 @@
     /* Container & Period Bar */
     .main-wrap {
       max-width: 980px; margin: 0 auto;
-      padding: 12px 12px 112px;
+      padding: 12px 12px 116px;
       min-height: calc(100vh - 64px);
     }
     .period-bar {
       display: flex; align-items: center; justify-content: space-between; gap: 10px;
       padding: 8px 12px; border-radius: 16px; margin-bottom: 12px;
     }
-    .period-nav {
-      display: flex; align-items: center; gap: 8px;
-    }
+    .period-nav { display: flex; align-items: center; gap: 8px; }
     .period-btn {
       width: 34px; height: 34px; border-radius: 10px;
       border: 1px solid var(--glass-border);
@@ -260,14 +257,10 @@
       font-size: 16px; font-weight: 700; cursor: pointer;
       display: inline-flex; align-items: center; justify-content: center;
     }
-    .period-label {
-      font-size: 15px; font-weight: 800; min-width: 112px; text-align: center;
-    }
-    .swipe-hint {
-      font-size: 11px; color: var(--text-soft); display: flex; align-items: center; gap: 4px;
-    }
+    .period-label { font-size: 14.5px; font-weight: 800; min-width: 118px; text-align: center; }
+    .swipe-hint { font-size: 11px; color: var(--text-soft); display: flex; align-items: center; gap: 4px; }
 
-    /* Tab Panels with smooth animation */
+    /* Tab Panels */
     .tab-panel { display: none; animation: tabFade 0.24s ease; }
     .tab-panel.active { display: block; }
     @keyframes tabFade {
@@ -288,17 +281,12 @@
       box-shadow: var(--glass-shadow), inset 0 1px 0 var(--glass-specular);
     }
     .kpi-label { font-size: 11.5px; font-weight: 600; color: var(--text-soft); margin-bottom: 4px; }
-    .kpi-val { font-size: 18px; font-weight: 800; letter-spacing: -0.3px; }
+    .kpi-val { font-size: 17.5px; font-weight: 800; letter-spacing: -0.2px; }
     .kpi-val.green { color: var(--emerald); }
     .kpi-val.red { color: var(--danger); }
     .kpi-val.blue { color: var(--indigo); }
-    .progress-track {
-      height: 6px; border-radius: 99px; background: var(--divider); margin-top: 7px; overflow: hidden;
-    }
-    .progress-fill {
-      height: 100%; border-radius: 99px; background: linear-gradient(90deg, #10b981, #0ea5e9);
-      transition: width 0.35s ease;
-    }
+    .progress-track { height: 6px; border-radius: 99px; background: var(--divider); margin-top: 7px; overflow: hidden; }
+    .progress-fill { height: 100%; border-radius: 99px; background: linear-gradient(90deg, #10b981, #0ea5e9); transition: width 0.35s ease; }
 
     /* Buttons & Inputs */
     .btn {
@@ -309,69 +297,39 @@
       text-decoration: none; white-space: nowrap;
     }
     .btn:active { transform: scale(0.96); }
+    .btn:disabled { opacity: 0.55; cursor: not-allowed; }
     .btn-sm { padding: 6px 10px; font-size: 12px; border-radius: 10px; }
-    .btn-emerald {
-      background: linear-gradient(135deg, #10b981, #059669); color: #fff;
-      box-shadow: 0 6px 16px rgba(16, 185, 129, 0.30);
-    }
-    .btn-amber {
-      background: linear-gradient(135deg, #f59e0b, #d97706); color: #fff;
-      box-shadow: 0 6px 16px rgba(245, 158, 11, 0.30);
-    }
-    .btn-indigo {
-      background: linear-gradient(135deg, #6366f1, #4f46e5); color: #fff;
-      box-shadow: 0 6px 16px rgba(99, 102, 241, 0.30);
-    }
-    .btn-danger {
-      background: linear-gradient(135deg, #ef4444, #dc2626); color: #fff;
-      box-shadow: 0 6px 16px rgba(239, 68, 68, 0.28);
-    }
-    .btn-glass {
-      background: var(--glass-bg-strong); color: var(--text-main);
-      border-color: var(--glass-border);
-      box-shadow: inset 0 1px 0 var(--glass-specular);
-    }
+    .btn-emerald { background: linear-gradient(135deg, #10b981, #059669); color: #fff; box-shadow: 0 6px 16px rgba(16, 185, 129, 0.30); }
+    .btn-amber { background: linear-gradient(135deg, #f59e0b, #d97706); color: #fff; box-shadow: 0 6px 16px rgba(245, 158, 11, 0.30); }
+    .btn-indigo { background: linear-gradient(135deg, #6366f1, #4f46e5); color: #fff; box-shadow: 0 6px 16px rgba(99, 102, 241, 0.30); }
+    .btn-danger { background: linear-gradient(135deg, #ef4444, #dc2626); color: #fff; box-shadow: 0 6px 16px rgba(239, 68, 68, 0.28); }
+    .btn-glass { background: var(--glass-bg-strong); color: var(--text-main); border-color: var(--glass-border); box-shadow: inset 0 1px 0 var(--glass-specular); }
 
     input[type="text"], input[type="number"], input[type="password"], input[type="tel"], select, textarea {
       width: 100%; padding: 9px 11px; border-radius: 12px;
       border: 1px solid var(--input-border);
       background: var(--input-bg); color: var(--text-main);
-      font-size: 13.5px; font-family: inherit; outline: none;
+      font-size: 13.5px; outline: none;
       transition: border-color 0.2s ease, box-shadow 0.2s ease;
     }
     input:focus, select:focus, textarea:focus {
       border-color: #10b981;
       box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.18);
     }
-    input[readonly], input:disabled {
-      opacity: 0.72; cursor: not-allowed;
-    }
-    label.field-label {
-      display: block; font-size: 11.5px; font-weight: 700; color: var(--text-soft); margin-bottom: 4px;
-    }
+    input[readonly], input:disabled { opacity: 0.72; cursor: not-allowed; }
+    label.field-label { display: block; font-size: 11.5px; font-weight: 700; color: var(--text-soft); margin-bottom: 4px; }
 
     /* Section Header */
-    .sec-head {
-      display: flex; align-items: center; justify-content: space-between; gap: 10px;
-      flex-wrap: wrap; margin-bottom: 12px;
-    }
-    .sec-title {
-      font-size: 15.5px; font-weight: 800; display: flex; align-items: center; gap: 7px;
-    }
-    .badge {
-      display: inline-flex; align-items: center; gap: 4px;
-      padding: 3px 9px; border-radius: 99px; font-size: 11px; font-weight: 700;
-    }
+    .sec-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; margin-bottom: 12px; }
+    .sec-title { font-size: 15px; font-weight: 800; display: flex; align-items: center; gap: 7px; }
+    .badge { display: inline-flex; align-items: center; gap: 4px; padding: 3px 9px; border-radius: 99px; font-size: 11px; font-weight: 700; }
     .badge-paid { background: var(--emerald-soft); color: var(--emerald); }
     .badge-partial { background: var(--amber-soft); color: var(--amber); }
     .badge-unpaid { background: var(--danger-soft); color: var(--danger); }
     .badge-vacant { background: var(--divider); color: var(--text-soft); }
-    .badge-info { background: var(--indigo-soft); color: var(--indigo); }
 
     /* Billing Room Cards */
-    .bill-grid {
-      display: grid; grid-template-columns: 1fr; gap: 12px;
-    }
+    .bill-grid { display: grid; grid-template-columns: 1fr; gap: 12px; }
     @media (min-width: 760px) { .bill-grid { grid-template-columns: repeat(2, 1fr); } }
     .bill-card {
       padding: 15px; border-radius: 20px; position: relative;
@@ -385,7 +343,7 @@
       display: flex; align-items: flex-start; justify-content: space-between; gap: 8px;
       padding-bottom: 10px; border-bottom: 1px solid var(--divider); margin-bottom: 10px;
     }
-    .bill-room-name { font-size: 16px; font-weight: 800; }
+    .bill-room-name { font-size: 15.5px; font-weight: 800; }
     .bill-tenant-meta { font-size: 12px; color: var(--text-soft); margin-top: 2px; }
     .bill-rows { display: flex; flex-direction: column; gap: 6px; font-size: 13px; }
     .bill-row { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
@@ -396,33 +354,24 @@
       background: var(--emerald-soft); border: 1px solid rgba(16, 185, 129, 0.28);
       display: flex; justify-content: space-between; align-items: center;
     }
-    .bill-total-val { font-size: 18px; font-weight: 900; color: var(--emerald); }
+    .bill-total-val { font-size: 17.5px; font-weight: 800; color: var(--emerald); }
     .bill-admin-edit {
       margin-top: 10px; padding-top: 10px; border-top: 1px dashed var(--divider);
       display: grid; grid-template-columns: 1fr 1fr; gap: 8px;
     }
-    .bill-actions {
-      margin-top: 11px; display: flex; flex-wrap: wrap; gap: 7px;
-    }
+    .bill-actions { margin-top: 11px; display: flex; flex-wrap: wrap; gap: 7px; }
 
     /* Tables */
     .table-wrap {
       width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch;
       border-radius: 14px; border: 1px solid var(--divider);
     }
-    table { width: 100%; border-collapse: collapse; font-size: 12.5px; min-width: 580px; }
-    th, td {
-      padding: 9px 8px; text-align: left; border-bottom: 1px solid var(--divider);
-      vertical-align: middle;
-    }
-    th {
-      font-size: 11.5px; font-weight: 800; color: var(--text-soft);
-      background: var(--glass-bg-subtle); white-space: nowrap;
-    }
+    table { width: 100%; border-collapse: collapse; font-size: 12.5px; min-width: 680px; }
+    th, td { padding: 9px 8px; text-align: left; border-bottom: 1px solid var(--divider); vertical-align: middle; }
+    th { font-size: 11.5px; font-weight: 700; color: var(--text-soft); background: var(--glass-bg-subtle); white-space: nowrap; }
     tr:last-child td { border-bottom: none; }
-    .num-input {
-      width: 96px !important; padding: 6px 8px !important; text-align: right; font-weight: 700;
-    }
+    .num-input { width: 92px !important; padding: 6px 8px !important; text-align: right; font-weight: 700; }
+    .note-input { min-width: 120px !important; padding: 6px 8px !important; font-size: 12px !important; }
     .warn-red { color: var(--danger); font-weight: 800; }
     .warn-amber { color: var(--amber); font-weight: 800; }
 
@@ -436,10 +385,10 @@
       display: inline-flex; align-items: center; gap: 5px;
       padding: 6px 10px; border-radius: 10px; font-size: 11.5px; font-weight: 700;
       border: 1px dashed var(--input-border); background: var(--glass-bg-subtle);
-      color: var(--text-main); cursor: pointer;
+      color: var(--text-main); cursor: pointer; white-space: nowrap;
     }
 
-    /* Config Room Cards */
+    /* Config Room Cards + Inline Pencil + Toggle Switch */
     .cfg-grid { display: grid; grid-template-columns: 1fr; gap: 12px; }
     @media (min-width: 720px) { .cfg-grid { grid-template-columns: repeat(2, 1fr); } }
     .cfg-card {
@@ -447,28 +396,71 @@
       background: var(--glass-bg); border: 1px solid var(--glass-border);
       box-shadow: var(--glass-shadow), inset 0 1px 0 var(--glass-specular);
     }
+    .cfg-head-row {
+      display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap;
+    }
+    .room-title-wrap {
+      display: flex; align-items: center; gap: 6px; min-width: 0; flex: 1;
+    }
+    .pencil-btn {
+      width: 28px; height: 28px; border-radius: 8px;
+      border: 1px solid var(--glass-border);
+      background: var(--glass-bg-strong); color: var(--indigo);
+      display: inline-flex; align-items: center; justify-content: center;
+      cursor: pointer; flex-shrink: 0;
+    }
+    .pencil-btn svg { width: 14px; height: 14px; }
+    .inline-name-edit {
+      display: flex; align-items: center; gap: 5px; flex: 1; min-width: 150px;
+    }
+    .inline-name-edit input { padding: 5px 8px; font-size: 13px; font-weight: 700; }
+
+    /* Sleek Toggle Switch for Đang thuê / Phòng trống */
+    .status-switch {
+      display: inline-flex; align-items: center; gap: 7px; cursor: pointer; user-select: none; flex-shrink: 0;
+    }
+    .status-switch input { display: none; }
+    .switch-track {
+      width: 44px; height: 24px; border-radius: 99px; position: relative;
+      background: rgba(148, 163, 184, 0.45);
+      border: 1px solid var(--glass-border);
+      transition: background 0.25s ease;
+    }
+    .switch-knob {
+      width: 18px; height: 18px; border-radius: 50%; background: #fff;
+      position: absolute; top: 2px; left: 2px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.22);
+      transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    .status-switch input:checked + .switch-track {
+      background: linear-gradient(135deg, #10b981, #059669);
+    }
+    .status-switch input:checked + .switch-track .switch-knob {
+      transform: translateX(20px);
+    }
+    .switch-text {
+      font-size: 11.5px; font-weight: 700; min-width: 72px; text-align: right;
+    }
+    .switch-text.on { color: var(--emerald); }
+    .switch-text.off { color: var(--text-soft); }
+
     .cfg-fields { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 10px; }
     .cfg-fields .full { grid-column: 1 / -1; }
-    .stepper {
-      display: flex; align-items: center; gap: 6px;
-    }
+    .stepper { display: flex; align-items: center; gap: 6px; }
     .stepper button {
       width: 32px; height: 34px; border-radius: 10px; border: 1px solid var(--input-border);
       background: var(--glass-bg-strong); color: var(--text-main); font-size: 16px; font-weight: 800; cursor: pointer;
     }
     .stepper input { text-align: center; font-weight: 800; }
 
-    /* Bottom Floating Liquid Glass Tab Dock */
+    /* Bottom Floating Liquid Glass Tab Dock — Crisp Vietnamese Font */
     .bottom-dock-wrap {
       position: fixed; left: 0; right: 0; bottom: 0; z-index: 45;
       padding: 8px 12px max(12px, env(safe-area-inset-bottom));
       pointer-events: none;
       transition: transform 0.34s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.28s ease;
     }
-    .bottom-dock-wrap.dock-hidden {
-      transform: translateY(130%);
-      opacity: 0;
-    }
+    .bottom-dock-wrap.dock-hidden { transform: translateY(130%); opacity: 0; }
     .bottom-dock {
       max-width: 560px; margin: 0 auto; pointer-events: auto;
       display: flex; align-items: stretch; gap: 8px; padding: 7px;
@@ -482,51 +474,44 @@
     .dock-tab {
       flex: 1; border: 1.5px solid transparent; border-radius: 18px;
       padding: 8px 6px; cursor: pointer;
-      display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px;
-      font-size: 11.5px; font-weight: 800; line-height: 1.15; text-align: center;
+      display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px;
+      font-family: var(--font-vi);
+      font-size: 12px; font-weight: 700; line-height: 1.28; letter-spacing: 0;
+      text-align: center;
+      text-rendering: optimizeLegibility;
       transition: all 0.24s cubic-bezier(0.22, 1, 0.36, 1);
-      position: relative; overflow: hidden;
     }
     .dock-tab svg { width: 19px; height: 19px; flex-shrink: 0; }
+    .dock-tab span { display: block; word-break: keep-all; }
 
-    /* Distinct Colors for Each of the 3 Tabs */
     .dock-tab.tab-billing {
-      background: rgba(16, 185, 129, 0.14);
-      color: #047857;
-      border-color: rgba(16, 185, 129, 0.26);
+      background: rgba(16, 185, 129, 0.14); color: #047857; border-color: rgba(16, 185, 129, 0.26);
     }
     html[data-theme="dark"] .dock-tab.tab-billing { color: #6ee7b7; background: rgba(16, 185, 129, 0.18); }
     .dock-tab.tab-billing.active {
-      background: linear-gradient(135deg, #10b981, #059669);
-      color: #ffffff;
+      background: linear-gradient(135deg, #10b981, #059669); color: #ffffff;
       border-color: rgba(255,255,255,0.45);
       box-shadow: 0 8px 20px rgba(16, 185, 129, 0.42), inset 0 1px 1px rgba(255,255,255,0.5);
       transform: translateY(-2px);
     }
 
     .dock-tab.tab-electric {
-      background: rgba(245, 158, 11, 0.15);
-      color: #b45309;
-      border-color: rgba(245, 158, 11, 0.28);
+      background: rgba(245, 158, 11, 0.15); color: #b45309; border-color: rgba(245, 158, 11, 0.28);
     }
     html[data-theme="dark"] .dock-tab.tab-electric { color: #fcd34d; background: rgba(245, 158, 11, 0.20); }
     .dock-tab.tab-electric.active {
-      background: linear-gradient(135deg, #f59e0b, #ea580c);
-      color: #ffffff;
+      background: linear-gradient(135deg, #f59e0b, #ea580c); color: #ffffff;
       border-color: rgba(255,255,255,0.45);
       box-shadow: 0 8px 20px rgba(245, 158, 11, 0.44), inset 0 1px 1px rgba(255,255,255,0.5);
       transform: translateY(-2px);
     }
 
     .dock-tab.tab-config {
-      background: rgba(99, 102, 241, 0.15);
-      color: #4338ca;
-      border-color: rgba(99, 102, 241, 0.28);
+      background: rgba(99, 102, 241, 0.15); color: #4338ca; border-color: rgba(99, 102, 241, 0.28);
     }
     html[data-theme="dark"] .dock-tab.tab-config { color: #a5b4fc; background: rgba(99, 102, 241, 0.22); }
     .dock-tab.tab-config.active {
-      background: linear-gradient(135deg, #6366f1, #4f46e5);
-      color: #ffffff;
+      background: linear-gradient(135deg, #6366f1, #4f46e5); color: #ffffff;
       border-color: rgba(255,255,255,0.45);
       box-shadow: 0 8px 20px rgba(99, 102, 241, 0.44), inset 0 1px 1px rgba(255,255,255,0.5);
       transform: translateY(-2px);
@@ -558,7 +543,7 @@
       display: flex; align-items: center; justify-content: space-between;
       padding-bottom: 12px; border-bottom: 1px solid var(--divider); margin-bottom: 14px;
     }
-    .modal-title { font-size: 16.5px; font-weight: 800; }
+    .modal-title { font-size: 16px; font-weight: 800; }
     .close-btn {
       width: 32px; height: 32px; border-radius: 10px; border: 1px solid var(--glass-border);
       background: var(--glass-bg-subtle); color: var(--text-main); font-size: 18px; cursor: pointer;
@@ -568,9 +553,7 @@
       padding: 14px; border-radius: 16px; margin-bottom: 14px;
       background: var(--glass-bg-subtle); border: 1px solid var(--divider);
     }
-    .settings-section h4 {
-      margin: 0 0 10px; font-size: 14px; font-weight: 800; display: flex; align-items: center; gap: 6px;
-    }
+    .settings-section h4 { margin: 0 0 10px; font-size: 14px; font-weight: 800; display: flex; align-items: center; gap: 6px; }
     .input-eye-wrap { position: relative; display: flex; align-items: center; }
     .input-eye-wrap input { padding-right: 40px; }
     .eye-toggle {
@@ -579,11 +562,18 @@
       cursor: pointer; display: inline-flex; align-items: center; justify-content: center; border-radius: 8px;
     }
 
-    /* Tenant Account Row inside Settings */
+    /* Inline Tenant Account Row & Sub-Editor */
+    .acc-block { margin-bottom: 8px; }
     .acc-item {
       display: flex; align-items: center; justify-content: space-between; gap: 8px;
       padding: 9px 10px; border-radius: 12px; background: var(--glass-bg);
-      border: 1px solid var(--divider); margin-bottom: 7px; flex-wrap: wrap;
+      border: 1px solid var(--divider); flex-wrap: wrap;
+    }
+    .acc-inline-editor {
+      margin-top: 6px; padding: 12px; border-radius: 14px;
+      background: var(--glass-bg-strong);
+      border: 1.5px solid rgba(99, 102, 241, 0.45);
+      animation: tabFade 0.18s ease;
     }
     .acc-meta { font-size: 12.5px; }
     .acc-meta strong { font-size: 13px; }
@@ -598,44 +588,40 @@
     .receipt-line { display: flex; justify-content: space-between; font-size: 13px; padding: 4px 0; }
     .receipt-total {
       margin-top: 8px; padding-top: 8px; border-top: 2px solid #059669;
-      display: flex; justify-content: space-between; font-size: 17px; font-weight: 900; color: #059669;
+      display: flex; justify-content: space-between; font-size: 17px; font-weight: 800; color: #059669;
     }
-    .receipt-qr-box {
-      margin-top: 12px; text-align: center; padding-top: 10px; border-top: 1px dashed #cbd5e1;
-    }
-    .receipt-qr-box img {
-      max-width: 210px; max-height: 230px; border-radius: 12px; border: 1px solid #e2e8f0;
-    }
+    .receipt-qr-box { margin-top: 12px; text-align: center; padding-top: 10px; border-top: 1px dashed #cbd5e1; }
+    .receipt-qr-box img { max-width: 210px; max-height: 230px; border-radius: 12px; border: 1px solid #e2e8f0; }
 
     /* Fullscreen Login Overlay */
     .login-gate {
       position: fixed; inset: 0; z-index: 95;
       display: none; align-items: center; justify-content: center; padding: 18px;
-      background: rgba(7, 13, 25, 0.45);
+      background: rgba(7, 13, 25, 0.48);
       backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px);
     }
     .login-gate.open { display: flex; }
     .login-card {
-      width: 100%; max-width: 390px; padding: 24px 20px; border-radius: 26px;
+      width: 100%; max-width: 400px; padding: 24px 20px; border-radius: 26px;
       background: var(--glass-bg-strong);
       border: 1px solid var(--glass-border);
       box-shadow: 0 24px 64px rgba(0,0,0,0.35), inset 0 1px 0 var(--glass-specular);
     }
+    .login-error-box {
+      padding: 9px 12px; border-radius: 12px; margin-bottom: 12px;
+      background: var(--danger-soft); border: 1px solid rgba(239, 68, 68, 0.35);
+      color: var(--danger); font-size: 12.5px; font-weight: 700; text-align: center;
+    }
 
-    /* Lightbox Image Viewer */
+    /* Lightbox */
     .lightbox {
       position: fixed; inset: 0; z-index: 100;
       background: rgba(0, 0, 0, 0.88); backdrop-filter: blur(8px);
       display: none; flex-direction: column; align-items: center; justify-content: center; padding: 16px;
     }
     .lightbox.open { display: flex; }
-    .lightbox img {
-      max-width: 96vw; max-height: 82vh; border-radius: 14px; object-fit: contain;
-      box-shadow: 0 12px 40px rgba(0,0,0,0.6);
-    }
-    .lightbox-bar {
-      margin-top: 12px; display: flex; gap: 10px; align-items: center;
-    }
+    .lightbox img { max-width: 96vw; max-height: 82vh; border-radius: 14px; object-fit: contain; box-shadow: 0 12px 40px rgba(0,0,0,0.6); }
+    .lightbox-bar { margin-top: 12px; display: flex; gap: 10px; align-items: center; }
 
     /* Toast */
     .toast-wrap {
@@ -653,9 +639,7 @@
     .toast.err { background: rgba(220, 38, 38, 0.94); }
     .toast.warn { background: rgba(217, 119, 6, 0.94); }
 
-    .filter-row {
-      display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 10px;
-    }
+    .filter-row { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 10px; }
     .filter-row select { width: auto; min-width: 130px; flex: 1; }
     .hidden { display: none !important; }
     .muted { color: var(--text-soft); font-size: 12px; }
@@ -678,7 +662,7 @@
       <div class="brand">
         <img src="./icon-192.png" alt="Logo" class="brand-icon" />
         <div class="brand-text">
-          <div class="brand-title">Nhà Cho Thuê <span class="v-badge">V2</span></div>
+          <div class="brand-title" id="headerAppTitle">Nhà Cho Thuê</div>
           <div class="brand-sub" id="headerUserSub">Chưa đăng nhập</div>
         </div>
       </div>
@@ -808,7 +792,7 @@
           <button class="btn btn-amber btn-sm" onclick="commitMetersAndBills()">Chốt số điện &amp; Kết tiền</button>
         </div>
         <p class="muted" style="margin:0 0 10px;">
-          Số điện cũ tự động kéo từ Số điện mới tháng trước. Có thể đính kèm ảnh chụp công tơ (PNG/JPG chất lượng gốc) để khách xem đối chiếu.
+          Số điện cũ tự động kéo từ Số điện mới tháng trước. Nhập Số điện mới sẽ tự động tính Số điện sử dụng và ghi nhận ngày hiện tại.
         </p>
         <div class="table-wrap no-swipe">
           <table>
@@ -817,7 +801,8 @@
                 <th>Phòng</th>
                 <th>Số điện mới</th>
                 <th>Số điện cũ</th>
-                <th>Tiêu thụ</th>
+                <th>Số điện sử dụng</th>
+                <th>Ghi chú</th>
                 <th>Ảnh đồng hồ (PNG/JPG)</th>
               </tr>
             </thead>
@@ -832,7 +817,7 @@
       <!-- Tenant Only: Current Room Meter Detail -->
       <div id="tenantMeterDetailCard" class="glass-card hidden">
         <div class="sec-head">
-          <div class="sec-title">Chi tiết số điện phòng bạn — <span id="tenantMeterPeriodLabel">11/2026</span></div>
+          <div class="sec-title">Chi tiết số điện phòng bạn — <span id="tenantMeterPeriodLabel">Tháng 10-11/2026</span></div>
         </div>
         <div id="tenantMeterDetailBody"></div>
       </div>
@@ -854,7 +839,8 @@
                 <th>Phòng / Khách</th>
                 <th>Số điện mới</th>
                 <th>Số điện cũ</th>
-                <th>Tiêu thụ (kWh)</th>
+                <th>Số điện sử dụng</th>
+                <th>Ghi chú</th>
                 <th>Ảnh đồng hồ</th>
                 <th>Ngày ghi</th>
               </tr>
@@ -870,7 +856,6 @@
       <div class="glass-card">
         <div class="sec-head">
           <div class="sec-title">Thiết lập nhanh giá chung (9 phòng)</div>
-          <span class="badge badge-info">Không thu tiền Wifi</span>
         </div>
         <div class="cfg-fields" style="grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));">
           <div>
@@ -935,7 +920,50 @@
         <button class="close-btn" onclick="closeModal('settingsModal')">&times;</button>
       </div>
 
-      <!-- 1. Tài khoản nhận tiền & Ảnh QR -->
+      <!-- 1. Quản lý tài khoản từng phòng thuê (ĐƯA LÊN ĐẦU TIÊN, form tạo/sửa hiện ngay dưới từng phòng) -->
+      <div class="settings-section">
+        <h4>Quản lý tài khoản từng phòng thuê</h4>
+        <p class="muted" style="margin:0 0 10px;">
+          Bấm <strong>+ Tạo TK</strong> hoặc <strong>Sửa TK</strong> ngay tại phòng cần chỉnh. Khi khách chuyển đi bấm <strong>Xóa TK</strong>: lịch sử cũ vẫn giữ nguyên cho Quản trị viên, tài khoản mới sẽ không thấy dữ liệu khách cũ.
+        </p>
+        <div id="tenantAccountsList"></div>
+      </div>
+
+      <!-- 2. Tùy chỉnh tiêu đề hiển thị ngoài màn hình -->
+      <div class="settings-section">
+        <h4>Tiêu đề ứng dụng ngoài màn hình</h4>
+        <div>
+          <label class="field-label">Tên hiển thị (thay cho chữ "Nhà Cho Thuê")</label>
+          <input type="text" id="setAppTitle" placeholder="Nhà Cho Thuê" />
+        </div>
+      </div>
+
+      <!-- 3. Tạo & Cập nhật mật khẩu Quản trị viên -->
+      <div class="settings-section">
+        <h4>Tài khoản &amp; Mật khẩu Quản trị viên</h4>
+        <div class="cfg-fields">
+          <div class="full">
+            <label class="field-label">Tài khoản đăng nhập QTV</label>
+            <input type="text" id="setAdminUser" />
+          </div>
+          <div>
+            <label class="field-label">Mật khẩu đăng nhập QTV</label>
+            <div class="input-eye-wrap">
+              <input type="password" id="setAdminPass" inputmode="numeric" />
+              <button type="button" class="eye-toggle" onclick="toggleInputEye('setAdminPass')">&#128065;</button>
+            </div>
+          </div>
+          <div>
+            <label class="field-label">Mã QTV (mở khóa sửa)</label>
+            <div class="input-eye-wrap">
+              <input type="password" id="setAdminPin" inputmode="numeric" />
+              <button type="button" class="eye-toggle" onclick="toggleInputEye('setAdminPin')">&#128065;</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4. Tài khoản nhận tiền & Ảnh QR (CHUYỂN XUỐNG DƯỚI, để trống gợi ý STK & Chủ TK) -->
       <div class="settings-section">
         <h4>Tài khoản nhận tiền (Tạo mã VietQR trên phiếu thu)</h4>
         <div class="cfg-fields">
@@ -956,15 +984,14 @@
           </div>
           <div>
             <label class="field-label">Số tài khoản</label>
-            <input type="text" id="setAccNo" placeholder="VD: 0987654321" />
+            <input type="text" id="setAccNo" placeholder="" />
           </div>
           <div>
             <label class="field-label">Chủ tài khoản</label>
-            <input type="text" id="setAccName" placeholder="VD: NGUYEN TIEN CANH" />
+            <input type="text" id="setAccName" placeholder="" />
           </div>
         </div>
 
-        <!-- Đính kèm ảnh mã QR riêng -->
         <div class="mt-3" style="padding-top:10px; border-top:1px dashed var(--divider);">
           <label class="field-label">Đính kèm ảnh mã QR (kết xuất trực tiếp sang Phiếu thu)</label>
           <div class="flex-row">
@@ -981,94 +1008,41 @@
         </div>
       </div>
 
-      <!-- 2. Quản lý tài khoản từng phòng thuê -->
-      <div class="settings-section">
-        <h4>Quản lý tài khoản từng phòng thuê</h4>
-        <p class="muted" style="margin:0 0 10px;">
-          Mỗi phòng chỉ xem được dữ liệu của phòng mình (không được sửa). Khi khách chuyển đi, bấm <strong>Xóa TK</strong>: lịch sử thanh toán cũ vẫn lưu nguyên cho Quản trị viên, nhưng tài khoản mới tạo sau này sẽ không thấy dữ liệu của khách cũ.
-        </p>
-        <div id="tenantAccountsList"></div>
-        <div id="tenantEditBox" class="hidden mt-3" style="padding:12px; border-radius:14px; background:var(--glass-bg); border:1px solid var(--glass-border);">
-          <div style="font-weight:800; font-size:13px; margin-bottom:8px;" id="tenantEditTitle">Tạo / Sửa tài khoản phòng</div>
-          <input type="hidden" id="editAccRoomId" />
-          <div class="cfg-fields">
-            <div>
-              <label class="field-label">Tài khoản đăng nhập</label>
-              <input type="text" id="editAccUser" placeholder="VD: phong101" />
-            </div>
-            <div>
-              <label class="field-label">Tên hiển thị</label>
-              <input type="text" id="editAccName" placeholder="VD: Anh Nam - P101" />
-            </div>
-            <div class="full">
-              <label class="field-label">Mật khẩu phòng</label>
-              <div class="input-eye-wrap">
-                <input type="password" id="editAccPass" placeholder="Nhập mật khẩu" />
-                <button type="button" class="eye-toggle" onclick="toggleInputEye('editAccPass')">&#128065;</button>
-              </div>
-            </div>
-          </div>
-          <div class="mt-2 flex-row">
-            <button class="btn btn-emerald btn-sm" onclick="saveTenantAccount()">Lưu tài khoản phòng</button>
-            <button class="btn btn-glass btn-sm" onclick="cancelEditTenantAccount()">Hủy</button>
-          </div>
-        </div>
-      </div>
-
-      <!-- 3. Tạo & Cập nhật mật khẩu Quản trị viên -->
-      <div class="settings-section">
-        <h4>Tài khoản &amp; Mật khẩu Quản trị viên</h4>
-        <div class="cfg-fields">
-          <div class="full">
-            <label class="field-label">Tài khoản đăng nhập QTV</label>
-            <input type="text" id="setAdminUser" placeholder="admin" />
-          </div>
-          <div>
-            <label class="field-label">Mật khẩu đăng nhập QTV</label>
-            <div class="input-eye-wrap">
-              <input type="password" id="setAdminPass" placeholder="Nhập mật khẩu mới" />
-              <button type="button" class="eye-toggle" onclick="toggleInputEye('setAdminPass')">&#128065;</button>
-            </div>
-          </div>
-          <div>
-            <label class="field-label">Mã QTV (mở khóa sửa)</label>
-            <div class="input-eye-wrap">
-              <input type="password" id="setAdminPin" placeholder="VD: 123456" />
-              <button type="button" class="eye-toggle" onclick="toggleInputEye('setAdminPin')">&#128065;</button>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- 4. Đồng bộ máy chủ (Đặt ở CUỐI CÙNG, mặc định ẩn bằng icon mắt) -->
+      <!-- 5. Đồng bộ máy chủ (Đặt ở CUỐI CÙNG, mặc định ẩn bằng icon mắt) -->
       <div class="settings-section">
         <h4>Đồng bộ máy chủ</h4>
         <div class="cfg-fields">
           <div class="full">
-            <label class="field-label">Đồng bộ máy chủ (mặc định dùng /api ẩn link qua Cloudflare)</label>
+            <label class="field-label">Đồng bộ máy chủ (mặc định /api ẩn link qua Cloudflare)</label>
             <div class="input-eye-wrap">
-              <input type="password" id="setServerEndpoint" placeholder="/api (Tự động kết nối biến GAS_URL trên Cloudflare)" />
+              <input type="password" id="setServerEndpoint" placeholder="/api" />
               <button type="button" class="eye-toggle" onclick="toggleInputEye('setServerEndpoint')" title="Ẩn / Hiện">&#128065;</button>
             </div>
-            <div class="muted mt-2">Mặc định để trống hoặc <code>/api</code> để ẩn hoàn toàn link Google Apps Script trong Cloudflare Variables &amp; Secrets.</div>
+            <div class="muted mt-2">Tự động đồng bộ 2 chiều mỗi 6 giây sau khi mở khóa trên thiết bị.</div>
           </div>
 
           <div class="full mt-2">
-            <label class="field-label">Đồng bộ ảnh (Link thư mục Google Drive lưu ảnh đồng hồ &amp; bill gốc)</label>
+            <label class="field-label">Đồng bộ ảnh (Link thư mục lưu ảnh đồng hồ &amp; bill gốc)</label>
             <div class="input-eye-wrap">
-              <input type="password" id="setDriveFolderUrl" placeholder="Dán link thư mục Google Drive (https://drive.google.com/drive/folders/...)" />
+              <input type="password" id="setDriveFolderUrl" placeholder="Dán link thư mục Google Drive" />
               <button type="button" class="eye-toggle" onclick="toggleInputEye('setDriveFolderUrl')" title="Ẩn / Hiện">&#128065;</button>
             </div>
-            <div class="muted mt-2">Hệ thống tự tạo thư mục con theo từng Phòng → Tháng/Năm và lưu ảnh chất lượng gốc (PNG/JPG).</div>
+            <div class="muted mt-2">Tự tạo thư mục con theo từng Phòng → Tháng/Năm và lưu ảnh chất lượng gốc (PNG/JPG).</div>
           </div>
         </div>
       </div>
 
       <div class="flex-row" style="justify-content:space-between;">
-        <button class="btn btn-glass btn-sm" onclick="exportBackupJson()">Sao lưu JSON</button>
+        <div class="flex-row" style="gap:6px;">
+          <button class="btn btn-glass btn-sm" onclick="exportBackupJson()">Xuất JSON</button>
+          <label class="btn btn-indigo btn-sm" style="cursor:pointer;">
+            Nhập JSON
+            <input type="file" id="importJsonInput" accept=".json,application/json" style="display:none" onchange="handleImportJson(event)" />
+          </label>
+        </div>
         <div class="flex-row">
           <button class="btn btn-glass" onclick="closeModal('settingsModal')">Đóng</button>
-          <button class="btn btn-emerald" onclick="saveAdminSettings()">Lưu cài đặt &amp; Đồng bộ</button>
+          <button class="btn btn-emerald" id="btnSaveSettings" onclick="saveAdminSettings()">Lưu cài đặt &amp; Đồng bộ</button>
         </div>
       </div>
     </div>
@@ -1095,7 +1069,7 @@
       <div id="receiptCaptureTarget" class="receipt-card"></div>
       <div class="mt-3 flex-row" style="justify-content:center;">
         <button class="btn btn-emerald" onclick="downloadReceiptPng()">Tải ảnh phiếu thu (PNG)</button>
-        <button class="btn btn-indigo" id="btnCopyReceiptFromModal" onclick="copyCurrentReceiptText()">Copy phiếu thu</button>
+        <button class="btn btn-indigo" onclick="copyCurrentReceiptText()">Copy phiếu thu</button>
       </div>
     </div>
   </div>
@@ -1108,10 +1082,10 @@
         <button class="close-btn" onclick="closeModal('pinModal')">&times;</button>
       </div>
       <p class="muted" style="margin:0 0 10px;">
-        Tài khoản phòng thuê chỉ được xem. Để chỉnh sửa dữ liệu, vui lòng nhập Mã Quản trị viên hoặc đăng nhập bằng tài khoản Quản trị viên.
+        Tài khoản phòng thuê chỉ được xem. Để chỉnh sửa dữ liệu, vui lòng nhập Mã Quản trị viên.
       </p>
       <div class="input-eye-wrap">
-        <input type="password" id="verifyAdminPinInput" placeholder="Nhập Mã Quản trị viên" />
+        <input type="password" id="verifyAdminPinInput" inputmode="numeric" placeholder="Nhập Mã Quản trị viên" />
         <button type="button" class="eye-toggle" onclick="toggleInputEye('verifyAdminPinInput')">&#128065;</button>
       </div>
       <div class="mt-3 flex-row" style="justify-content:flex-end;">
@@ -1121,30 +1095,37 @@
     </div>
   </div>
 
-  <!-- ==================== LOGIN GATE ==================== -->
+  <!-- ==================== LOGIN GATE (Chọn phòng + Tự đăng nhập + Bàn phím số + Sai tối đa 5 lần + Duy trì 24h) ==================== -->
   <div id="loginGate" class="login-gate">
     <div class="login-card">
       <div style="text-align:center; margin-bottom:16px;">
-        <img src="./icon-192.png" alt="Logo" style="width:62px; height:62px; border-radius:18px; box-shadow:0 8px 24px rgba(16,185,129,0.35);" />
-        <h2 style="margin:10px 0 4px; font-size:20px; font-weight:900;">Nhà Cho Thuê V2</h2>
-        <div class="muted">Đăng nhập Quản trị viên hoặc Tài khoản phòng thuê</div>
+        <img src="./icon-192.png" alt="Logo" style="width:68px; height:68px; border-radius:18px; box-shadow:0 8px 24px rgba(220,38,38,0.32); object-fit:cover;" />
+        <h2 id="loginAppTitle" style="margin:10px 0 4px; font-size:20px; font-weight:800;">Nhà Cho Thuê</h2>
+        <div class="muted">Chọn phòng, nhập tài khoản &amp; mật khẩu (duy trì 24 giờ)</div>
       </div>
+
+      <div id="loginErrorBox" class="login-error-box hidden"></div>
+
       <form onsubmit="handleLoginSubmit(event)">
         <div style="margin-bottom:10px;">
+          <label class="field-label">Chọn phòng / Vai trò</label>
+          <select id="loginRoomSelect" onchange="onLoginRoomChanged()"></select>
+        </div>
+        <div style="margin-bottom:10px;">
           <label class="field-label">Tài khoản</label>
-          <input type="text" id="loginUser" autocomplete="username" placeholder="Nhập tài khoản (VD: admin hoặc phong101)" required />
+          <input type="text" id="loginUser" autocomplete="username" placeholder="Nhập tài khoản đăng nhập" oninput="scheduleAutoLoginCheck()" required />
         </div>
         <div style="margin-bottom:14px;">
-          <label class="field-label">Mật khẩu</label>
+          <label class="field-label">Mật khẩu (nhập đúng sẽ tự động đăng nhập)</label>
           <div class="input-eye-wrap">
-            <input type="password" id="loginPass" autocomplete="current-password" placeholder="Nhập mật khẩu" required />
+            <input type="password" id="loginPass" inputmode="numeric" autocomplete="current-password" placeholder="Nhập mật khẩu" oninput="scheduleAutoLoginCheck()" required />
             <button type="button" class="eye-toggle" onclick="toggleInputEye('loginPass')">&#128065;</button>
           </div>
         </div>
         <button type="submit" id="btnLoginSubmit" class="btn btn-emerald" style="width:100%; padding:11px;">Đăng nhập</button>
       </form>
       <div class="muted mt-3" style="text-align:center; font-size:11.5px;">
-        Mặc định QTV lần đầu: <strong>admin</strong> / <strong>123456</strong>
+        Mặc định QTV lần đầu: <strong>admin</strong> / <strong>123456</strong> · Nhập sai tối đa 5 lần
       </div>
     </div>
   </div>
@@ -1158,7 +1139,7 @@
     </div>
   </div>
 
-  <!-- Hidden File Inputs for Meter Photo & Tenant Bill Photo -->
+  <!-- Hidden File Inputs -->
   <input type="file" id="meterPhotoInput" accept="image/png,image/jpeg" style="display:none" onchange="onMeterPhotoSelected(event)" />
   <input type="file" id="billPhotoInput" accept="image/png,image/jpeg" style="display:none" onchange="onBillPhotoSelected(event)" />
 
@@ -1166,17 +1147,22 @@
 
   <script>
     /* ============================================================
-       NHÀ CHO THUÊ V2 — CORE STATE & STORAGE
+       NHÀ CHO THUÊ V3 — CORE STATE & STORAGE
        ============================================================ */
-    const STORAGE_KEY = "nha_cho_thue_v2_state";
-    const SESSION_KEY = "nha_cho_thue_v2_session";
+    const STORAGE_KEY = "nha_cho_thue_v3_state";
+    const LEGACY_V2_KEY = "nha_cho_thue_v2_state";
+    const SESSION_KEY = "nha_cho_thue_v3_session";
     const THEME_KEY = "nha_cho_thue_v2_theme";
-    const PULLED_KEY = "nha_cho_thue_v2_initial_pulled";
+    const PULLED_KEY = "nha_cho_thue_v3_initial_pulled";
+    const LOGIN_FAIL_KEY = "nha_cho_thue_v3_login_fails";
+    const SESSION_DURATION_MS = 24 * 60 * 60 * 1000; // 24 giờ
+    const MAX_LOGIN_ATTEMPTS = 5;
+    const LOCKOUT_MS = 5 * 60 * 1000; // Khóa 5 phút sau 5 lần sai
+    const AUTO_SYNC_INTERVAL_MS = 6000; // Tự động đồng bộ 2 chiều mỗi 6 giây
 
     function getDefaultPeriod() {
       const d = new Date();
-      const mm = String(d.getMonth() + 1).padStart(2, "0");
-      return mm + "/" + d.getFullYear();
+      return String(d.getMonth() + 1).padStart(2, "0") + "/" + d.getFullYear();
     }
 
     function makeDefaultRooms() {
@@ -1199,6 +1185,7 @@
 
     function makeDefaultState() {
       return {
+        appTitle: "Nhà Cho Thuê",
         rooms: makeDefaultRooms(),
         accounts: [
           {
@@ -1215,6 +1202,7 @@
         ],
         meters: [],
         bills: [],
+        pendingTenantSubmissions: [],
         payment: {
           bankBin: "970422",
           bankName: "MB Bank",
@@ -1227,29 +1215,31 @@
       };
     }
 
-    let state = loadState();
-    let session = loadSession(); // { id, role, roomId, username, password, displayName }
-    let hasInitialPulled = localStorage.getItem(PULLED_KEY) === "1";
-    let currentPeriod = getDefaultPeriod();
-    let currentTab = "billing";
-    let activeMeterPhotoRoomId = null;
-    let activeBillPhotoBillId = null;
-    let activeReceiptBillId = null;
-    let syncState = hasInitialPulled ? "synced" : "needs-pull"; // needs-pull | pulling | pushing | synced
+    function normalizeRoomStatus(st) {
+      return (st === "Trống" || st === "Phòng trống") ? "Phòng trống" : "Đang thuê";
+    }
+    function isRoomVacant(rm) {
+      return rm && (rm.status === "Trống" || rm.status === "Phòng trống");
+    }
 
     function loadState() {
       try {
-        const raw = localStorage.getItem(STORAGE_KEY);
+        const raw = localStorage.getItem(STORAGE_KEY) || localStorage.getItem(LEGACY_V2_KEY);
         if (!raw) return makeDefaultState();
         const parsed = JSON.parse(raw);
         const def = makeDefaultState();
+        const rooms = Array.isArray(parsed.rooms) && parsed.rooms.length
+          ? parsed.rooms.map((r) => ({ ...r, status: normalizeRoomStatus(r.status) }))
+          : def.rooms;
         return {
           ...def,
           ...parsed,
-          rooms: Array.isArray(parsed.rooms) && parsed.rooms.length ? parsed.rooms : def.rooms,
+          appTitle: (parsed.appTitle && String(parsed.appTitle).trim()) || "Nhà Cho Thuê",
+          rooms,
           accounts: Array.isArray(parsed.accounts) && parsed.accounts.length ? parsed.accounts : def.accounts,
-          meters: Array.isArray(parsed.meters) ? parsed.meters : [],
+          meters: Array.isArray(parsed.meters) ? parsed.meters.map((m) => ({ note: "", ...m })) : [],
           bills: Array.isArray(parsed.bills) ? parsed.bills : [],
+          pendingTenantSubmissions: Array.isArray(parsed.pendingTenantSubmissions) ? parsed.pendingTenantSubmissions : [],
           payment: { ...def.payment, ...(parsed.payment || {}) }
         };
       } catch (e) {
@@ -1257,18 +1247,25 @@
       }
     }
 
-    function saveState() {
+    function saveState(markDirty = false) {
+      if (markDirty) hasLocalDirty = true;
       try {
         localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
       } catch (e) {
-        toast("Bộ nhớ trình duyệt gần đầy, hãy đồng bộ lên Google Sheets!", "warn");
+        toast("Bộ nhớ trình duyệt gần đầy, hãy đồng bộ lên máy chủ!", "warn");
       }
     }
 
     function loadSession() {
       try {
         const raw = localStorage.getItem(SESSION_KEY);
-        return raw ? JSON.parse(raw) : null;
+        if (!raw) return null;
+        const s = JSON.parse(raw);
+        if (!s || !s.expiresAt || Date.now() > s.expiresAt) {
+          localStorage.removeItem(SESSION_KEY);
+          return null;
+        }
+        return s;
       } catch (e) {
         return null;
       }
@@ -1276,8 +1273,13 @@
 
     function saveSession(s) {
       session = s;
-      if (s) localStorage.setItem(SESSION_KEY, JSON.stringify(s));
-      else localStorage.removeItem(SESSION_KEY);
+      if (s) {
+        if (!s.loginAt) s.loginAt = Date.now();
+        if (!s.expiresAt) s.expiresAt = s.loginAt + SESSION_DURATION_MS;
+        localStorage.setItem(SESSION_KEY, JSON.stringify(s));
+      } else {
+        localStorage.removeItem(SESSION_KEY);
+      }
     }
 
     function isAdmin() {
@@ -1289,12 +1291,28 @@
       return ep || "/api";
     }
 
+    let state = loadState();
+    let session = loadSession();
+    let hasInitialPulled = localStorage.getItem(PULLED_KEY) === "1";
+    let currentPeriod = getDefaultPeriod();
+    let currentTab = "billing";
+    let activeMeterPhotoRoomId = null;
+    let activeBillPhotoBillId = null;
+    let activeReceiptBillId = null;
+    let editingTenantRoomId = null;
+    let editingRoomNameId = null;
+    let hasLocalDirty = false;
+    let isSyncing = false;
+    let autoSyncTimer = null;
+    let autoLoginDebounce = null;
+    let lockoutTimer = null;
+    let serverLoginRooms = [];
+
     /* ============================================================
-       UTILITIES
+       UTILITIES & PERIOD FORMATTING
        ============================================================ */
     function fmtMoney(n) {
-      const num = Number(n) || 0;
-      return num.toLocaleString("vi-VN") + " đ";
+      return (Number(n) || 0).toLocaleString("vi-VN") + " đ";
     }
 
     function fmtNum(n) {
@@ -1316,6 +1334,23 @@
       return String(m - 1).padStart(2, "0") + "/" + y;
     }
 
+    /**
+     * Định dạng Kỳ chỉ số điện: Tháng cũ - Tháng mới
+     * VD: 12/2026 -> "Tháng 11-12/2026"
+     * VD: 01/2027 -> "Tháng 12/2026-tháng 1/2027"
+     */
+    function formatElectricPeriodRange(period) {
+      const parts = String(period || "").split("/");
+      if (parts.length !== 2) return period || "";
+      const m = Number(parts[0]);
+      const y = Number(parts[1]);
+      if (!m || !y) return period;
+      if (m === 1) {
+        return `Tháng 12/${y - 1}-tháng 1/${y}`;
+      }
+      return `Tháng ${m - 1}-${m}/${y}`;
+    }
+
     function periodToSortable(p) {
       const [m, y] = String(p || "01/2000").split("/").map(Number);
       return (y || 0) * 100 + (m || 0);
@@ -1326,6 +1361,7 @@
       return (y || "2026") + String(m || "01").padStart(2, "0");
     }
 
+    // Lịch dương Việt Nam: Ngày/Tháng/Năm (DD/MM/YYYY)
     function todayStr() {
       const d = new Date();
       return String(d.getDate()).padStart(2, "0") + "/" +
@@ -1365,12 +1401,20 @@
       document.getElementById("photoLightbox").classList.remove("open");
     }
 
+    function applyAppTitleUI() {
+      const title = (state.appTitle && state.appTitle.trim()) || "Nhà Cho Thuê";
+      document.title = title;
+      const h = document.getElementById("headerAppTitle");
+      if (h) h.textContent = title;
+      const l = document.getElementById("loginAppTitle");
+      if (l) l.textContent = title;
+    }
+
     /* ============================================================
        THEME (LIGHT / DARK MODE)
        ============================================================ */
     function initTheme() {
-      const saved = localStorage.getItem(THEME_KEY) || "light";
-      applyTheme(saved);
+      applyTheme(localStorage.getItem(THEME_KEY) || "light");
     }
     function applyTheme(theme) {
       document.documentElement.setAttribute("data-theme", theme);
@@ -1384,10 +1428,9 @@
     }
 
     /* ============================================================
-       SYNC STATUS BOX & 2-WAY SYNC LOCK LOGIC
+       SYNC STATUS BOX, 2-WAY SYNC & 6-SECOND AUTO-SYNC
        ============================================================ */
     function updateSyncBoxUI(mode, customText) {
-      syncState = mode;
       const box = document.getElementById("syncBox");
       box.classList.remove("state-synced", "state-busy", "state-needs-pull");
       if (mode === "needs-pull") {
@@ -1423,69 +1466,167 @@
       return data;
     }
 
-    async function handleSyncClick() {
-      if (!session) {
+    function checkSessionExpired() {
+      if (!session) return true;
+      if (session.expiresAt && Date.now() > session.expiresAt) {
+        stopAutoSync();
+        saveSession(null);
+        hasInitialPulled = false;
+        localStorage.removeItem(PULLED_KEY);
+        updateSyncBoxUI("needs-pull");
         openLoginGate();
-        return;
+        toast("Phiên đăng nhập 24 giờ đã hết hạn. Vui lòng đăng nhập lại.", "warn");
+        return true;
       }
-      if (!hasInitialPulled) {
-        await pullFromServer(true);
-        return;
-      }
-      // Đã đồng bộ xuống lần đầu -> cho phép đồng bộ 2 chiều
-      if (isAdmin()) {
-        const pushed = await pushToServer(false);
-        if (pushed) await pullFromServer(false);
-      } else {
-        await pullFromServer(false);
+      return false;
+    }
+
+    function isUserActivelyEditing() {
+      const settingsOpen = document.getElementById("settingsModal").classList.contains("open");
+      if (settingsOpen) return true;
+      const ae = document.activeElement;
+      if (ae && ["INPUT", "TEXTAREA", "SELECT"].includes(ae.tagName)) return true;
+      if (editingRoomNameId) return true;
+      return false;
+    }
+
+    function startAutoSync() {
+      stopAutoSync();
+      if (!session || !hasInitialPulled) return;
+      autoSyncTimer = setInterval(async () => {
+        if (checkSessionExpired()) return;
+        if (!hasInitialPulled || isSyncing) return;
+        if (document.hidden) return;
+
+        // Ưu tiên đẩy dữ liệu nội bộ lên trước nếu có thay đổi chưa đồng bộ
+        if (isAdmin()) {
+          if (hasLocalDirty) {
+            await pushToServer(true);
+          } else {
+            await pullFromServer(false, true);
+          }
+        } else {
+          // Tài khoản phòng thuê cũng tự động đồng bộ 2 chiều mỗi 6 giây
+          if (state.pendingTenantSubmissions && state.pendingTenantSubmissions.length > 0) {
+            await flushTenantPendingSubmissions(true);
+          }
+          await pullFromServer(false, true);
+        }
+      }, AUTO_SYNC_INTERVAL_MS);
+    }
+
+    function stopAutoSync() {
+      if (autoSyncTimer) {
+        clearInterval(autoSyncTimer);
+        autoSyncTimer = null;
       }
     }
 
-    async function pullFromServer(isFirstPull) {
-      if (!session) return false;
+    async function handleSyncClick() {
+      if (checkSessionExpired()) return;
+      if (isSyncing) return;
+      if (!hasInitialPulled) {
+        const ok = await pullFromServer(true, false);
+        if (ok) startAutoSync();
+        return;
+      }
+      // Đã đồng bộ xuống lần đầu -> đồng bộ 2 chiều cho mọi tài khoản
+      if (isAdmin()) {
+        const pushed = await pushToServer(false);
+        if (pushed) await pullFromServer(false, false);
+      } else {
+        await flushTenantPendingSubmissions(false);
+        await pullFromServer(false, false);
+      }
+    }
+
+    function getStateFingerprint(s) {
+      return JSON.stringify({
+        appTitle: s.appTitle,
+        rooms: s.rooms,
+        meters: s.meters,
+        bills: s.bills,
+        payment: s.payment,
+        accounts: isAdmin() ? s.accounts : null,
+        driveFolderUrl: isAdmin() ? s.driveFolderUrl : null
+      });
+    }
+
+    async function pullFromServer(isFirstPull, silent = false) {
+      if (!session || isSyncing) return false;
+      isSyncing = true;
       updateSyncBoxUI("pulling");
       try {
+        const beforeFp = getStateFingerprint(state);
         const res = await apiCall({
           action: "pull",
           auth: { username: session.username, password: session.password }
         });
-        if (Array.isArray(res.rooms) && res.rooms.length) state.rooms = res.rooms;
-        if (Array.isArray(res.meters)) state.meters = res.meters;
-        if (Array.isArray(res.bills)) state.bills = res.bills;
-        if (res.payment) state.payment = { ...state.payment, ...res.payment };
+        if (typeof res.appTitle === "string" && res.appTitle.trim()) {
+          state.appTitle = res.appTitle.trim();
+        }
+        if (Array.isArray(res.rooms) && res.rooms.length) {
+          state.rooms = res.rooms.map((r) => ({ ...r, status: normalizeRoomStatus(r.status) }));
+        }
+        if (Array.isArray(res.meters)) {
+          state.meters = res.meters.map((m) => ({ note: "", ...m }));
+        }
+        if (Array.isArray(res.bills)) {
+          state.bills = res.bills;
+        }
+        if (res.payment) {
+          state.payment = { ...state.payment, ...res.payment };
+        }
         if (isAdmin()) {
           if (Array.isArray(res.accounts) && res.accounts.length) state.accounts = res.accounts;
           if (typeof res.driveFolderUrl === "string") state.driveFolderUrl = res.driveFolderUrl;
         }
-        saveState();
+
+        saveState(false);
         hasInitialPulled = true;
         localStorage.setItem(PULLED_KEY, "1");
         updateSyncBoxUI("synced");
-        renderAll();
-        toast(isFirstPull ? "Đã đồng bộ xuống! Đồng bộ 2 chiều đã được mở khóa." : "Đã tải dữ liệu mới nhất từ máy chủ.", "ok");
+
+        const afterFp = getStateFingerprint(state);
+        if (isFirstPull || !silent || (beforeFp !== afterFp && !isUserActivelyEditing())) {
+          renderAll();
+        } else if (beforeFp !== afterFp) {
+          applyAppTitleUI();
+        }
+
+        if (!silent) {
+          toast(isFirstPull ? "Đã đồng bộ từ máy chủ! Tự động đồng bộ 2 chiều 6 giây/lần đã bật." : "Đã đồng bộ dữ liệu mới nhất từ máy chủ.", "ok");
+        }
         return true;
       } catch (err) {
         updateSyncBoxUI(hasInitialPulled ? "synced" : "needs-pull");
-        toast("Đồng bộ xuống thất bại: " + err.message, "err");
+        if (!silent) toast("Đồng bộ xuống thất bại: " + err.message, "err");
         return false;
+      } finally {
+        isSyncing = false;
       }
     }
 
-    async function pushToServer(silent = false) {
+    async function pushToServer(silent = false, oldAuth = null) {
       if (!session || !isAdmin()) return false;
       if (!hasInitialPulled) {
         if (!silent) {
-          toast("Thiết bị mới: Vui lòng bấm ô Đồng bộ (nhấp nháy xanh-vàng-đỏ) để kéo dữ liệu xuống trước khi đẩy lên!", "warn");
+          toast("Thiết bị mới: Vui lòng bấm ô Đồng bộ (nhấp nháy xanh-vàng-đỏ) để tải dữ liệu từ máy chủ xuống trước!", "warn");
         }
         updateSyncBoxUI("needs-pull");
         return false;
       }
+      if (isSyncing) return false;
+      isSyncing = true;
       updateSyncBoxUI("pushing");
       try {
-        await apiCall({
+        const authToUse = oldAuth || { username: session.username, password: session.password };
+        const payload = {
           action: "push",
-          auth: { username: session.username, password: session.password },
+          auth: authToUse,
+          oldAuth: oldAuth || undefined,
           data: {
+            appTitle: state.appTitle,
             rooms: state.rooms,
             accounts: state.accounts,
             meters: state.meters,
@@ -1493,80 +1634,219 @@
             payment: state.payment,
             driveFolderUrl: state.driveFolderUrl
           }
-        });
+        };
+        await apiCall(payload);
+        hasLocalDirty = false;
         updateSyncBoxUI("synced");
-        if (!silent) toast("Đã đồng bộ dữ liệu lên Google Sheets!", "ok");
+        if (!silent) toast("Đã đồng bộ lên máy chủ!", "ok");
         return true;
       } catch (err) {
         updateSyncBoxUI("synced");
-        toast("Lỗi đồng bộ lên máy chủ: " + err.message, "err");
+        if (!silent) toast("Lỗi đồng bộ lên máy chủ: " + err.message, "err");
         return false;
+      } finally {
+        isSyncing = false;
+      }
+    }
+
+    async function flushTenantPendingSubmissions(silent = true) {
+      if (!session || isAdmin() || !hasInitialPulled) return;
+      if (!Array.isArray(state.pendingTenantSubmissions) || !state.pendingTenantSubmissions.length) return;
+      if (isSyncing) return;
+      isSyncing = true;
+      updateSyncBoxUI("pushing");
+      const remaining = [];
+      for (const item of state.pendingTenantSubmissions) {
+        try {
+          await apiCall({
+            action: "tenantSubmitBill",
+            auth: { username: session.username, password: session.password },
+            billId: item.billId,
+            billPhotoUrl: item.billPhotoUrl,
+            paidDate: item.paidDate
+          });
+        } catch (e) {
+          remaining.push(item);
+        }
+      }
+      state.pendingTenantSubmissions = remaining;
+      saveState(false);
+      updateSyncBoxUI("synced");
+      isSyncing = false;
+      if (!silent && remaining.length === 0) {
+        toast("Đã đồng bộ lên máy chủ!", "ok");
       }
     }
 
     /* ============================================================
-       AUTHENTICATION & TENANT DATA ISOLATION
+       LOGIN GATE: ROOM SELECT, AUTO-LOGIN, NUMERIC KEYPAD, MAX 5 FAILS, 24H SESSION
        ============================================================ */
-    function openLoginGate() {
-      document.getElementById("loginGate").classList.add("open");
-      setTimeout(() => document.getElementById("loginUser").focus(), 100);
+    function getLoginFailInfo() {
+      try {
+        const raw = localStorage.getItem(LOGIN_FAIL_KEY);
+        if (!raw) return { count: 0, lockUntil: 0 };
+        const obj = JSON.parse(raw);
+        if (obj.lockUntil && Date.now() >= obj.lockUntil) {
+          localStorage.removeItem(LOGIN_FAIL_KEY);
+          return { count: 0, lockUntil: 0 };
+        }
+        return { count: Number(obj.count) || 0, lockUntil: Number(obj.lockUntil) || 0 };
+      } catch (e) {
+        return { count: 0, lockUntil: 0 };
+      }
     }
+
+    function setLoginFailInfo(info) {
+      if (!info || (info.count === 0 && !info.lockUntil)) {
+        localStorage.removeItem(LOGIN_FAIL_KEY);
+      } else {
+        localStorage.setItem(LOGIN_FAIL_KEY, JSON.stringify(info));
+      }
+    }
+
+    function showLoginError(msg) {
+      const box = document.getElementById("loginErrorBox");
+      if (!msg) {
+        box.classList.add("hidden");
+        box.textContent = "";
+      } else {
+        box.classList.remove("hidden");
+        box.textContent = msg;
+      }
+    }
+
+    function updateLockoutUI() {
+      const info = getLoginFailInfo();
+      const btn = document.getElementById("btnLoginSubmit");
+      if (info.lockUntil && Date.now() < info.lockUntil) {
+        const sec = Math.ceil((info.lockUntil - Date.now()) / 1000);
+        const mm = Math.floor(sec / 60);
+        const ss = String(sec % 60).padStart(2, "0");
+        showLoginError(`Bạn đã nhập sai quá 5 lần. Vui lòng thử lại sau ${mm}:${ss}.`);
+        btn.disabled = true;
+        if (!lockoutTimer) {
+          lockoutTimer = setInterval(updateLockoutUI, 1000);
+        }
+        return true;
+      } else {
+        if (lockoutTimer) {
+          clearInterval(lockoutTimer);
+          lockoutTimer = null;
+        }
+        btn.disabled = false;
+        return false;
+      }
+    }
+
+    function populateLoginRoomDropdown() {
+      const sel = document.getElementById("loginRoomSelect");
+      const prevVal = sel.value || "ADMIN";
+
+      // Hợp nhất danh sách phòng đã tạo tài khoản từ máy chủ & cục bộ
+      const roomMap = new Map();
+      serverLoginRooms.forEach((item) => {
+        roomMap.set(item.roomId, item.roomName || item.roomId);
+      });
+      state.accounts
+        .filter((a) => a.status === "active" && a.role === "tenant" && a.roomId)
+        .forEach((a) => {
+          const rm = state.rooms.find((r) => r.id === a.roomId);
+          roomMap.set(a.roomId, (rm && rm.name) || a.roomId);
+        });
+
+      const opts = [`<option value="ADMIN">Quản trị viên</option>`];
+      [...roomMap.entries()]
+        .sort((a, b) => a[0].localeCompare(b[0]))
+        .forEach(([rId, rName]) => {
+          opts.push(`<option value="${escHtml(rId)}">${escHtml(rName)} (${escHtml(rId)})</option>`);
+        });
+
+      sel.innerHTML = opts.join("");
+      if ([...sel.options].some((o) => o.value === prevVal)) {
+        sel.value = prevVal;
+      }
+    }
+
+    function onLoginRoomChanged() {
+      showLoginError("");
+      document.getElementById("loginUser").value = "";
+      document.getElementById("loginPass").value = "";
+      document.getElementById("loginUser").focus();
+    }
+
+    async function fetchPublicLoginRooms() {
+      try {
+        const res = await apiCall({ action: "getLoginRooms" });
+        if (res && res.ok) {
+          if (typeof res.appTitle === "string" && res.appTitle.trim()) {
+            state.appTitle = res.appTitle.trim();
+            applyAppTitleUI();
+          }
+          if (Array.isArray(res.rooms)) {
+            serverLoginRooms = res.rooms;
+            populateLoginRoomDropdown();
+          }
+        }
+      } catch (e) {
+        // Bỏ qua nếu đang offline
+      }
+    }
+
+    function openLoginGate() {
+      applyAppTitleUI();
+      populateLoginRoomDropdown();
+      showLoginError("");
+      document.getElementById("loginGate").classList.add("open");
+      updateLockoutUI();
+      fetchPublicLoginRooms();
+    }
+
     function closeLoginGate() {
       document.getElementById("loginGate").classList.remove("open");
+      if (lockoutTimer) {
+        clearInterval(lockoutTimer);
+        lockoutTimer = null;
+      }
     }
 
-    async function handleLoginSubmit(e) {
-      e.preventDefault();
-      const username = document.getElementById("loginUser").value.trim();
-      const password = document.getElementById("loginPass").value;
-      const btn = document.getElementById("btnLoginSubmit");
-      btn.disabled = true;
-      btn.textContent = "Đang xác thực...";
+    function findLocalMatchingAccount(selectedRoom, username, password) {
+      const u = String(username || "").trim().toLowerCase();
+      const p = String(password || "");
+      if (!u || !p) return null;
+      return state.accounts.find((a) => {
+        if (a.status !== "active") return false;
+        if (a.username.toLowerCase() !== u || a.password !== p) return false;
+        if (selectedRoom === "ADMIN") return a.role === "admin";
+        return a.role === "tenant" && a.roomId === selectedRoom;
+      }) || null;
+    }
 
-      let matched = null;
-      let authenticatedOnline = false;
-
-      // 1. Thử xác thực với máy chủ trước (hỗ trợ thiết bị mới / đổi mật khẩu)
-      try {
-        const res = await apiCall({ action: "login", username, password });
-        if (res && res.ok && res.user) {
-          matched = { ...res.user, password };
-          authenticatedOnline = true;
-        }
-      } catch (serverErr) {
-        // Fallback cục bộ nếu chưa kết nối mạng hoặc lần đầu chưa triển khai GAS
-        const localAcc = state.accounts.find(
-          (a) => a.status === "active" && a.username.toLowerCase() === username.toLowerCase() && a.password === password
-        );
-        if (localAcc) {
-          matched = {
-            id: localAcc.id,
-            role: localAcc.role,
-            roomId: localAcc.roomId,
-            username: localAcc.username,
-            password: localAcc.password,
-            displayName: localAcc.displayName,
-            createdAt: localAcc.createdAt
-          };
-        }
+    function completeLoginSuccess(matched) {
+      if (autoLoginDebounce) {
+        clearTimeout(autoLoginDebounce);
+        autoLoginDebounce = null;
       }
+      setLoginFailInfo({ count: 0, lockUntil: 0 });
+      showLoginError("");
 
-      btn.disabled = false;
-      btn.textContent = "Đăng nhập";
-
-      if (!matched) {
-        toast("Sai tài khoản hoặc mật khẩu (hoặc tài khoản đã bị xóa).", "err");
-        return;
-      }
-
-      // Kiểm tra xem có phải đổi người dùng / thiết bị mới không -> bắt buộc nháy đồng bộ xuống
       const prevSession = loadSession();
       if (!prevSession || prevSession.id !== matched.id || !hasInitialPulled) {
         hasInitialPulled = false;
         localStorage.removeItem(PULLED_KEY);
       }
 
-      saveSession(matched);
+      const now = Date.now();
+      saveSession({
+        id: matched.id,
+        role: matched.role,
+        roomId: matched.roomId,
+        username: matched.username,
+        password: matched.password,
+        displayName: matched.displayName,
+        loginAt: now,
+        expiresAt: now + SESSION_DURATION_MS
+      });
+
       closeLoginGate();
       document.getElementById("loginPass").value = "";
 
@@ -1578,25 +1858,113 @@
       renderAll();
 
       if (!hasInitialPulled) {
-        toast("Đăng nhập thành công! Hãy bấm ô Đồng bộ đang nhấp nháy để tải dữ liệu từ máy chủ xuống.", "ok");
+        toast("Đăng nhập thành công! Bấm ô Đồng bộ nhấp nháy để tải dữ liệu từ máy chủ xuống.", "ok");
       } else {
+        startAutoSync();
         toast("Chào mừng " + (matched.displayName || matched.username) + "!", "ok");
       }
     }
 
-    function openAccountModal() {
-      if (!session) {
-        openLoginGate();
+    // Tự động đăng nhập ngay khi nhập đúng tài khoản & mật khẩu
+    function scheduleAutoLoginCheck() {
+      if (updateLockoutUI()) return;
+      const selectedRoom = document.getElementById("loginRoomSelect").value;
+      const username = document.getElementById("loginUser").value.trim();
+      const password = document.getElementById("loginPass").value;
+      if (!username || !password) return;
+
+      // 1. Kiểm tra tức thì cục bộ
+      const localMatch = findLocalMatchingAccount(selectedRoom, username, password);
+      if (localMatch) {
+        completeLoginSuccess(localMatch);
         return;
       }
+
+      // 2. Kiểm tra tự động trên máy chủ sau 450ms (dành cho thiết bị mới / đổi mật khẩu)
+      if (autoLoginDebounce) clearTimeout(autoLoginDebounce);
+      if (password.length >= 4) {
+        autoLoginDebounce = setTimeout(async () => {
+          if (!document.getElementById("loginGate").classList.contains("open")) return;
+          const curRoom = document.getElementById("loginRoomSelect").value;
+          const curUser = document.getElementById("loginUser").value.trim();
+          const curPass = document.getElementById("loginPass").value;
+          if (!curUser || curPass.length < 4) return;
+          try {
+            const res = await apiCall({ action: "login", roomId: curRoom, username: curUser, password: curPass });
+            if (res && res.ok && res.user) {
+              completeLoginSuccess({ ...res.user, password: curPass });
+            }
+          } catch (e) {
+            // Không tính lần sai khi đang gõ dở tay
+          }
+        }, 450);
+      }
+    }
+
+    async function handleLoginSubmit(e) {
+      e.preventDefault();
+      if (updateLockoutUI()) return;
+
+      const selectedRoom = document.getElementById("loginRoomSelect").value;
+      const username = document.getElementById("loginUser").value.trim();
+      const password = document.getElementById("loginPass").value;
+      const btn = document.getElementById("btnLoginSubmit");
+
+      btn.disabled = true;
+      btn.textContent = "Đang xác thực...";
+
+      let matched = null;
+      let serverErrorMsg = "";
+      try {
+        const res = await apiCall({ action: "login", roomId: selectedRoom, username, password });
+        if (res && res.ok && res.user) {
+          matched = { ...res.user, password };
+        }
+      } catch (err) {
+        serverErrorMsg = err.message || "";
+        // Fallback cục bộ khi ngoại tuyến
+        const localAcc = findLocalMatchingAccount(selectedRoom, username, password);
+        if (localAcc) matched = localAcc;
+      }
+
+      btn.disabled = false;
+      btn.textContent = "Đăng nhập";
+
+      if (matched) {
+        completeLoginSuccess(matched);
+        return;
+      }
+
+      // Tính số lần nhập sai (tối đa 5 lần)
+      const failInfo = getLoginFailInfo();
+      failInfo.count += 1;
+      if (failInfo.count >= MAX_LOGIN_ATTEMPTS) {
+        failInfo.lockUntil = Date.now() + LOCKOUT_MS;
+        setLoginFailInfo(failInfo);
+        updateLockoutUI();
+      } else {
+        setLoginFailInfo(failInfo);
+        const remain = MAX_LOGIN_ATTEMPTS - failInfo.count;
+        const msg = `${serverErrorMsg || "Sai tài khoản hoặc mật khẩu!"} (Sai ${failInfo.count}/${MAX_LOGIN_ATTEMPTS} lần — còn ${remain} lần thử)`;
+        showLoginError(msg);
+      }
+    }
+
+    function openAccountModal() {
+      if (checkSessionExpired()) return;
       const box = document.getElementById("accountProfileBox");
       const room = state.rooms.find((r) => r.id === session.roomId);
+      const remainMs = Math.max(0, (session.expiresAt || 0) - Date.now());
+      const remainH = Math.floor(remainMs / 3600000);
+      const remainM = Math.floor((remainMs % 3600000) / 60000);
+
       box.innerHTML = `
         <div class="settings-section" style="margin-bottom:12px;">
           <div style="font-size:15px; font-weight:800;">${escHtml(session.displayName || session.username)}</div>
           <div class="muted mt-2">Tài khoản: <strong>${escHtml(session.username)}</strong></div>
           <div class="muted mt-2">Quyền hạn: <strong>${isAdmin() ? "Quản trị viên (Toàn quyền)" : "Người thuê — " + escHtml(room ? room.name : session.roomId) + " (Chỉ xem & gửi bill)"}</strong></div>
-          <div class="muted mt-2">Trạng thái đồng bộ 2 chiều: <strong>${hasInitialPulled ? "Đã mở khóa" : "Chưa mở khóa (cần bấm đồng bộ xuống)"}</strong></div>
+          <div class="muted mt-2">Phiên đăng nhập còn lại: <strong>${remainH} giờ ${remainM} phút</strong> (tự duy trì 24h)</div>
+          <div class="muted mt-2">Đồng bộ 2 chiều tự động (6 giây/lần): <strong>${hasInitialPulled ? "Đang bật" : "Chưa bật (cần bấm đồng bộ xuống)"}</strong></div>
         </div>
         <div class="flex-row" style="justify-content:space-between;">
           ${!isAdmin() ? `<button class="btn btn-indigo btn-sm" onclick="closeModal('accountModal'); openPinModal();">Nhập mã QTV để sửa</button>` : `<span></span>`}
@@ -1608,6 +1976,7 @@
 
     function logoutUser() {
       closeModal("accountModal");
+      stopAutoSync();
       saveSession(null);
       hasInitialPulled = false;
       localStorage.removeItem(PULLED_KEY);
@@ -1626,13 +1995,16 @@
       const validPin = (adminAcc && (adminAcc.adminPin || adminAcc.password)) || "123456";
       if (pin && pin === validPin) {
         closeModal("pinModal");
+        const now = Date.now();
         saveSession({
           id: adminAcc ? adminAcc.id : "ADMIN_ROOT",
           role: "admin",
           roomId: "ALL",
           username: adminAcc ? adminAcc.username : "admin",
           password: adminAcc ? adminAcc.password : "123456",
-          displayName: adminAcc ? adminAcc.displayName : "Quản trị viên"
+          displayName: adminAcc ? adminAcc.displayName : "Quản trị viên",
+          loginAt: now,
+          expiresAt: now + SESSION_DURATION_MS
         });
         toast("Đã xác thực Mã Quản trị viên! Bạn có toàn quyền chỉnh sửa.", "ok");
         renderAll();
@@ -1689,13 +2061,9 @@
       const curY = window.scrollY;
       const dock = document.getElementById("bottomDockWrap");
       if (!dock) return;
-      if (curY < 45) {
-        dock.classList.remove("dock-hidden");
-      } else if (curY - lastScrollY > 12) {
-        dock.classList.add("dock-hidden");
-      } else if (lastScrollY - curY > 8) {
-        dock.classList.remove("dock-hidden");
-      }
+      if (curY < 45) dock.classList.remove("dock-hidden");
+      else if (curY - lastScrollY > 12) dock.classList.add("dock-hidden");
+      else if (lastScrollY - curY > 8) dock.classList.remove("dock-hidden");
       lastScrollY = curY;
     }, { passive: true });
 
@@ -1706,7 +2074,7 @@
       area.addEventListener("touchstart", (e) => {
         if (e.touches.length !== 1) return;
         const target = e.target;
-        ignoreSwipe = !!target.closest(".no-swipe, input, select, textarea, button");
+        ignoreSwipe = !!target.closest(".no-swipe, input, select, textarea, button, label");
         startX = e.touches[0].clientX;
         startY = e.touches[0].clientY;
       }, { passive: true });
@@ -1718,17 +2086,14 @@
         if (Math.abs(dx) > 65 && Math.abs(dx) > Math.abs(dy) * 1.55) {
           const tabs = getVisibleTabs();
           const idx = tabs.indexOf(currentTab);
-          if (dx < 0 && idx < tabs.length - 1) {
-            switchTab(tabs[idx + 1]);
-          } else if (dx > 0 && idx > 0) {
-            switchTab(tabs[idx - 1]);
-          }
+          if (dx < 0 && idx < tabs.length - 1) switchTab(tabs[idx + 1]);
+          else if (dx > 0 && idx > 0) switchTab(tabs[idx - 1]);
         }
       }, { passive: true });
     })();
 
     /* ============================================================
-       TAB 3: DỮ LIỆU PHÒNG (ADMIN ONLY)
+       TAB 3: DỮ LIỆU PHÒNG (ADMIN ONLY) — Pencil Rename + Toggle Switch
        ============================================================ */
     function applyBulkRates() {
       if (!isAdmin()) return openPinModal();
@@ -1740,7 +2105,7 @@
         r.waterRate = water;
         r.electricRate = elec;
       });
-      saveState();
+      saveState(true);
       renderConfigTab();
       toast("Đã áp dụng mức giá mới cho cả 9 phòng!", "ok");
     }
@@ -1754,10 +2119,54 @@
       } else {
         rm[field] = value;
       }
-      saveState();
-      if (field === "people" || field === "waterRate" || field === "status") {
-        renderConfigTab();
+      saveState(true);
+      if (field === "people" || field === "waterRate" || field === "status" || field === "name") {
+        renderAll();
       }
+    }
+
+    function toggleRoomOccupied(roomId, isOccupied) {
+      if (!isAdmin()) return openPinModal();
+      const rm = state.rooms.find((r) => r.id === roomId);
+      if (!rm) return;
+      rm.status = isOccupied ? "Đang thuê" : "Phòng trống";
+      saveState(true);
+      renderAll();
+      if (hasInitialPulled) pushToServer(true);
+    }
+
+    function startEditRoomName(roomId) {
+      if (!isAdmin()) return openPinModal();
+      editingRoomNameId = roomId;
+      renderConfigTab();
+      setTimeout(() => {
+        const inp = document.getElementById("inlineRoomNameInput_" + roomId);
+        if (inp) { inp.focus(); inp.select(); }
+      }, 40);
+    }
+
+    function cancelEditRoomName() {
+      editingRoomNameId = null;
+      renderConfigTab();
+    }
+
+    async function saveInlineRoomName(roomId) {
+      const inp = document.getElementById("inlineRoomNameInput_" + roomId);
+      if (!inp) return;
+      const newName = inp.value.trim();
+      if (!newName) {
+        toast("Tên phòng không được để trống!", "warn");
+        return;
+      }
+      const rm = state.rooms.find((r) => r.id === roomId);
+      if (rm) {
+        rm.name = newName;
+      }
+      editingRoomNameId = null;
+      saveState(true);
+      renderAll();
+      toast("Đã cập nhật tên phòng thành \"" + newName + "\"!", "ok");
+      if (hasInitialPulled) await pushToServer(true);
     }
 
     function stepPeople(roomId, delta) {
@@ -1765,13 +2174,13 @@
       const rm = state.rooms.find((r) => r.id === roomId);
       if (!rm) return;
       rm.people = Math.max(0, (Number(rm.people) || 0) + delta);
-      saveState();
+      saveState(true);
       renderConfigTab();
     }
 
     async function saveRoomsAndSync() {
       if (!isAdmin()) return openPinModal();
-      saveState();
+      saveState(true);
       toast("Đã lưu dữ liệu 9 phòng.", "ok");
       await pushToServer(false);
     }
@@ -1781,34 +2190,50 @@
       const grid = document.getElementById("configRoomGrid");
       grid.innerHTML = state.rooms.map((rm) => {
         const waterMonth = (Number(rm.people) || 0) * (Number(rm.waterRate) || 0);
-        const isVacant = rm.status === "Trống";
+        const vacant = isRoomVacant(rm);
         const activeAcc = getActiveTenantForRoom(rm.id);
+        const isEditingName = editingRoomNameId === rm.id;
+
+        const titleHtml = isEditingName
+          ? `<div class="inline-name-edit">
+               <span style="font-weight:800; font-size:13px;">${escHtml(rm.id)}</span>
+               <input type="text" id="inlineRoomNameInput_${rm.id}" value="${escHtml(rm.name)}"
+                 onkeydown="if(event.key==='Enter'){saveInlineRoomName('${rm.id}');}else if(event.key==='Escape'){cancelEditRoomName();}" />
+               <button type="button" class="btn btn-emerald btn-sm" onclick="saveInlineRoomName('${rm.id}')">Lưu</button>
+               <button type="button" class="btn btn-glass btn-sm" onclick="cancelEditRoomName()">&#10005;</button>
+             </div>`
+          : `<div class="room-title-wrap">
+               <div style="font-weight:800; font-size:15px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${escHtml(rm.id)} · ${escHtml(rm.name)}</div>
+               <button type="button" class="pencil-btn" onclick="startEditRoomName('${rm.id}')" title="Sửa tên phòng">
+                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                   <path d="M12 20h9"></path>
+                   <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
+                 </svg>
+               </button>
+             </div>`;
+
         return `
-          <div class="cfg-card" style="${isVacant ? "opacity:0.72;" : ""}">
-            <div style="display:flex; justify-content:space-between; align-items:center; gap:8px;">
-              <div style="font-weight:900; font-size:15px;">${escHtml(rm.id)} · ${escHtml(rm.name)}</div>
-              <select style="width:auto; padding:5px 8px; font-size:12px; font-weight:700;"
-                onchange="updateRoomField('${rm.id}', 'status', this.value)">
-                <option value="Đang thuê" ${rm.status === "Đang thuê" ? "selected" : ""}>Đang thuê</option>
-                <option value="Trống" ${rm.status === "Trống" ? "selected" : ""}>Trống</option>
-              </select>
+          <div class="cfg-card" style="${vacant ? "opacity:0.74;" : ""}">
+            <div class="cfg-head-row">
+              ${titleHtml}
+              <label class="status-switch" title="Bật: Đang thuê | Tắt: Phòng trống">
+                <input type="checkbox" ${!vacant ? "checked" : ""} onchange="toggleRoomOccupied('${rm.id}', this.checked)" />
+                <span class="switch-track"><span class="switch-knob"></span></span>
+                <span class="switch-text ${!vacant ? "on" : "off"}">${!vacant ? "Đang thuê" : "Phòng trống"}</span>
+              </label>
             </div>
             <div class="muted mt-2">
               Tài khoản xem phòng: ${activeAcc ? `<strong style="color:var(--emerald)">${escHtml(activeAcc.username)}</strong> (${escHtml(activeAcc.displayName)})` : "Chưa tạo (tạo trong Cài đặt QTV)"}
             </div>
             <div class="cfg-fields">
               <div>
-                <label class="field-label">Tên phòng</label>
-                <input type="text" value="${escHtml(rm.name)}" onchange="updateRoomField('${rm.id}','name',this.value)" />
-              </div>
-              <div>
                 <label class="field-label">Tên khách thuê</label>
                 <input type="text" value="${escHtml(rm.tenantName || "")}" placeholder="Nhập tên khách" onchange="updateRoomField('${rm.id}','tenantName',this.value)" />
               </div>
-              <div class="full">
+              <div>
                 <label class="field-label">Số điện thoại</label>
-                <div style="display:flex; gap:6px;">
-                  <input type="tel" value="${escHtml(rm.phone || "")}" placeholder="VD: 0987 654 321" onchange="updateRoomField('${rm.id}','phone',this.value)" />
+                <div style="display:flex; gap:5px;">
+                  <input type="tel" value="${escHtml(rm.phone || "")}" placeholder="Số điện thoại" onchange="updateRoomField('${rm.id}','phone',this.value)" />
                   ${rm.phone ? `<a class="btn btn-glass btn-sm" href="tel:${escHtml(rm.phone)}">Gọi</a>` : ""}
                 </div>
               </div>
@@ -1839,7 +2264,7 @@
     }
 
     /* ============================================================
-       TAB 2: SỐ ĐIỆN (Số mới trước, Số cũ sau + Ảnh đồng hồ gốc)
+       TAB 2: SỐ ĐIỆN — Số mới, Số cũ, Số điện sử dụng, Ghi chú, Kỳ & Ngày ghi VN
        ============================================================ */
     function getMeterRecord(period, roomId) {
       return state.meters.find((m) => m.period === period && m.roomId === roomId) || null;
@@ -1851,7 +2276,6 @@
       if (prevRec && prevRec.newVal !== "" && prevRec.newVal !== undefined) {
         return Number(prevRec.newVal);
       }
-      // Fallback: tìm kỳ gần nhất trước kỳ hiện tại
       const curSort = periodToSortable(period);
       const older = state.meters
         .filter((m) => m.roomId === roomId && periodToSortable(m.period) < curSort && m.newVal !== "")
@@ -1874,6 +2298,7 @@
           newVal: "",
           oldVal: oldVal,
           used: 0,
+          note: "",
           photoUrl: "",
           date: todayStr()
         };
@@ -1885,12 +2310,18 @@
     function onMeterInputChange(roomId, field, rawVal) {
       if (!isAdmin()) return openPinModal();
       const rec = ensureMeterDraft(currentPeriod, roomId);
-      rec[field] = rawVal === "" ? "" : Number(rawVal);
-      const nv = rec.newVal === "" ? null : Number(rec.newVal);
-      const ov = rec.oldVal === "" ? 0 : Number(rec.oldVal);
-      rec.used = nv === null ? 0 : (nv - ov);
-      rec.date = todayStr();
-      saveState();
+      if (field === "note") {
+        rec.note = rawVal;
+      } else {
+        rec[field] = rawVal === "" ? "" : Number(rawVal);
+        const nv = rec.newVal === "" ? null : Number(rec.newVal);
+        const ov = rec.oldVal === "" ? 0 : Number(rec.oldVal);
+        rec.used = nv === null ? 0 : (nv - ov);
+        if (field === "newVal") {
+          rec.date = todayStr(); // Ngày dương lịch Việt Nam khi nhập số điện mới
+        }
+      }
+      saveState(true);
       renderElectricTab();
     }
 
@@ -1922,7 +2353,7 @@
       const rm = state.rooms.find((r) => r.id === roomId);
       const rec = ensureMeterDraft(currentPeriod, roomId);
 
-      toast("Đang tải ảnh đồng hồ chất lượng gốc lên Google Drive...", "");
+      toast("Đang tải ảnh đồng hồ chất lượng gốc lên máy chủ...", "");
       try {
         const dataUrl = await readFileAsDataUrl(file);
         try {
@@ -1938,13 +2369,12 @@
             base64Data: dataUrl
           });
           rec.photoUrl = res.directUrl || res.viewUrl;
-          toast("Đã đồng bộ ảnh đồng hồ chất lượng gốc vào Google Drive!", "ok");
+          toast("Đã đồng bộ ảnh đồng hồ chất lượng gốc lên máy chủ!", "ok");
         } catch (uploadErr) {
-          // Lưu tạm cục bộ nếu chưa cấu hình Drive URL
           rec.photoUrl = dataUrl;
-          toast("Đã đính kèm ảnh cục bộ (chưa đồng bộ Drive: " + uploadErr.message + ")", "warn");
+          toast("Đã lưu ảnh cục bộ (chưa đồng bộ thư mục ảnh: " + uploadErr.message + ")", "warn");
         }
-        saveState();
+        saveState(true);
         renderElectricTab();
         if (hasInitialPulled) pushToServer(true);
       } catch (err) {
@@ -1954,9 +2384,8 @@
 
     async function commitMetersAndBills() {
       if (!isAdmin()) return openPinModal();
-      // Kiểm tra hợp lệ số mới < số cũ
       for (const rm of state.rooms) {
-        if (rm.status === "Trống") continue;
+        if (isRoomVacant(rm)) continue;
         const rec = getMeterRecord(currentPeriod, rm.id);
         if (rec && rec.newVal !== "" && Number(rec.newVal) < Number(rec.oldVal || 0)) {
           toast("Cảnh báo: " + rm.name + " có Số điện mới nhỏ hơn Số điện cũ!", "err");
@@ -1975,39 +2404,43 @@
       if (isAdmin()) {
         adminCard.classList.remove("hidden");
         tenantCard.classList.add("hidden");
-        document.getElementById("meterPeriodBadge").textContent = currentPeriod;
+        document.getElementById("meterPeriodBadge").textContent = formatElectricPeriodRange(currentPeriod);
 
         const tbody = document.getElementById("meterEntryBody");
         tbody.innerHTML = state.rooms.map((rm) => {
-          const isVacant = rm.status === "Trống";
+          const vacant = isRoomVacant(rm);
           const rec = getMeterRecord(currentPeriod, rm.id);
           const autoOld = rec ? rec.oldVal : getAutoOldElectric(currentPeriod, rm.id);
           const newVal = rec && rec.newVal !== "" ? rec.newVal : "";
           const used = newVal === "" ? 0 : (Number(newVal) - Number(autoOld || 0));
+          const noteVal = rec ? (rec.note || "") : "";
           let usedHtml = `<strong>${used} kWh</strong>`;
           if (newVal !== "" && used < 0) usedHtml = `<span class="warn-red">${used} (Lỗi!)</span>`;
           else if (used > 250) usedHtml = `<span class="warn-amber">${used} kWh (Cao)</span>`;
 
           const photoUrl = rec ? rec.photoUrl : "";
           return `
-            <tr style="${isVacant ? "opacity:0.55;" : ""}">
+            <tr style="${vacant ? "opacity:0.55;" : ""}">
               <td>
                 <strong>${escHtml(rm.name)}</strong>
-                <div class="muted">${escHtml(rm.tenantName || (isVacant ? "Phòng trống" : "Chưa nhập tên"))}</div>
+                <div class="muted">${escHtml(rm.tenantName || (vacant ? "Phòng trống" : "Chưa nhập tên"))}</div>
               </td>
-              <!-- ĐỔI VỊ TRÍ: Số điện MỚI đứng TRƯỚC -->
               <td>
                 <input type="number" class="num-input" value="${newVal}" placeholder="Nhập mới"
-                  ${isVacant ? "disabled" : ""}
+                  ${vacant ? "disabled" : ""}
                   onchange="onMeterInputChange('${rm.id}','newVal',this.value)" />
               </td>
-              <!-- Số điện CŨ đứng SAU -->
               <td>
                 <input type="number" class="num-input" value="${autoOld}"
-                  ${isVacant ? "disabled" : ""}
+                  ${vacant ? "disabled" : ""}
                   onchange="onMeterInputChange('${rm.id}','oldVal',this.value)" />
               </td>
-              <td>${isVacant ? "0 kWh" : usedHtml}</td>
+              <td>${vacant ? "0 kWh" : usedHtml}</td>
+              <td>
+                <input type="text" class="note-input" value="${escHtml(noteVal)}" placeholder="Ghi chú..."
+                  ${vacant ? "disabled" : ""}
+                  onchange="onMeterInputChange('${rm.id}','note',this.value)" />
+              </td>
               <td>
                 <div class="flex-row" style="flex-wrap:nowrap;">
                   ${photoUrl ? `<img src="${escHtml(photoUrl)}" class="photo-thumb" onclick="openLightbox('${escHtml(photoUrl)}')" title="Xem ảnh đồng hồ" />` : ""}
@@ -2020,22 +2453,22 @@
           `;
         }).join("");
       } else {
-        // NGƯỜI THUÊ: Ẩn mục Ghi chỉ số điện hàng tháng, chỉ hiện Chi tiết số điện phòng mình
         adminCard.classList.add("hidden");
         tenantCard.classList.remove("hidden");
-        document.getElementById("tenantMeterPeriodLabel").textContent = currentPeriod;
+        document.getElementById("tenantMeterPeriodLabel").textContent = formatElectricPeriodRange(currentPeriod);
 
         const rec = state.meters.find((m) => m.period === currentPeriod && canCurrentUserSeeRecord(m));
         const body = document.getElementById("tenantMeterDetailBody");
         if (!rec) {
-          body.innerHTML = `<div class="muted">Chưa có chỉ số điện kỳ ${escHtml(currentPeriod)} cho tài khoản phòng bạn.</div>`;
+          body.innerHTML = `<div class="muted">Chưa có chỉ số điện kỳ ${escHtml(formatElectricPeriodRange(currentPeriod))} cho tài khoản phòng bạn.</div>`;
         } else {
           body.innerHTML = `
             <div class="bill-rows">
               <div class="bill-row"><span>Số điện mới</span><strong>${fmtNum(rec.newVal)}</strong></div>
               <div class="bill-row"><span>Số điện cũ</span><strong>${fmtNum(rec.oldVal)}</strong></div>
-              <div class="bill-row"><span>Tổng điện đã dùng</span><strong style="color:var(--amber); font-size:15px;">${fmtNum(rec.used)} kWh</strong></div>
-              <div class="bill-row"><span>Ngày ghi chỉ số</span><strong>${escHtml(rec.date || "—")}</strong></div>
+              <div class="bill-row"><span>Số điện sử dụng</span><strong style="color:var(--amber); font-size:15px;">${fmtNum(rec.used)} kWh</strong></div>
+              ${rec.note ? `<div class="bill-row"><span>Ghi chú</span><strong>${escHtml(rec.note)}</strong></div>` : ""}
+              <div class="bill-row"><span>Ngày ghi</span><strong>${escHtml(rec.date || "—")}</strong></div>
             </div>
             <div class="mt-3">
               ${rec.photoUrl
@@ -2063,7 +2496,7 @@
       const periods = [...new Set(visibleMeters.map((m) => m.period))].sort((a, b) => periodToSortable(b) - periodToSortable(a));
 
       pSel.innerHTML = `<option value="ALL">Tất cả các kỳ</option>` +
-        periods.map((p) => `<option value="${p}" ${curPVal === p ? "selected" : ""}>Tháng ${p}</option>`).join("");
+        periods.map((p) => `<option value="${p}" ${curPVal === p ? "selected" : ""}>${escHtml(formatElectricPeriodRange(p))}</option>`).join("");
 
       if (isAdmin()) {
         rSel.classList.remove("hidden");
@@ -2080,7 +2513,7 @@
 
       const tbody = document.getElementById("meterHistoryBody");
       if (!filtered.length) {
-        tbody.innerHTML = `<tr><td colspan="7" class="muted" style="text-align:center; padding:18px;">Chưa có lịch sử chỉ số điện.</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="8" class="muted" style="text-align:center; padding:18px;">Chưa có lịch sử chỉ số điện.</td></tr>`;
         return;
       }
 
@@ -2088,14 +2521,15 @@
         const rm = state.rooms.find((r) => r.id === m.roomId);
         return `
           <tr>
-            <td><strong>${escHtml(m.period)}</strong></td>
+            <td><strong>${escHtml(formatElectricPeriodRange(m.period))}</strong></td>
             <td>
               <strong>${escHtml(rm ? rm.name : m.roomId)}</strong>
               <div class="muted">${escHtml(m.tenantName || "")}</div>
             </td>
             <td><strong>${fmtNum(m.newVal)}</strong></td>
             <td>${fmtNum(m.oldVal)}</td>
-            <td><strong style="color:var(--amber)">${fmtNum(m.used)}</strong></td>
+            <td><strong style="color:var(--amber)">${fmtNum(m.used)} kWh</strong></td>
+            <td>${escHtml(m.note || "—")}</td>
             <td>
               ${m.photoUrl
                 ? `<img src="${escHtml(m.photoUrl)}" class="photo-thumb" onclick="openLightbox('${escHtml(m.photoUrl)}')" title="Bấm xem ảnh đồng hồ" />`
@@ -2109,7 +2543,7 @@
     }
 
     /* ============================================================
-       TAB 1: TIỀN PHÒNG MM/YYYY (Billing, Tenant Bill Upload, Receipt)
+       TAB 1: TIỀN PHÒNG MM/YYYY
        ============================================================ */
     function calcPrevUnpaidDebt(period, roomId, tenantId) {
       const prevP = getPrevPeriod(period);
@@ -2127,7 +2561,7 @@
         const tenantId = activeAcc ? activeAcc.id : ("LEGACY_" + rm.id);
         const existing = state.bills.find((b) => b.id === id);
 
-        if (rm.status === "Trống") {
+        if (isRoomVacant(rm)) {
           if (existing) {
             existing.rent = 0; existing.waterTotal = 0; existing.electricTotal = 0;
             existing.total = 0; existing.status = "vacant";
@@ -2164,9 +2598,8 @@
           existing.electricTotal = electricTotal;
           existing.oldDebt = oldDebt;
           existing.total = total;
-          if (existing.status === "paid" && existing.paidAmount < total) {
-            existing.paidAmount = total;
-          }
+          if (existing.status === "vacant") existing.status = "unpaid";
+          if (existing.status === "paid" && existing.paidAmount < total) existing.paidAmount = total;
         } else {
           state.bills.push({
             id,
@@ -2185,7 +2618,7 @@
           });
         }
       });
-      saveState();
+      saveState(true);
       renderBillingTab();
       if (!silent) {
         toast("Đã kết tổng hóa đơn kỳ " + currentPeriod + "!", "ok");
@@ -2215,7 +2648,7 @@
           b.paidDate = "";
         }
       }
-      saveState();
+      saveState(true);
       renderBillingTab();
       if (hasInitialPulled) pushToServer(true);
     }
@@ -2233,7 +2666,7 @@
         b.paidAmount = b.total;
         b.paidDate = todayStr();
       }
-      saveState();
+      saveState(true);
       renderBillingTab();
       if (hasInitialPulled) pushToServer(true);
     }
@@ -2256,7 +2689,7 @@
       if (!b) return;
       const rm = state.rooms.find((r) => r.id === b.roomId);
 
-      toast("Đang tải ảnh bill thanh toán lên Google Drive...", "");
+      toast("Đang tải ảnh bill thanh toán lên máy chủ...", "");
       try {
         const dataUrl = await readFileAsDataUrl(file);
         let uploadedUrl = "";
@@ -2275,26 +2708,29 @@
           uploadedUrl = res.directUrl || res.viewUrl;
         } catch (upErr) {
           uploadedUrl = dataUrl;
-          toast("Lưu ảnh cục bộ (Drive chưa kết nối: " + upErr.message + ")", "warn");
+          toast("Lưu ảnh cục bộ (thư mục ảnh chưa kết nối: " + upErr.message + ")", "warn");
         }
 
-        // Tự động chuyển trạng thái sang ĐÃ ĐÓNG ĐỦ sau khi đính kèm bill
         b.paidAmount = b.total;
         b.status = "paid";
         b.paidDate = todayStr();
         b.hasBillPhoto = true;
         if (isAdmin()) {
           b.billPhotoUrl = uploadedUrl;
-        } else {
-          // Người thuê không giữ link xem ảnh bill sau khi gửi, nhưng vẫn đẩy lên máy chủ cho QTV xem
-          b.billPhotoUrl = "";
-        }
-        saveState();
-        renderBillingTab();
-
-        if (isAdmin()) {
+          saveState(true);
+          renderBillingTab();
           await pushToServer(true);
         } else {
+          b.billPhotoUrl = "";
+          if (!hasInitialPulled) {
+            state.pendingTenantSubmissions.push({ billId: b.id, billPhotoUrl: uploadedUrl, paidDate: b.paidDate });
+            saveState(false);
+            renderBillingTab();
+            toast("Đã lưu bill tạm thời. Hãy bấm ô Đồng bộ nhấp nháy để đồng bộ lên máy chủ!", "warn");
+            return;
+          }
+          saveState(false);
+          renderBillingTab();
           try {
             await apiCall({
               action: "tenantSubmitBill",
@@ -2304,7 +2740,8 @@
               paidDate: b.paidDate
             });
           } catch (syncErr) {
-            toast("Đã đánh dấu Đã đóng đủ trên máy (chưa đồng bộ máy chủ: " + syncErr.message + ")", "warn");
+            state.pendingTenantSubmissions.push({ billId: b.id, billPhotoUrl: uploadedUrl, paidDate: b.paidDate });
+            saveState(false);
           }
         }
         toast("Đã đính kèm bill thanh toán! Trạng thái tự chuyển sang Đã đóng đủ.", "ok");
@@ -2428,11 +2865,9 @@
     }
 
     function renderBillingTab() {
-      // Cập nhật động tiêu đề & nhãn tab dưới: "Tiền phòng MM/YYYY"
       document.getElementById("dockBillingLabel").textContent = "Tiền phòng " + currentPeriod;
       document.getElementById("billingSectionTitle").textContent = "Tiền phòng " + currentPeriod;
 
-      // Ẩn KPI & nút Admin nếu là tài khoản người thuê
       document.getElementById("adminKpiSection").classList.toggle("hidden", !isAdmin());
       document.getElementById("adminBillToolbar").classList.toggle("hidden", !isAdmin());
 
@@ -2471,7 +2906,6 @@
             const phone = rm && rm.phone ? ` · ${rm.phone}` : "";
             const isVacant = b.status === "vacant";
 
-            // Quyền xem ảnh bill: CHỈ Quản trị viên mới xem được ảnh bill đính kèm!
             const adminBillViewBtn = isAdmin() && b.billPhotoUrl
               ? `<button class="btn btn-indigo btn-sm" onclick="openLightbox('${escHtml(b.billPhotoUrl)}')">Xem ảnh bill</button>`
               : "";
@@ -2605,7 +3039,10 @@
     }
 
     /* ============================================================
-       SETTINGS MODAL (CÀI ĐẶT QUẢN TRỊ VIÊN - ADMIN ONLY)
+       SETTINGS MODAL (CÀI ĐẶT QUẢN TRỊ VIÊN)
+       - Inline tenant account editor directly below clicked room
+       - Import & Export JSON
+       - Fixed Admin password update sync via oldAuth
        ============================================================ */
     function openSettingsModal() {
       if (!isAdmin()) {
@@ -2614,6 +3051,7 @@
         return;
       }
 
+      document.getElementById("setAppTitle").value = state.appTitle || "Nhà Cho Thuê";
       document.getElementById("setBankBin").value = state.payment.bankBin || "970422";
       document.getElementById("setAccNo").value = state.payment.accountNo || "";
       document.getElementById("setAccName").value = state.payment.accountName || "";
@@ -2625,14 +3063,14 @@
       document.getElementById("setAdminPin").value = adminAcc ? (adminAcc.adminPin || adminAcc.password) : "123456";
 
       const epInput = document.getElementById("setServerEndpoint");
-      epInput.type = "password"; // Mặc định ẩn
+      epInput.type = "password";
       epInput.value = state.serverEndpoint || "/api";
 
       const drvInput = document.getElementById("setDriveFolderUrl");
-      drvInput.type = "password"; // Mặc định ẩn
+      drvInput.type = "password";
       drvInput.value = state.driveFolderUrl || "";
 
-      cancelEditTenantAccount();
+      editingTenantRoomId = null;
       renderTenantAccountsList();
       openModal("settingsModal");
     }
@@ -2651,13 +3089,35 @@
       }
     }
 
+    function compressQrDataUrl(dataUrl, maxDim = 360) {
+      return new Promise((resolve) => {
+        const img = new Image();
+        img.onload = () => {
+          const scale = Math.min(1, maxDim / Math.max(img.width || 1, img.height || 1));
+          const w = Math.max(1, Math.round(img.width * scale));
+          const h = Math.max(1, Math.round(img.height * scale));
+          const canvas = document.createElement("canvas");
+          canvas.width = w;
+          canvas.height = h;
+          const ctx = canvas.getContext("2d");
+          ctx.fillStyle = "#ffffff";
+          ctx.fillRect(0, 0, w, h);
+          ctx.drawImage(img, 0, 0, w, h);
+          resolve(canvas.toDataURL("image/jpeg", 0.86));
+        };
+        img.onerror = () => resolve(dataUrl);
+        img.src = dataUrl;
+      });
+    }
+
     async function handleCustomQrUpload(e) {
       const file = e.target.files && e.target.files[0];
       if (!file) return;
       try {
-        const dataUrl = await readFileAsDataUrl(file);
+        const rawDataUrl = await readFileAsDataUrl(file);
+        const dataUrl = await compressQrDataUrl(rawDataUrl, 360);
         state.payment.customQrImage = dataUrl;
-        saveState();
+        saveState(true);
         refreshCustomQrPreview();
         toast("Đã tải lên ảnh mã QR cho phiếu thu!", "ok");
       } catch (err) {
@@ -2667,54 +3127,91 @@
 
     function removeCustomQr() {
       state.payment.customQrImage = "";
-      saveState();
+      saveState(true);
       refreshCustomQrPreview();
-      toast("Đã xóa ảnh mã QR tùy chỉnh (quay về VietQR tự động).", "");
+      toast("Đã xóa ảnh mã QR tùy chỉnh.", "");
     }
 
+    // Hiển thị form tạo/sửa tài khoản NGAY BÊN DƯỚI từng phòng
     function renderTenantAccountsList() {
       const wrap = document.getElementById("tenantAccountsList");
       wrap.innerHTML = state.rooms.map((rm) => {
         const acc = getActiveTenantForRoom(rm.id);
+        const isEditing = editingTenantRoomId === rm.id;
+        const defaultUser = acc ? acc.username : ("phong" + rm.id.replace("P0", "10"));
+        const defaultName = acc ? acc.displayName : (rm.tenantName || rm.name);
+        const defaultPass = acc ? acc.password : "";
+
+        const inlineFormHtml = isEditing ? `
+          <div class="acc-inline-editor">
+            <div style="font-weight:800; font-size:13px; margin-bottom:8px; color:var(--indigo);">
+              ${acc ? "Sửa tài khoản" : "Tạo tài khoản mới"} — ${escHtml(rm.name)} (${escHtml(rm.id)})
+            </div>
+            <div class="cfg-fields" style="margin-top:0;">
+              <div>
+                <label class="field-label">Tài khoản đăng nhập</label>
+                <input type="text" id="inlineAccUser_${rm.id}" value="${escHtml(defaultUser)}" placeholder="Nhập tài khoản" />
+              </div>
+              <div>
+                <label class="field-label">Tên hiển thị</label>
+                <input type="text" id="inlineAccName_${rm.id}" value="${escHtml(defaultName)}" placeholder="Nhập tên hiển thị" />
+              </div>
+              <div class="full">
+                <label class="field-label">Mật khẩu phòng</label>
+                <div class="input-eye-wrap">
+                  <input type="password" id="inlineAccPass_${rm.id}" inputmode="numeric" value="${escHtml(defaultPass)}" placeholder="Nhập mật khẩu số" />
+                  <button type="button" class="eye-toggle" onclick="toggleInputEye('inlineAccPass_${rm.id}')">&#128065;</button>
+                </div>
+              </div>
+            </div>
+            <div class="mt-2 flex-row">
+              <button type="button" class="btn btn-emerald btn-sm" onclick="saveTenantAccount('${rm.id}')">Lưu tài khoản</button>
+              <button type="button" class="btn btn-glass btn-sm" onclick="cancelEditTenantAccount()">Hủy</button>
+            </div>
+          </div>
+        ` : "";
+
         return `
-          <div class="acc-item">
-            <div class="acc-meta">
-              <strong>${escHtml(rm.name)}</strong>
-              ${acc
-                ? `<div class="muted">TK: <strong>${escHtml(acc.username)}</strong> · ${escHtml(acc.displayName)}</div>`
-                : `<div class="muted">Chưa tạo tài khoản đăng nhập</div>`
-              }
+          <div class="acc-block">
+            <div class="acc-item">
+              <div class="acc-meta">
+                <strong>${escHtml(rm.id)} · ${escHtml(rm.name)}</strong>
+                ${acc
+                  ? `<div class="muted">TK: <strong>${escHtml(acc.username)}</strong> · ${escHtml(acc.displayName)}</div>`
+                  : `<div class="muted">Chưa tạo tài khoản đăng nhập</div>`
+                }
+              </div>
+              <div class="flex-row" style="gap:5px;">
+                <button type="button" class="btn btn-indigo btn-sm" onclick="toggleEditTenantAccount('${rm.id}')">${isEditing ? "Đóng" : (acc ? "Sửa TK" : "+ Tạo TK")}</button>
+                ${acc ? `<button type="button" class="btn btn-danger btn-sm" onclick="deleteTenantAccount('${rm.id}')">Xóa TK</button>` : ""}
+              </div>
             </div>
-            <div class="flex-row" style="gap:5px;">
-              <button class="btn btn-indigo btn-sm" onclick="startEditTenantAccount('${rm.id}')">${acc ? "Sửa TK" : "+ Tạo TK"}</button>
-              ${acc ? `<button class="btn btn-danger btn-sm" onclick="deleteTenantAccount('${rm.id}')">Xóa TK</button>` : ""}
-            </div>
+            ${inlineFormHtml}
           </div>
         `;
       }).join("");
     }
 
-    function startEditTenantAccount(roomId) {
-      const rm = state.rooms.find((r) => r.id === roomId);
-      const acc = getActiveTenantForRoom(roomId);
-      document.getElementById("editAccRoomId").value = roomId;
-      document.getElementById("tenantEditTitle").textContent = (acc ? "Sửa tài khoản: " : "Tạo tài khoản mới: ") + (rm ? rm.name : roomId);
-      document.getElementById("editAccUser").value = acc ? acc.username : ("phong" + roomId.replace("P0", "10"));
-      document.getElementById("editAccName").value = acc ? acc.displayName : ((rm && rm.tenantName) || (rm ? rm.name : roomId));
-      document.getElementById("editAccPass").value = acc ? acc.password : "";
-      document.getElementById("editAccPass").type = "password";
-      document.getElementById("tenantEditBox").classList.remove("hidden");
+    function toggleEditTenantAccount(roomId) {
+      editingTenantRoomId = (editingTenantRoomId === roomId) ? null : roomId;
+      renderTenantAccountsList();
+      if (editingTenantRoomId) {
+        setTimeout(() => {
+          const el = document.getElementById("inlineAccUser_" + roomId);
+          if (el) el.focus();
+        }, 50);
+      }
     }
 
     function cancelEditTenantAccount() {
-      document.getElementById("tenantEditBox").classList.add("hidden");
+      editingTenantRoomId = null;
+      renderTenantAccountsList();
     }
 
-    function saveTenantAccount() {
-      const roomId = document.getElementById("editAccRoomId").value;
-      const username = document.getElementById("editAccUser").value.trim();
-      const displayName = document.getElementById("editAccName").value.trim();
-      const password = document.getElementById("editAccPass").value;
+    function saveTenantAccount(roomId) {
+      const username = document.getElementById("inlineAccUser_" + roomId).value.trim();
+      const displayName = document.getElementById("inlineAccName_" + roomId).value.trim();
+      const password = document.getElementById("inlineAccPass_" + roomId).value;
       if (!username || !password) {
         toast("Vui lòng nhập đầy đủ Tài khoản và Mật khẩu!", "warn");
         return;
@@ -2734,14 +3231,9 @@
         existing.password = password;
         toast("Đã cập nhật tài khoản phòng!", "ok");
       } else {
-        // Tạo tài khoản người thuê MỚI: cô lập dữ liệu cũ để người thuê mới KHÔNG xem được dữ liệu người thuê cũ
         const newTenantId = "TNT_" + Date.now() + "_" + roomId;
-        state.meters.forEach((m) => {
-          if (m.roomId === roomId && !m.tenantId) m.tenantId = "LEGACY_" + roomId;
-        });
-        state.bills.forEach((b) => {
-          if (b.roomId === roomId && !b.tenantId) b.tenantId = "LEGACY_" + roomId;
-        });
+        state.meters.forEach((m) => { if (m.roomId === roomId && !m.tenantId) m.tenantId = "LEGACY_" + roomId; });
+        state.bills.forEach((b) => { if (b.roomId === roomId && !b.tenantId) b.tenantId = "LEGACY_" + roomId; });
         state.accounts.push({
           id: newTenantId,
           role: "tenant",
@@ -2755,8 +3247,8 @@
         });
         toast("Đã tạo tài khoản mới (cô lập hoàn toàn dữ liệu khách cũ)!", "ok");
       }
-      saveState();
-      cancelEditTenantAccount();
+      saveState(true);
+      editingTenantRoomId = null;
       renderTenantAccountsList();
       renderConfigTab();
     }
@@ -2765,17 +3257,25 @@
       const rm = state.rooms.find((r) => r.id === roomId);
       const acc = getActiveTenantForRoom(roomId);
       if (!acc) return;
-      if (!confirm(`Xóa tài khoản "${acc.username}" của ${rm ? rm.name : roomId}?\n\nLưu ý: Toàn bộ lịch sử đóng tiền và số điện cũ VẪN ĐƯỢC GIỮ NGUYÊN cho Quản trị viên. Tài khoản mới tạo sau này cho phòng này sẽ KHÔNG thấy dữ liệu của khách cũ.`)) {
+      if (!confirm(`Xóa tài khoản "${acc.username}" của ${rm ? rm.name : roomId}?\n\nLưu ý: Lịch sử đóng tiền và số điện cũ VẪN ĐƯỢC GIỮ NGUYÊN cho Quản trị viên. Tài khoản mới tạo sau này cho phòng này sẽ KHÔNG thấy dữ liệu của khách cũ.`)) {
         return;
       }
       acc.status = "deleted";
-      saveState();
+      saveState(true);
+      editingTenantRoomId = null;
       renderTenantAccountsList();
       renderConfigTab();
-      toast("Đã xóa tài khoản phòng. Lịch sử thanh toán vẫn được lưu cho Quản trị viên.", "ok");
+      toast("Đã xóa tài khoản phòng. Lịch sử vẫn được lưu cho Quản trị viên.", "ok");
     }
 
     async function saveAdminSettings() {
+      const btn = document.getElementById("btnSaveSettings");
+      // Lưu lại thông tin đăng nhập CŨ trước khi đổi để máy chủ xác thực thành công và ghi mật khẩu MỚI lên máy chủ!
+      const oldAuth = session ? { username: session.username, password: session.password } : null;
+
+      const newTitle = document.getElementById("setAppTitle").value.trim() || "Nhà Cho Thuê";
+      state.appTitle = newTitle;
+
       const bankSel = document.getElementById("setBankBin");
       state.payment.bankBin = bankSel.value;
       state.payment.bankName = bankSel.options[bankSel.selectedIndex].text;
@@ -2789,6 +3289,7 @@
         toast("Mật khẩu Quản trị viên không được để trống!", "warn");
         return;
       }
+
       let adminAcc = state.accounts.find((a) => a.role === "admin" && a.status === "active");
       if (!adminAcc) {
         adminAcc = { id: "ADMIN_ROOT", role: "admin", roomId: "ALL", status: "active", createdAt: new Date().toISOString() };
@@ -2799,21 +3300,42 @@
       adminAcc.adminPin = adminPin;
       adminAcc.displayName = "Quản trị viên";
 
-      // Cập nhật phiên đang đăng nhập của Admin
+      const ep = document.getElementById("setServerEndpoint").value.trim();
+      state.serverEndpoint = ep || "/api";
+      state.driveFolderUrl = document.getElementById("setDriveFolderUrl").value.trim();
+
+      saveState(true);
+      applyAppTitleUI();
+
+      // Đồng bộ lên máy chủ bằng thông tin cũ (oldAuth) -> máy chủ lưu mật khẩu mới -> sau đó cập nhật session sang mật khẩu mới!
+      btn.disabled = true;
+      btn.textContent = "Đang lưu & đồng bộ...";
+
+      let synced = false;
+      if (hasInitialPulled) {
+        synced = await pushToServer(false, oldAuth);
+        // Nếu thất bại vì trên máy chủ thực tế đã lưu mật khẩu mới trước đó, thử đẩy bằng mật khẩu mới
+        if (!synced && oldAuth && (oldAuth.username !== adminUser || oldAuth.password !== adminPass)) {
+          synced = await pushToServer(false, { username: adminUser, password: adminPass });
+        }
+      }
+
       if (isAdmin()) {
         session.username = adminUser;
         session.password = adminPass;
         saveSession(session);
       }
 
-      const ep = document.getElementById("setServerEndpoint").value.trim();
-      state.serverEndpoint = ep || "/api";
-      state.driveFolderUrl = document.getElementById("setDriveFolderUrl").value.trim();
-
-      saveState();
+      btn.disabled = false;
+      btn.textContent = "Lưu cài đặt & Đồng bộ";
       closeModal("settingsModal");
-      toast("Đã lưu Cài đặt quản trị viên!", "ok");
-      await pushToServer(false);
+      renderAll();
+
+      if (!hasInitialPulled) {
+        toast("Đã lưu cài đặt trên máy! Hãy bấm ô Đồng bộ nhấp nháy để kết nối máy chủ.", "warn");
+      } else if (synced) {
+        toast("Đã cập nhật cài đặt, mật khẩu mới và đồng bộ lên máy chủ!", "ok");
+      }
     }
 
     function exportBackupJson() {
@@ -2821,18 +3343,63 @@
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = url;
-      a.download = "nha_cho_thue_v2_backup_" + todayStr().replace(/\//g, "-") + ".json";
+      a.download = "nha_cho_thue_backup_" + todayStr().replace(/\//g, "-") + ".json";
       a.click();
       URL.revokeObjectURL(url);
+      toast("Đã xuất file sao lưu JSON!", "ok");
+    }
+
+    function handleImportJson(e) {
+      const file = e.target.files && e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = async () => {
+        try {
+          const parsed = JSON.parse(reader.result);
+          if (!parsed || typeof parsed !== "object" || !Array.isArray(parsed.rooms)) {
+            toast("File JSON không đúng định dạng dữ liệu Nhà Cho Thuê!", "err");
+            return;
+          }
+          if (!confirm("Nhập dữ liệu từ file JSON sẽ ghi đè dữ liệu hiện tại trên thiết bị và đồng bộ lên máy chủ. Bạn có chắc muốn tiếp tục?")) {
+            return;
+          }
+          const def = makeDefaultState();
+          const currentEndpoint = state.serverEndpoint || "/api";
+          state = {
+            ...def,
+            ...parsed,
+            appTitle: (parsed.appTitle && String(parsed.appTitle).trim()) || def.appTitle,
+            rooms: parsed.rooms.map((r) => ({ ...r, status: normalizeRoomStatus(r.status) })),
+            accounts: Array.isArray(parsed.accounts) && parsed.accounts.length ? parsed.accounts : state.accounts,
+            meters: Array.isArray(parsed.meters) ? parsed.meters.map((m) => ({ note: "", ...m })) : [],
+            bills: Array.isArray(parsed.bills) ? parsed.bills : [],
+            payment: { ...def.payment, ...(parsed.payment || {}) },
+            serverEndpoint: parsed.serverEndpoint || currentEndpoint
+          };
+          saveState(true);
+          applyAppTitleUI();
+          closeModal("settingsModal");
+          renderAll();
+          toast("Đã nhập dữ liệu JSON thành công!", "ok");
+          if (hasInitialPulled) {
+            await pushToServer(false);
+          }
+        } catch (err) {
+          toast("Lỗi đọc file JSON: " + err.message, "err");
+        } finally {
+          e.target.value = "";
+        }
+      };
+      reader.readAsText(file, "utf-8");
     }
 
     /* ============================================================
        MASTER RENDER & BOOTSTRAP
        ============================================================ */
     function renderAll() {
+      applyAppTitleUI();
       document.getElementById("periodLabel").textContent = "Tháng " + currentPeriod;
 
-      // Role-based visibility
       const dot = document.getElementById("accountDot");
       const sub = document.getElementById("headerUserSub");
       const tabConfigBtn = document.getElementById("dockTabConfig");
@@ -2867,12 +3434,15 @@
       });
     }
 
-    // App Init
+    // App Bootstrap
     initTheme();
     updateSyncBoxUI(hasInitialPulled ? "synced" : "needs-pull");
     renderAll();
-    if (!session) {
+
+    if (!session || checkSessionExpired()) {
       openLoginGate();
+    } else if (hasInitialPulled) {
+      startAutoSync();
     }
   </script>
 </body>

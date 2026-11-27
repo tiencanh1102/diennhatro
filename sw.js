@@ -1,4 +1,4 @@
-const CACHE_NAME = "nha-cho-thue-v2.0.1";
+const CACHE_NAME = "nha-cho-thue-v3.1.0";
 const ASSETS = [
   "./",
   "./index.html",
@@ -25,7 +25,6 @@ self.addEventListener("activate", (event) => {
 
 self.addEventListener("fetch", (event) => {
   const url = new URL(event.request.url);
-  // Không cache API đồng bộ, Google Apps Script hoặc ảnh Drive
   if (
     event.request.method !== "GET" ||
     url.pathname.startsWith("/api") ||
