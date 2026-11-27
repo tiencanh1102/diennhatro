@@ -1,8 +1,8 @@
 /**
- * Cloudflare Pages Function Proxy — Nhà Cho Thuê V4
+ * Cloudflare Pages Function Proxy — Nhà Cho Thuê V5
  * Route: /api
- * Ẩn hoàn toàn link Google Apps Script (/exec) bằng biến môi trường GAS_URL
- * Cấu hình tại: Cloudflare Pages -> Settings -> Variables and Secrets -> GAS_URL
+ *  1. Ẩn hoàn toàn link Google Apps Script (/exec) qua biến môi trường GAS_URL
+ *  2. Proxy ảnh VietQR (?action=qrProxy) có CORS sạch giúp hiển thị & tải PNG phiếu thu 100% không lỗi
  */
 
 const CORS_HEADERS = {
@@ -21,6 +21,41 @@ function getGasUrl(env) {
 }
 
 export async function onRequestGet(context) {
+  const incomingUrl = new URL(context.request.url);
+  const action = incomingUrl.searchParams.get("action") || "";
+
+  // Proxy ảnh VietQR sạch CORS cho phiếu thu & html2canvas
+  if (action === "qrProxy") {
+    const bank = (incomingUrl.searchParams.get("bank") || "").replace(/[^a-zA-Z0-9]/g, "");
+    const acc = (incomingUrl.searchParams.get("acc") || "").replace(/[^a-zA-Z0-9]/g, "");
+    const amount = (incomingUrl.searchParams.get("amount") || "0").replace(/[^0-9]/g, "");
+    const info = incomingUrl.searchParams.get("info") || "";
+    const name = incomingUrl.searchParams.get("name") || "";
+    const tpl = (incomingUrl.searchParams.get("tpl") || "compact2").replace(/[^a-zA-Z0-9_]/g, "");
+
+    if (!bank || !acc) {
+      return new Response("Missing bank or account", { status: 400, headers: CORS_HEADERS });
+    }
+    try {
+      const qrUrl = `https://img.vietqr.io/image/${bank}-${acc}-${tpl}.png?amount=${amount}&addInfo=${encodeURIComponent(info)}&accountName=${encodeURIComponent(name)}`;
+      const imgResp = await fetch(qrUrl, { method: "GET", redirect: "follow" });
+      if (!imgResp.ok) {
+        return new Response("QR upstream error", { status: imgResp.status, headers: CORS_HEADERS });
+      }
+      const buf = await imgResp.arrayBuffer();
+      return new Response(buf, {
+        status: 200,
+        headers: {
+          "Access-Control-Allow-Origin": "*",
+          "Content-Type": imgResp.headers.get("Content-Type") || "image/png",
+          "Cache-Control": "public, max-age=300"
+        }
+      });
+    } catch (err) {
+      return new Response("QR proxy failed", { status: 502, headers: CORS_HEADERS });
+    }
+  }
+
   const gasUrl = getGasUrl(context.env);
   if (!gasUrl) {
     return new Response(
@@ -33,7 +68,6 @@ export async function onRequestGet(context) {
   }
 
   try {
-    const incomingUrl = new URL(context.request.url);
     const targetUrl = new URL(gasUrl);
     incomingUrl.searchParams.forEach((value, key) => {
       targetUrl.searchParams.set(key, value);
