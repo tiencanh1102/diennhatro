@@ -220,24 +220,63 @@
     html[data-theme="dark"] .sync-box.state-needs-pull { color: #ffffff; }
 
     .icon-btn {
-      width: 36px; height: 36px;
-      border-radius: 12px;
-      border: 1px solid var(--glass-border);
+      width: 38px; height: 38px;
+      border-radius: 13px;
+      border: 1px solid rgba(255, 255, 255, 0.42);
       background: var(--glass-bg-strong);
-      color: var(--text-main);
+      color: #ffffff;
       display: inline-flex; align-items: center; justify-content: center;
       cursor: pointer; position: relative; flex-shrink: 0;
-      box-shadow: inset 0 1px 0 var(--glass-specular), 0 3px 10px rgba(0,0,0,0.06);
-      transition: transform 0.15s ease, background 0.2s ease;
+      transition: transform 0.16s ease, box-shadow 0.22s ease, filter 0.2s ease;
     }
-    .icon-btn:active { transform: scale(0.92); }
-    .icon-btn svg { width: 18px; height: 18px; stroke-width: 2; }
+    .icon-btn:hover { filter: brightness(1.07); }
+    .icon-btn:active { transform: scale(0.91); }
+    .icon-btn svg {
+      width: 19px; height: 19px; stroke-width: 2.25;
+      filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.22));
+    }
+    /* 1. Icon Người đăng nhập — Xanh dương ngọc nổi bật */
+    .icon-btn.icon-account {
+      background: linear-gradient(135deg, #06b6d4 0%, #2563eb 100%);
+      box-shadow: 0 5px 14px rgba(37, 99, 235, 0.38), inset 0 1px 1px rgba(255, 255, 255, 0.50);
+    }
+    /* 2. Icon Chuyển Sáng / Tối — Vàng cam rực rỡ (Sáng) / Tím đêm huyền ảo (Tối) */
+    .icon-btn.icon-theme {
+      background: linear-gradient(135deg, #f59e0b 0%, #ea580c 100%);
+      box-shadow: 0 5px 14px rgba(234, 88, 12, 0.40), inset 0 1px 1px rgba(255, 255, 255, 0.50);
+    }
+    html[data-theme="dark"] .icon-btn.icon-theme {
+      background: linear-gradient(135deg, #6366f1 0%, #7c3aed 100%);
+      box-shadow: 0 5px 16px rgba(124, 58, 237, 0.48), inset 0 1px 1px rgba(255, 255, 255, 0.40);
+    }
+    /* 3. Icon Cài đặt — Tím hồng nổi bật */
+    .icon-btn.icon-settings {
+      background: linear-gradient(135deg, #a855f7 0%, #ec4899 100%);
+      box-shadow: 0 5px 14px rgba(236, 72, 153, 0.38), inset 0 1px 1px rgba(255, 255, 255, 0.50);
+    }
     .icon-btn .role-dot {
-      position: absolute; top: 5px; right: 5px;
-      width: 7px; height: 7px; border-radius: 50%;
-      background: #10b981; box-shadow: 0 0 0 2px var(--glass-bg-strong);
+      position: absolute; top: 4px; right: 4px;
+      width: 8px; height: 8px; border-radius: 50%;
+      background: #4ade80; box-shadow: 0 0 0 2px #ffffff;
     }
-    .icon-btn .role-dot.tenant { background: #f59e0b; }
+    .icon-btn .role-dot.tenant { background: #fde047; }
+
+    /* Admin Password Change & Email OTP Recovery Box */
+    .change-pass-panel {
+      margin-top: 10px; padding: 12px; border-radius: 14px;
+      background: var(--glass-bg);
+      border: 1.5px solid rgba(16, 185, 129, 0.42);
+      animation: tabFade 0.2s ease;
+    }
+    .recovery-box {
+      margin-top: 14px; padding: 13px; border-radius: 16px;
+      background: rgba(245, 158, 11, 0.14);
+      border: 1.5px solid rgba(245, 158, 11, 0.48);
+      animation: tabFade 0.22s ease;
+    }
+    .recovery-title {
+      font-size: 13.5px; font-weight: 800; color: var(--amber); margin-bottom: 6px;
+    }
 
     /* Container & Period Bar */
     .main-wrap {
@@ -667,22 +706,23 @@
         </div>
       </div>
 
-      <!-- Framed Sync Box + 3 Icons in 1 Straight Row -->
+      <!-- Framed Sync Box + 3 Colored Icons: 1. Người đăng nhập -> 2. Sáng/Tối -> 3. Cài đặt -->
       <div class="header-controls">
         <button id="syncBox" class="sync-box state-needs-pull" onclick="handleSyncClick()" title="Bấm để đồng bộ dữ liệu với máy chủ">
           Đồng bộ máy chủ
         </button>
 
-        <!-- 1. Gear Icon (Settings - Admin only) -->
-        <button id="btnSettings" class="icon-btn" onclick="openSettingsModal()" title="Cài đặt quản trị viên">
+        <!-- 1. Icon Người đăng nhập -->
+        <button id="btnAccount" class="icon-btn icon-account" onclick="openAccountModal()" title="Tài khoản & Đăng nhập">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="12" cy="12" r="3"></circle>
-            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33h.01a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51h.01a1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82v.01a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+            <circle cx="12" cy="7" r="4"></circle>
           </svg>
+          <span id="accountDot" class="role-dot hidden"></span>
         </button>
 
-        <!-- 2. Light / Dark Mode Toggle Icon -->
-        <button id="btnTheme" class="icon-btn" onclick="toggleTheme()" title="Chuyển chế độ Sáng / Tối">
+        <!-- 2. Icon Chuyển Sáng / Tối -->
+        <button id="btnTheme" class="icon-btn icon-theme" onclick="toggleTheme()" title="Chuyển chế độ Sáng / Tối">
           <svg id="themeIconSun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
             <circle cx="12" cy="12" r="5"></circle>
             <line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line>
@@ -695,13 +735,12 @@
           </svg>
         </button>
 
-        <!-- 3. Person Icon (Account / Login) -->
-        <button id="btnAccount" class="icon-btn" onclick="openAccountModal()" title="Tài khoản & Đăng nhập">
+        <!-- 3. Icon Cài đặt quản trị viên -->
+        <button id="btnSettings" class="icon-btn icon-settings" onclick="openSettingsModal()" title="Cài đặt quản trị viên">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-            <circle cx="12" cy="7" r="4"></circle>
+            <circle cx="12" cy="12" r="3"></circle>
+            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33h.01a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51h.01a1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82v.01a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
           </svg>
-          <span id="accountDot" class="role-dot hidden"></span>
         </button>
       </div>
     </div>
@@ -938,20 +977,13 @@
         </div>
       </div>
 
-      <!-- 3. Tạo & Cập nhật mật khẩu Quản trị viên -->
+      <!-- 3. Tài khoản & Thay đổi mật khẩu Quản trị viên -->
       <div class="settings-section">
         <h4>Tài khoản &amp; Mật khẩu Quản trị viên</h4>
         <div class="cfg-fields">
-          <div class="full">
+          <div>
             <label class="field-label">Tài khoản đăng nhập QTV</label>
             <input type="text" id="setAdminUser" />
-          </div>
-          <div>
-            <label class="field-label">Mật khẩu đăng nhập QTV</label>
-            <div class="input-eye-wrap">
-              <input type="password" id="setAdminPass" inputmode="numeric" />
-              <button type="button" class="eye-toggle" onclick="toggleInputEye('setAdminPass')">&#128065;</button>
-            </div>
           </div>
           <div>
             <label class="field-label">Mã QTV (mở khóa sửa)</label>
@@ -959,6 +991,39 @@
               <input type="password" id="setAdminPin" inputmode="numeric" />
               <button type="button" class="eye-toggle" onclick="toggleInputEye('setAdminPin')">&#128065;</button>
             </div>
+          </div>
+        </div>
+
+        <div class="mt-3">
+          <button type="button" class="btn btn-amber btn-sm" id="btnToggleChangeAdminPass" onclick="toggleChangeAdminPassBox()">
+            Thay đổi mật khẩu quản trị viên
+          </button>
+          <span class="muted" style="margin-left:6px;">Khôi phục qua Gmail: <strong>tiencanh.ntc@gmail.com</strong></span>
+        </div>
+
+        <div id="changeAdminPassBox" class="change-pass-panel hidden">
+          <div style="font-weight:800; font-size:13px; color:var(--emerald); margin-bottom:8px;">
+            Đặt mật khẩu Quản trị viên mới (tự đồng bộ thay thế mật khẩu cũ trên máy chủ)
+          </div>
+          <div class="cfg-fields" style="margin-top:0;">
+            <div>
+              <label class="field-label">Mật khẩu quản trị viên mới</label>
+              <div class="input-eye-wrap">
+                <input type="password" id="newAdminPassInput" inputmode="numeric" placeholder="Nhập mật khẩu mới (từ 4 ký tự)" />
+                <button type="button" class="eye-toggle" onclick="toggleInputEye('newAdminPassInput')">&#128065;</button>
+              </div>
+            </div>
+            <div>
+              <label class="field-label">Nhập lại mật khẩu mới</label>
+              <div class="input-eye-wrap">
+                <input type="password" id="confirmAdminPassInput" inputmode="numeric" placeholder="Xác nhận lại mật khẩu mới" />
+                <button type="button" class="eye-toggle" onclick="toggleInputEye('confirmAdminPassInput')">&#128065;</button>
+              </div>
+            </div>
+          </div>
+          <div class="mt-2 flex-row">
+            <button type="button" class="btn btn-emerald btn-sm" id="btnSaveNewAdminPass" onclick="submitChangeAdminPassword()">Lưu &amp; Đồng bộ mật khẩu mới</button>
+            <button type="button" class="btn btn-glass btn-sm" onclick="toggleChangeAdminPassBox(false)">Hủy</button>
           </div>
         </div>
       </div>
@@ -1124,6 +1189,49 @@
         </div>
         <button type="submit" id="btnLoginSubmit" class="btn btn-emerald" style="width:100%; padding:11px;">Đăng nhập</button>
       </form>
+
+      <!-- Khôi phục mật khẩu Quản trị viên qua Gmail khi nhập sai quá 5 lần -->
+      <div id="adminRecoveryBox" class="recovery-box hidden">
+        <div class="recovery-title">Quên mật khẩu Quản trị viên?</div>
+
+        <div id="recoveryStepSend">
+          <div class="muted" style="margin-bottom:10px; line-height:1.45;">
+            Bạn đã nhập sai mật khẩu Quản trị viên quá 5 lần. Bấm nút bên dưới để nhận mã xác nhận 6 số gửi về Gmail <strong>tiencanh.ntc@gmail.com</strong> và đặt mật khẩu mới.
+          </div>
+          <button type="button" id="btnSendResetOtp" class="btn btn-amber" style="width:100%;" onclick="requestAdminResetOtp()">
+            Gửi mã về tiencanh.ntc@gmail.com
+          </button>
+        </div>
+
+        <div id="recoveryStepVerify" class="hidden">
+          <div class="muted" style="margin-bottom:8px; line-height:1.4;">
+            Mã xác nhận 6 số đã được gửi tới <strong>tiencanh.ntc@gmail.com</strong> (hiệu lực 10 phút). Nhập mã từ Gmail để đặt mật khẩu mới:
+          </div>
+          <div style="margin-bottom:8px;">
+            <label class="field-label">Mã xác nhận 6 số từ Gmail</label>
+            <input type="text" id="resetOtpInput" inputmode="numeric" maxlength="6" placeholder="Nhập 6 chữ số OTP" />
+          </div>
+          <div style="margin-bottom:8px;">
+            <label class="field-label">Mật khẩu quản trị viên mới</label>
+            <div class="input-eye-wrap">
+              <input type="password" id="resetNewPassInput" inputmode="numeric" placeholder="Nhập mật khẩu mới (từ 4 ký tự)" />
+              <button type="button" class="eye-toggle" onclick="toggleInputEye('resetNewPassInput')">&#128065;</button>
+            </div>
+          </div>
+          <div style="margin-bottom:10px;">
+            <label class="field-label">Nhập lại mật khẩu mới</label>
+            <div class="input-eye-wrap">
+              <input type="password" id="resetConfirmPassInput" inputmode="numeric" placeholder="Nhập lại mật khẩu mới" />
+              <button type="button" class="eye-toggle" onclick="toggleInputEye('resetConfirmPassInput')">&#128065;</button>
+            </div>
+          </div>
+          <div class="flex-row">
+            <button type="button" id="btnVerifyResetOtp" class="btn btn-emerald btn-sm" style="flex:1;" onclick="submitAdminResetOtp()">Đặt mật khẩu mới</button>
+            <button type="button" class="btn btn-glass btn-sm" onclick="requestAdminResetOtp()">Gửi lại mã</button>
+          </div>
+        </div>
+      </div>
+
       <div class="muted mt-3" style="text-align:center; font-size:11.5px;">
         Mặc định QTV lần đầu: <strong>admin</strong> / <strong>123456</strong> · Nhập sai tối đa 5 lần
       </div>
@@ -1607,6 +1715,14 @@
       }
     }
 
+    async function waitForSyncIdle(maxMs = 5000) {
+      const start = Date.now();
+      while (isSyncing && Date.now() - start < maxMs) {
+        await new Promise((r) => setTimeout(r, 120));
+      }
+      return !isSyncing;
+    }
+
     async function pushToServer(silent = false, oldAuth = null) {
       if (!session || !isAdmin()) return false;
       if (!hasInitialPulled) {
@@ -1616,7 +1732,11 @@
         updateSyncBoxUI("needs-pull");
         return false;
       }
-      if (isSyncing) return false;
+      if (isSyncing) {
+        if (silent) return false;
+        const idle = await waitForSyncIdle(5000);
+        if (!idle) return false;
+      }
       isSyncing = true;
       updateSyncBoxUI("pushing");
       try {
@@ -1715,6 +1835,16 @@
       }
     }
 
+    function syncAdminRecoveryVisibility() {
+      const box = document.getElementById("adminRecoveryBox");
+      if (!box) return;
+      const info = getLoginFailInfo();
+      const sel = document.getElementById("loginRoomSelect");
+      const isSelectingAdmin = !sel || sel.value === "ADMIN";
+      const lockedByFails = info.count >= MAX_LOGIN_ATTEMPTS || (info.lockUntil && Date.now() < info.lockUntil);
+      box.classList.toggle("hidden", !(isSelectingAdmin && lockedByFails));
+    }
+
     function updateLockoutUI() {
       const info = getLoginFailInfo();
       const btn = document.getElementById("btnLoginSubmit");
@@ -1724,6 +1854,7 @@
         const ss = String(sec % 60).padStart(2, "0");
         showLoginError(`Bạn đã nhập sai quá 5 lần. Vui lòng thử lại sau ${mm}:${ss}.`);
         btn.disabled = true;
+        syncAdminRecoveryVisibility();
         if (!lockoutTimer) {
           lockoutTimer = setInterval(updateLockoutUI, 1000);
         }
@@ -1734,7 +1865,105 @@
           lockoutTimer = null;
         }
         btn.disabled = false;
+        syncAdminRecoveryVisibility();
         return false;
+      }
+    }
+
+    async function requestAdminResetOtp() {
+      const btn = document.getElementById("btnSendResetOtp");
+      if (btn) {
+        btn.disabled = true;
+        btn.textContent = "Đang gửi mã về Gmail...";
+      }
+      try {
+        const res = await apiCall({ action: "requestAdminResetOtp" });
+        document.getElementById("recoveryStepSend").classList.add("hidden");
+        document.getElementById("recoveryStepVerify").classList.remove("hidden");
+        document.getElementById("resetOtpInput").value = "";
+        document.getElementById("resetNewPassInput").value = "";
+        document.getElementById("resetConfirmPassInput").value = "";
+        toast(res.message || "Đã gửi mã 6 số về tiencanh.ntc@gmail.com!", "ok");
+        setTimeout(() => document.getElementById("resetOtpInput").focus(), 60);
+      } catch (err) {
+        toast("Không gửi được mã về Gmail: " + err.message, "err");
+      } finally {
+        if (btn) {
+          btn.disabled = false;
+          btn.textContent = "Gửi mã về tiencanh.ntc@gmail.com";
+        }
+      }
+    }
+
+    async function submitAdminResetOtp() {
+      const otp = document.getElementById("resetOtpInput").value.trim();
+      const newPass = document.getElementById("resetNewPassInput").value.trim();
+      const confirmPass = document.getElementById("resetConfirmPassInput").value.trim();
+
+      if (otp.length < 6) {
+        toast("Vui lòng nhập đủ 6 chữ số mã xác nhận từ Gmail!", "warn");
+        return;
+      }
+      if (newPass.length < 4) {
+        toast("Mật khẩu Quản trị viên mới phải có ít nhất 4 ký tự!", "warn");
+        return;
+      }
+      if (newPass !== confirmPass) {
+        toast("Mật khẩu nhập lại không khớp!", "err");
+        return;
+      }
+
+      const btn = document.getElementById("btnVerifyResetOtp");
+      btn.disabled = true;
+      btn.textContent = "Đang xác nhận...";
+
+      try {
+        const res = await apiCall({
+          action: "verifyAdminResetOtp",
+          otp: otp,
+          newPassword: newPass
+        });
+
+        // Cập nhật mật khẩu mới cục bộ và đăng nhập ngay
+        let adminAcc = state.accounts.find((a) => a.role === "admin" && a.status === "active");
+        if (!adminAcc) {
+          adminAcc = {
+            id: (res.user && res.user.id) || "ADMIN_ROOT",
+            role: "admin",
+            roomId: "ALL",
+            username: (res.user && res.user.username) || "admin",
+            password: newPass,
+            displayName: "Quản trị viên",
+            adminPin: newPass,
+            status: "active",
+            createdAt: new Date().toISOString()
+          };
+          state.accounts.unshift(adminAcc);
+        } else {
+          adminAcc.password = newPass;
+          adminAcc.adminPin = newPass;
+          if (res.user && res.user.username) adminAcc.username = res.user.username;
+        }
+        saveState(false);
+
+        document.getElementById("recoveryStepVerify").classList.add("hidden");
+        document.getElementById("recoveryStepSend").classList.remove("hidden");
+        document.getElementById("adminRecoveryBox").classList.add("hidden");
+
+        toast("Đã đặt lại mật khẩu Quản trị viên mới và đồng bộ lên máy chủ!", "ok");
+        completeLoginSuccess({
+          id: adminAcc.id,
+          role: "admin",
+          roomId: "ALL",
+          username: adminAcc.username,
+          password: newPass,
+          displayName: adminAcc.displayName
+        });
+      } catch (err) {
+        toast(err.message || "Xác thực mã thất bại!", "err");
+      } finally {
+        btn.disabled = false;
+        btn.textContent = "Đặt mật khẩu mới";
       }
     }
 
@@ -1771,6 +2000,7 @@
       showLoginError("");
       document.getElementById("loginUser").value = "";
       document.getElementById("loginPass").value = "";
+      syncAdminRecoveryVisibility();
       document.getElementById("loginUser").focus();
     }
 
@@ -3059,8 +3289,8 @@
 
       const adminAcc = state.accounts.find((a) => a.role === "admin" && a.status === "active") || state.accounts[0];
       document.getElementById("setAdminUser").value = adminAcc ? adminAcc.username : "admin";
-      document.getElementById("setAdminPass").value = adminAcc ? adminAcc.password : "123456";
       document.getElementById("setAdminPin").value = adminAcc ? (adminAcc.adminPin || adminAcc.password) : "123456";
+      toggleChangeAdminPassBox(false);
 
       const epInput = document.getElementById("setServerEndpoint");
       epInput.type = "password";
@@ -3268,10 +3498,100 @@
       toast("Đã xóa tài khoản phòng. Lịch sử vẫn được lưu cho Quản trị viên.", "ok");
     }
 
+    function toggleChangeAdminPassBox(forceState) {
+      const box = document.getElementById("changeAdminPassBox");
+      if (!box) return;
+      const shouldShow = typeof forceState === "boolean" ? forceState : box.classList.contains("hidden");
+      box.classList.toggle("hidden", !shouldShow);
+      const inp1 = document.getElementById("newAdminPassInput");
+      const inp2 = document.getElementById("confirmAdminPassInput");
+      if (inp1) { inp1.value = ""; inp1.type = "password"; }
+      if (inp2) { inp2.value = ""; inp2.type = "password"; }
+      if (shouldShow && inp1) {
+        setTimeout(() => inp1.focus(), 50);
+      }
+    }
+
+    async function submitChangeAdminPassword() {
+      if (!isAdmin() || !session) return;
+      const newPass = document.getElementById("newAdminPassInput").value.trim();
+      const confirmPass = document.getElementById("confirmAdminPassInput").value.trim();
+      const adminUser = document.getElementById("setAdminUser").value.trim() || session.username || "admin";
+      const adminPin = document.getElementById("setAdminPin").value.trim() || newPass;
+
+      if (newPass.length < 4) {
+        toast("Mật khẩu Quản trị viên mới phải có ít nhất 4 ký tự!", "warn");
+        return;
+      }
+      if (newPass !== confirmPass) {
+        toast("Mật khẩu nhập lại không khớp!", "err");
+        return;
+      }
+
+      const btn = document.getElementById("btnSaveNewAdminPass");
+      btn.disabled = true;
+      btn.textContent = "Đang đồng bộ mật khẩu mới...";
+      stopAutoSync();
+      await waitForSyncIdle(5000);
+
+      const oldAuth = { username: session.username, password: session.password };
+      try {
+        updateSyncBoxUI("pushing");
+        await apiCall({
+          action: "changeAdminPassword",
+          auth: oldAuth,
+          oldAuth: oldAuth,
+          newUsername: adminUser,
+          newPassword: newPass,
+          newAdminPin: adminPin
+        });
+
+        let adminAcc = state.accounts.find((a) => a.role === "admin" && a.status === "active");
+        if (!adminAcc) {
+          adminAcc = { id: "ADMIN_ROOT", role: "admin", roomId: "ALL", status: "active", createdAt: new Date().toISOString() };
+          state.accounts.unshift(adminAcc);
+        }
+        adminAcc.username = adminUser;
+        adminAcc.password = newPass;
+        adminAcc.adminPin = adminPin;
+        adminAcc.displayName = "Quản trị viên";
+
+        session.username = adminUser;
+        session.password = newPass;
+        saveSession(session);
+        saveState(false);
+
+        updateSyncBoxUI(hasInitialPulled ? "synced" : "needs-pull");
+        toggleChangeAdminPassBox(false);
+        toast("Đã thay đổi mật khẩu Quản trị viên và đồng bộ lên máy chủ thành công!", "ok");
+      } catch (err) {
+        updateSyncBoxUI(hasInitialPulled ? "synced" : "needs-pull");
+        toast("Không thể đổi mật khẩu lên máy chủ: " + err.message, "err");
+      } finally {
+        btn.disabled = false;
+        btn.textContent = "Lưu & Đồng bộ mật khẩu mới";
+        if (hasInitialPulled) startAutoSync();
+      }
+    }
+
     async function saveAdminSettings() {
       const btn = document.getElementById("btnSaveSettings");
-      // Lưu lại thông tin đăng nhập CŨ trước khi đổi để máy chủ xác thực thành công và ghi mật khẩu MỚI lên máy chủ!
       const oldAuth = session ? { username: session.username, password: session.password } : null;
+
+      // Nếu người dùng đang mở khung đổi mật khẩu và đã nhập mật khẩu mới -> kiểm tra khớp trước khi lưu
+      const passBoxOpen = !document.getElementById("changeAdminPassBox").classList.contains("hidden");
+      const typedNewPass = document.getElementById("newAdminPassInput").value.trim();
+      const typedConfirmPass = document.getElementById("confirmAdminPassInput").value.trim();
+      if (passBoxOpen && (typedNewPass || typedConfirmPass)) {
+        if (typedNewPass.length < 4) {
+          toast("Mật khẩu Quản trị viên mới phải có ít nhất 4 ký tự!", "warn");
+          return;
+        }
+        if (typedNewPass !== typedConfirmPass) {
+          toast("Mật khẩu Quản trị viên nhập lại không khớp!", "err");
+          return;
+        }
+      }
 
       const newTitle = document.getElementById("setAppTitle").value.trim() || "Nhà Cho Thuê";
       state.appTitle = newTitle;
@@ -3282,21 +3602,18 @@
       state.payment.accountNo = document.getElementById("setAccNo").value.trim();
       state.payment.accountName = document.getElementById("setAccName").value.trim().toUpperCase();
 
-      const adminUser = document.getElementById("setAdminUser").value.trim() || "admin";
-      const adminPass = document.getElementById("setAdminPass").value;
-      const adminPin = document.getElementById("setAdminPin").value.trim() || adminPass;
-      if (!adminPass) {
-        toast("Mật khẩu Quản trị viên không được để trống!", "warn");
-        return;
-      }
-
       let adminAcc = state.accounts.find((a) => a.role === "admin" && a.status === "active");
       if (!adminAcc) {
-        adminAcc = { id: "ADMIN_ROOT", role: "admin", roomId: "ALL", status: "active", createdAt: new Date().toISOString() };
+        adminAcc = { id: "ADMIN_ROOT", role: "admin", roomId: "ALL", password: (session && session.password) || "123456", status: "active", createdAt: new Date().toISOString() };
         state.accounts.unshift(adminAcc);
       }
+
+      const adminUser = document.getElementById("setAdminUser").value.trim() || adminAcc.username || "admin";
+      const finalAdminPass = (passBoxOpen && typedNewPass) ? typedNewPass : (adminAcc.password || (session && session.password) || "123456");
+      const adminPin = document.getElementById("setAdminPin").value.trim() || finalAdminPass;
+
       adminAcc.username = adminUser;
-      adminAcc.password = adminPass;
+      adminAcc.password = finalAdminPass;
       adminAcc.adminPin = adminPin;
       adminAcc.displayName = "Quản trị viên";
 
@@ -3307,34 +3624,51 @@
       saveState(true);
       applyAppTitleUI();
 
-      // Đồng bộ lên máy chủ bằng thông tin cũ (oldAuth) -> máy chủ lưu mật khẩu mới -> sau đó cập nhật session sang mật khẩu mới!
       btn.disabled = true;
       btn.textContent = "Đang lưu & đồng bộ...";
+      stopAutoSync();
+      await waitForSyncIdle(5000);
 
       let synced = false;
       if (hasInitialPulled) {
         synced = await pushToServer(false, oldAuth);
-        // Nếu thất bại vì trên máy chủ thực tế đã lưu mật khẩu mới trước đó, thử đẩy bằng mật khẩu mới
-        if (!synced && oldAuth && (oldAuth.username !== adminUser || oldAuth.password !== adminPass)) {
-          synced = await pushToServer(false, { username: adminUser, password: adminPass });
+        if (!synced && oldAuth && (oldAuth.username !== adminUser || oldAuth.password !== finalAdminPass)) {
+          synced = await pushToServer(false, { username: adminUser, password: finalAdminPass });
+        }
+      } else if (passBoxOpen && typedNewPass && oldAuth) {
+        // Kể cả khi chưa đồng bộ tổng, vẫn cho phép đổi mật khẩu trực tiếp trên máy chủ nếu người dùng vừa gõ mật khẩu mới
+        try {
+          await apiCall({
+            action: "changeAdminPassword",
+            auth: oldAuth,
+            oldAuth: oldAuth,
+            newUsername: adminUser,
+            newPassword: finalAdminPass,
+            newAdminPin: adminPin
+          });
+          synced = true;
+        } catch (e) {
+          toast("Lỗi cập nhật mật khẩu lên máy chủ: " + e.message, "err");
         }
       }
 
-      if (isAdmin()) {
+      if (isAdmin() && (synced || !hasInitialPulled)) {
         session.username = adminUser;
-        session.password = adminPass;
+        session.password = finalAdminPass;
         saveSession(session);
       }
 
       btn.disabled = false;
       btn.textContent = "Lưu cài đặt & Đồng bộ";
+      toggleChangeAdminPassBox(false);
       closeModal("settingsModal");
       renderAll();
+      if (hasInitialPulled) startAutoSync();
 
-      if (!hasInitialPulled) {
+      if (!hasInitialPulled && !synced) {
         toast("Đã lưu cài đặt trên máy! Hãy bấm ô Đồng bộ nhấp nháy để kết nối máy chủ.", "warn");
       } else if (synced) {
-        toast("Đã cập nhật cài đặt, mật khẩu mới và đồng bộ lên máy chủ!", "ok");
+        toast("Đã lưu cài đặt và đồng bộ lên máy chủ!", "ok");
       }
     }
 

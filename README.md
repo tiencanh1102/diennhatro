@@ -1,11 +1,10 @@
-# Nhà Cho Thuê — Phiên bản V3.1
+# Nhà Cho Thuê — Phiên bản V4
 
-## Điểm cập nhật trong bản V3.1
-- **Sửa triệt để lỗi cú pháp RegExp** ở dòng 566 tệp Google Apps Script (`/[\/\\]/g`).
-- **Tăng độ ổn định đồng bộ đa thiết bị:** bổ sung `LockService` chống xung đột khi nhiều máy đồng bộ 6 giây/lần.
-- **Chống tràn ô Google Sheets (>50.000 ký tự):** tự động tối ưu kích thước ảnh mã QR tải lên và tự chia nhỏ dữ liệu lớn trong `_System_Meta`.
-- **Tích hợp hàm `testAllFunctions`** ngay trong `Code_V3.1_AppsScript.js` để bấm chạy kiểm thử nhanh trực tiếp trong Apps Script.
+## Các nâng cấp chính trong bản V4
+1. **Đổi mật khẩu Quản trị viên trực tiếp & đồng bộ ngay lên máy chủ:** Có ô/khung **Thay đổi mật khẩu quản trị viên** riêng trong phần *Tài khoản & Mật khẩu Quản trị viên*, tự chờ đồng bộ rảnh và cập nhật trực tiếp lên máy chủ (thay thế mật khẩu cũ).
+2. **Khôi phục mật khẩu Quản trị viên qua Gmail (`tiencanh.ntc@gmail.com`):** Khi nhập sai mật khẩu Quản trị viên quá 5 lần ngoài màn hình khóa, ứng dụng cho phép bấm **Gửi mã xác nhận 6 số về Gmail `tiencanh.ntc@gmail.com`**, nhập mã OTP nhận được để đặt mật khẩu Quản trị viên mới ngay lập tức.
+3. **Đổi vị trí & tô màu nổi bật 3 icon góc phải:** Thứ tự mới gồm **Người đăng nhập** (xanh dương ngọc) → **Chuyển Sáng/Tối** (vàng cam / tím đêm) → **Cài đặt** (tím hồng), biểu tượng trắng sắc nét nổi bật trên nền kính lỏng.
 
-## Hướng dẫn cập nhật
-1. Mở Google Apps Script → thay toàn bộ mã bằng `Code_V3.1_AppsScript.js` → bấm **Lưu** → chọn hàm `testAllFunctions` và bấm **Chạy** để kiểm chứng không lỗi → chọn **Triển khai → Quản lý các bản triển khai → Sửa → Phiên bản mới → Triển khai**.
-2. Đẩy toàn bộ các tệp còn lại (`index.html`, `sw.js`, `manifest.json`, `functions/api.js`, 4 tệp icon, `README.md`) lên GitHub / Cloudflare Pages.
+## Hướng dẫn cập nhật lên V4
+1. Mở Google Apps Script → thay toàn bộ mã bằng `Code_V4_AppsScript.js` → bấm **Lưu** → chọn hàm **`testAllFunctions`** và bấm **Chạy** (để Google hiện hộp thoại cấp thêm quyền gửi email `MailApp` cho chức năng quên mật khẩu) → chọn **Triển khai → Quản lý các bản triển khai → biểu tượng cây bút → Phiên bản mới → Triển khai**.
+2. Giải nén `nha_cho_thue_v4.zip` và tải toàn bộ tệp (trừ `Code_V4_AppsScript.js`) cùng thư mục `functions` lên GitHub / Cloudflare Pages.
