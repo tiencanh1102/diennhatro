@@ -1,5 +1,5 @@
 /**
- * Cloudflare Pages Function Proxy — Nhà Cho Thuê V3.1
+ * Cloudflare Pages Function Proxy — Nhà Cho Thuê V4
  * Route: /api
  * Ẩn hoàn toàn link Google Apps Script (/exec) bằng biến môi trường GAS_URL
  * Cấu hình tại: Cloudflare Pages -> Settings -> Variables and Secrets -> GAS_URL
