@@ -619,13 +619,18 @@
     .bottom-dock-wrap.dock-hidden { transform: translateY(130%); opacity: 0; }
     .bottom-dock {
       max-width: 560px; margin: 0 auto; pointer-events: auto;
-      display: flex; align-items: stretch; gap: 8px; padding: 7px;
-      border-radius: 24px;
-      background: var(--glass-bg-strong);
-      backdrop-filter: blur(30px) saturate(210%);
-      -webkit-backdrop-filter: blur(30px) saturate(210%);
-      border: 1px solid var(--glass-border);
-      box-shadow: 0 16px 40px rgba(15, 23, 42, 0.20), inset 0 1px 1px var(--glass-specular);
+      display: flex; align-items: stretch; gap: 7px; padding: 7px;
+      border-radius: 26px;
+      background: linear-gradient(155deg, rgba(255,255,255,0.62) 0%, rgba(255,255,255,0.34) 100%);
+      backdrop-filter: blur(34px) saturate(225%);
+      -webkit-backdrop-filter: blur(34px) saturate(225%);
+      border: 1.4px solid rgba(255,255,255,0.82);
+      box-shadow: 0 18px 44px rgba(15, 23, 42, 0.22), inset 0 1.5px 2px rgba(255,255,255,0.95), inset 0 -1px 2px rgba(15,23,42,0.06);
+    }
+    html[data-theme="dark"] .bottom-dock {
+      background: linear-gradient(155deg, rgba(30,41,59,0.72) 0%, rgba(15,23,42,0.48) 100%);
+      border-color: rgba(255,255,255,0.22);
+      box-shadow: 0 20px 48px rgba(0, 0, 0, 0.55), inset 0 1.5px 2px rgba(255,255,255,0.24), inset 0 -1px 2px rgba(0,0,0,0.35);
     }
     .dock-tab {
       flex: 1; border: 1.5px solid transparent; border-radius: 18px;
@@ -789,15 +794,111 @@
     .login-gate {
       position: fixed; inset: 0; z-index: 95;
       display: none; align-items: center; justify-content: center; padding: 18px;
-      background: rgba(7, 13, 25, 0.48);
-      backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px);
+      background: radial-gradient(circle at 18% 20%, rgba(16,185,129,0.26), transparent 45%),
+                  radial-gradient(circle at 82% 78%, rgba(99,102,241,0.28), transparent 48%),
+                  rgba(15, 23, 42, 0.36);
+      backdrop-filter: blur(22px) saturate(190%);
+      -webkit-backdrop-filter: blur(22px) saturate(190%);
     }
     .login-gate.open { display: flex; }
     .login-card {
-      width: 100%; max-width: 400px; padding: 24px 20px; border-radius: 26px;
-      background: var(--glass-bg-strong);
-      border: 1px solid var(--glass-border);
-      box-shadow: 0 24px 64px rgba(0,0,0,0.35), inset 0 1px 0 var(--glass-specular);
+      width: 100%; max-width: 400px; padding: 24px 20px; border-radius: 30px;
+      background: linear-gradient(155deg, rgba(255,255,255,0.72) 0%, rgba(255,255,255,0.44) 100%);
+      backdrop-filter: blur(36px) saturate(220%);
+      -webkit-backdrop-filter: blur(36px) saturate(220%);
+      border: 1.5px solid rgba(255,255,255,0.84);
+      box-shadow: 0 28px 68px rgba(15,23,42,0.28), inset 0 2px 3px rgba(255,255,255,0.95), inset 0 -1px 3px rgba(15,23,42,0.06);
+      position: relative; overflow: hidden;
+    }
+    html[data-theme="dark"] .login-card {
+      background: linear-gradient(155deg, rgba(30,41,59,0.74) 0%, rgba(15,23,42,0.52) 100%);
+      border-color: rgba(255,255,255,0.24);
+      box-shadow: 0 28px 72px rgba(0,0,0,0.62), inset 0 1.5px 2px rgba(255,255,255,0.24);
+    }
+
+    /* Sync Guide Popup with Upward Arrow pointing directly at Sync Box */
+    .sync-guide-wrap { position: relative; display: flex; flex-direction: column; align-items: flex-end; }
+    .sync-guide-popup {
+      position: absolute; top: 29px; right: 0; z-index: 65;
+      width: 215px; padding: 9px 11px; border-radius: 13px;
+      background: linear-gradient(135deg, #f59e0b, #ef4444);
+      color: #ffffff; font-size: 11.5px; font-weight: 700; line-height: 1.38;
+      text-align: center;
+      box-shadow: 0 12px 28px rgba(239, 68, 68, 0.42);
+      border: 1.2px solid rgba(255,255,255,0.55);
+      animation: guideFloat 1.4s ease-in-out infinite;
+      cursor: pointer;
+    }
+    .sync-guide-popup::before {
+      content: "";
+      position: absolute; top: -7px; right: 38px;
+      width: 12px; height: 12px;
+      background: #f59e0b;
+      transform: rotate(45deg);
+      border-top: 1.2px solid rgba(255,255,255,0.55);
+      border-left: 1.2px solid rgba(255,255,255,0.55);
+    }
+    @keyframes guideFloat {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(4px); }
+    }
+
+    /* Bill Card 2-Row Action Buttons: Row 1 (2 equal cols) + Row 2 (1 full-width Bill button) */
+    .bill-actions-row2 {
+      margin-top: 11px;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 7px;
+    }
+    .bill-actions-full {
+      margin-top: 7px;
+      display: flex;
+    }
+    .bill-actions-full .bill-act-btn {
+      width: 100%;
+      padding: 9px 10px;
+      font-size: 12.5px;
+    }
+
+    /* Tenant Period Bar & Centered Billing Title */
+    .period-bar.tenant-mode {
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 10px 12px;
+    }
+    .tenant-room-banner {
+      font-size: 15px;
+      font-weight: 800;
+      color: var(--text-main);
+      text-align: center;
+      width: 100%;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .sec-head.center-title {
+      justify-content: center;
+    }
+    .sec-head.center-title .sec-title {
+      width: 100%;
+      justify-content: center;
+      text-align: center;
+    }
+
+    /* Dual Meter Photo Slots (Old & New) */
+    .meter-photo-pair {
+      display: flex; flex-direction: column; gap: 5px; min-width: 138px;
+    }
+    .meter-photo-slot {
+      display: flex; align-items: center; gap: 6px;
+    }
+    .meter-photo-slot .photo-btn {
+      padding: 4px 8px; font-size: 11px;
+    }
+    .meter-photo-slot .photo-thumb {
+      width: 30px; height: 30px; border-radius: 7px;
     }
     .login-error-box {
       padding: 9px 12px; border-radius: 12px; margin-bottom: 12px;
@@ -890,9 +991,14 @@
 
       <!-- Compact Vertical Stack: Sync Box on top, 3 small vibrant icons aligned below -->
       <div class="header-controls">
-        <button id="syncBox" class="sync-box state-needs-pull" onclick="handleSyncClick()" title="Bấm để đồng bộ dữ liệu với máy chủ">
-          Đồng bộ máy chủ
-        </button>
+        <div class="sync-guide-wrap">
+          <button id="syncBox" class="sync-box state-needs-pull" onclick="handleSyncClick()" title="Bấm để đồng bộ dữ liệu với máy chủ">
+            Đồng bộ
+          </button>
+          <div id="syncGuidePopup" class="sync-guide-popup hidden" onclick="handleSyncClick()">
+            Click vào đây để cập nhật dữ liệu mới từ máy chủ
+          </div>
+        </div>
 
         <div class="header-icons-row">
           <!-- 1. Icon Người đăng nhập -->
@@ -933,7 +1039,7 @@
   <!-- Main Swipeable Content -->
   <main class="main-wrap" id="swipeArea">
     <!-- Period Bar -->
-    <div class="period-bar glass">
+    <div id="periodBar" class="period-bar glass">
       <div class="period-nav">
         <button class="period-btn" onclick="shiftPeriod(-1)" title="Tháng trước">&#8249;</button>
         <div class="period-label" id="periodLabel">Tháng 11/2026</div>
@@ -967,7 +1073,7 @@
 
       <!-- Current Month Billing Header & Cards -->
       <div class="glass-card">
-        <div class="sec-head">
+        <div class="sec-head" id="billingSectionHead">
           <div class="sec-title" id="billingSectionTitle">Tiền phòng 11/2026</div>
           <div class="flex-row" id="adminBillToolbar">
             <div class="due-inline-bar" title="Thiết lập ngày hạn thu tiền phòng hàng tháng để tự động cảnh báo quá hạn">
@@ -1035,7 +1141,7 @@
                 <th>Số điện cũ</th>
                 <th>Số điện sử dụng</th>
                 <th>Ghi chú</th>
-                <th>Ảnh đồng hồ (PNG/JPG)</th>
+                <th>Ảnh đồng hồ (Cũ / Mới)</th>
               </tr>
             </thead>
             <tbody id="meterEntryBody"></tbody>
@@ -1264,12 +1370,15 @@
             </div>
           </div>
 
-          <div class="mt-3">
+          <div class="mt-3 flex-row">
+            <button type="button" class="btn btn-indigo btn-sm" id="btnSaveAdminUsername" onclick="submitChangeAdminUsername()">
+              Lưu tên đăng nhập QTV
+            </button>
             <button type="button" class="btn btn-amber btn-sm" id="btnToggleChangeAdminPass" onclick="toggleChangeAdminPassBox()">
               Thay đổi mật khẩu quản trị viên
             </button>
-            <span class="muted" style="margin-left:6px;">Hỗ trợ khôi phục qua Gmail bảo mật khi quên mật khẩu</span>
           </div>
+          <div class="muted mt-2">Hỗ trợ khôi phục qua Gmail bảo mật khi quên mật khẩu</div>
 
           <div id="changeAdminPassBox" class="change-pass-panel hidden">
             <div style="font-weight:800; font-size:13px; color:var(--emerald); margin-bottom:8px;">
@@ -1461,16 +1570,16 @@
 
       <form onsubmit="handleLoginSubmit(event)">
         <div style="margin-bottom:8px;">
-          <label class="field-label">Chọn phòng của bạn (hoặc Quản trị viên)</label>
+          <label class="field-label" style="text-align:center;">Chọn phòng của bạn</label>
           <input type="hidden" id="loginRoomSelect" value="ADMIN" />
           <div id="loginRoomGrid" class="login-room-grid"></div>
         </div>
         <div id="loginUserWrap" style="margin-bottom:10px;">
-          <label class="field-label">Tài khoản Quản trị viên</label>
-          <input type="text" id="loginUser" autocomplete="username" placeholder="Nhập tài khoản QTV (VD: admin)" oninput="scheduleAutoLoginCheck()" />
+          <label class="field-label" style="text-align:center;">Tài khoản Quản trị viên</label>
+          <input type="text" id="loginUser" autocomplete="username" placeholder="Nhập tài khoản QTV" oninput="scheduleAutoLoginCheck()" />
         </div>
         <div style="margin-bottom:14px;">
-          <label class="field-label" id="loginPassLabel">Mật khẩu số (nhập đúng tự động đăng nhập)</label>
+          <label class="field-label" id="loginPassLabel" style="text-align:center;">Mật khẩu phòng (nhập đúng tự động đăng nhập)</label>
           <div class="input-eye-wrap">
             <input type="password" id="loginPass" inputmode="numeric" autocomplete="current-password" placeholder="Nhập mật khẩu số" oninput="scheduleAutoLoginCheck()" required />
             <button type="button" class="eye-toggle" onclick="toggleInputEye('loginPass')">&#128065;</button>
@@ -1521,9 +1630,7 @@
         </div>
       </div>
 
-      <div class="muted mt-3" style="text-align:center; font-size:11.5px;">
-        Mặc định QTV lần đầu: <strong>admin</strong> / <strong>123456</strong> · Nhập sai tối đa 5 lần
-      </div>
+
     </div>
   </div>
 
@@ -1547,7 +1654,7 @@
     /* ============================================================
        NHÀ CHO THUÊ V3 — CORE STATE & STORAGE
        ============================================================ */
-    const APP_VERSION = "9.0.0";
+    const APP_VERSION = "10.0.0";
     const DEVICE_SYNCED_PREFIX = "nha_cho_thue_dev_synced_";
     const VERSION_KEY = "nha_cho_thue_app_version";
     const STORAGE_KEY = "nha_cho_thue_v3_state";
@@ -1658,7 +1765,7 @@
           masterMeters: Array.isArray(parsed.masterMeters) ? parsed.masterMeters.map((mm) => ({ ...mm, period: normalizePeriodStr(mm.period) })) : [],
           rooms,
           accounts: Array.isArray(parsed.accounts) && parsed.accounts.length ? parsed.accounts : def.accounts,
-          meters: Array.isArray(parsed.meters) ? parsed.meters.map((m) => ({ note: "", ...m, period: normalizePeriodStr(m.period), date: normalizeDateStr(m.date) })) : [],
+          meters: Array.isArray(parsed.meters) ? parsed.meters.map((m) => ({ note: "", oldPhotoUrl: "", committed: true, ...m, period: normalizePeriodStr(m.period), date: normalizeDateStr(m.date) })) : [],
           bills: Array.isArray(parsed.bills) ? parsed.bills.map((b) => ({ ...b, period: normalizePeriodStr(b.period), paidDate: normalizeDateStr(b.paidDate) })) : [],
           pendingTenantSubmissions: Array.isArray(parsed.pendingTenantSubmissions) ? parsed.pendingTenantSubmissions : [],
           payment: { ...def.payment, ...(parsed.payment || {}) }
@@ -1758,6 +1865,7 @@
     let currentPeriod = getDefaultPeriod();
     let currentTab = "billing";
     let activeMeterPhotoRoomId = null;
+    let activeMeterPhotoSlot = "new";
     let activeBillPhotoBillId = null;
     let lightboxBillId = null;
     let activeReceiptBillId = null;
@@ -1933,6 +2041,10 @@
         box.classList.add("state-synced");
         box.innerHTML = `${ICON_CLOUD_CHECK}<span>Đã đồng bộ</span>`;
       }
+      const guide = document.getElementById("syncGuidePopup");
+      if (guide) {
+        guide.classList.toggle("hidden", !(mode === "needs-pull" && session));
+      }
     }
 
     async function apiCall(payload) {
@@ -2098,6 +2210,8 @@
         if (Array.isArray(res.meters)) {
           state.meters = res.meters.map((m) => ({
             note: "",
+            oldPhotoUrl: "",
+            committed: true,
             ...m,
             period: normalizePeriodStr(m.period),
             date: normalizeDateStr(m.date)
@@ -3195,14 +3309,25 @@
     function getAutoOldElectric(period, roomId) {
       const prevP = getPrevPeriod(period);
       const prevRec = getMeterRecord(prevP, roomId);
-      if (prevRec && prevRec.newVal !== "" && prevRec.newVal !== undefined) {
+      if (prevRec && prevRec.newVal !== "" && prevRec.newVal !== null && prevRec.newVal !== undefined) {
         return Number(prevRec.newVal);
       }
       const curSort = periodToSortable(period);
       const older = state.meters
-        .filter((m) => m.roomId === roomId && periodToSortable(m.period) < curSort && m.newVal !== "")
+        .filter((m) => m.roomId === roomId && periodToSortable(m.period) < curSort && m.newVal !== "" && m.newVal !== null && m.newVal !== undefined)
         .sort((a, b) => periodToSortable(b.period) - periodToSortable(a.period));
-      return older.length ? Number(older[0].newVal) : 0;
+      return older.length ? Number(older[0].newVal) : "";
+    }
+
+    function getAutoOldMeterPhoto(period, roomId) {
+      const prevP = getPrevPeriod(period);
+      const prevRec = getMeterRecord(prevP, roomId);
+      if (prevRec && prevRec.photoUrl) return prevRec.photoUrl;
+      const curSort = periodToSortable(period);
+      const older = state.meters
+        .filter((m) => m.roomId === roomId && periodToSortable(m.period) < curSort && m.photoUrl)
+        .sort((a, b) => periodToSortable(b.period) - periodToSortable(a.period));
+      return older.length ? older[0].photoUrl : "";
     }
 
     function ensureMeterDraft(period, roomId) {
@@ -3210,7 +3335,6 @@
       const rm = state.rooms.find((r) => r.id === roomId);
       const activeAcc = getActiveTenantForRoom(roomId);
       if (!rec) {
-        const oldVal = getAutoOldElectric(period, roomId);
         rec = {
           key: periodCode(period) + "-" + roomId,
           period,
@@ -3218,22 +3342,34 @@
           tenantId: activeAcc ? activeAcc.id : ("LEGACY_" + roomId),
           tenantName: (rm && rm.tenantName) || (activeAcc && activeAcc.displayName) || "",
           newVal: "",
-          oldVal: oldVal,
+          oldVal: getAutoOldElectric(period, roomId),
           used: 0,
           note: "",
+          oldPhotoUrl: getAutoOldMeterPhoto(period, roomId),
           photoUrl: "",
+          committed: false,
           date: todayStr()
         };
         state.meters.push(rec);
+      } else if (!rec.oldPhotoUrl) {
+        const autoOldP = getAutoOldMeterPhoto(period, roomId);
+        if (autoOldP) rec.oldPhotoUrl = autoOldP;
       }
       return rec;
+    }
+
+    function calcMeterUsed(newVal, oldVal) {
+      if (newVal === "" || newVal === null || newVal === undefined) return 0;
+      if (oldVal === "" || oldVal === null || oldVal === undefined) return 0;
+      return Number(newVal) - Number(oldVal);
     }
 
     function updateMeterUsedCellUI(roomId, newVal, oldVal) {
       const cell = document.getElementById("meterUsedCell_" + roomId);
       if (!cell) return;
-      const used = newVal === "" ? 0 : (Number(newVal) - Number(oldVal || 0));
-      if (newVal !== "" && used < 0) {
+      const hasBoth = newVal !== "" && newVal !== null && newVal !== undefined && oldVal !== "" && oldVal !== null && oldVal !== undefined;
+      const used = hasBoth ? (Number(newVal) - Number(oldVal)) : 0;
+      if (hasBoth && used < 0) {
         cell.innerHTML = `<span class="warn-red">${used} (Lỗi!)</span>`;
       } else if (used > 250) {
         cell.innerHTML = `<span class="warn-amber">${used} kWh (Cao)</span>`;
@@ -3249,9 +3385,7 @@
         rec.note = rawVal;
       } else {
         rec[field] = rawVal === "" ? "" : Number(rawVal);
-        const nv = rec.newVal === "" ? null : Number(rec.newVal);
-        const ov = rec.oldVal === "" ? 0 : Number(rec.oldVal);
-        rec.used = nv === null ? 0 : (nv - ov);
+        rec.used = calcMeterUsed(rec.newVal, rec.oldVal);
         if (field === "newVal" && rawVal !== "") {
           rec.date = todayStr();
         }
@@ -3259,13 +3393,13 @@
         renderEvnCompareResultOnly();
       }
       saveState(true);
+      scheduleQuickPush(1200);
     }
 
     function onMeterInputChange(roomId, field, rawVal) {
       if (!isAdmin()) return openPinModal();
       onMeterInputLive(roomId, field, rawVal);
-      renderMeterHistory();
-      scheduleQuickPush(1200);
+      scheduleQuickPush(800);
     }
 
     function flushMeterInputsFromDom() {
@@ -3278,11 +3412,12 @@
         const newRaw = newEl ? newEl.value.trim() : "";
         const oldRaw = oldEl ? oldEl.value.trim() : "";
         const noteRaw = noteEl ? noteEl.value : "";
-        if (newRaw === "" && !getMeterRecord(currentPeriod, rm.id) && noteRaw === "") return;
+        const existing = getMeterRecord(currentPeriod, rm.id);
+        if (newRaw === "" && oldRaw === "" && !existing && noteRaw === "") return;
         const rec = ensureMeterDraft(currentPeriod, rm.id);
-        rec.oldVal = oldRaw === "" ? 0 : Number(oldRaw);
+        rec.oldVal = oldRaw === "" ? "" : Number(oldRaw);
         rec.newVal = newRaw === "" ? "" : Number(newRaw);
-        rec.used = rec.newVal === "" ? 0 : (Number(rec.newVal) - Number(rec.oldVal || 0));
+        rec.used = calcMeterUsed(rec.newVal, rec.oldVal);
         rec.note = noteRaw;
         if (rec.newVal !== "") rec.date = todayStr();
       });
@@ -3305,9 +3440,10 @@
       if (hasInitialPulled) await pushToServer(true);
     }
 
-    function triggerMeterPhotoUpload(roomId) {
+    function triggerMeterPhotoUpload(roomId, slot = "new") {
       if (!isAdmin()) return openPinModal();
       activeMeterPhotoRoomId = roomId;
+      activeMeterPhotoSlot = slot === "old" ? "old" : "new";
       const inp = document.getElementById("meterPhotoInput");
       inp.value = "";
       inp.click();
@@ -3330,12 +3466,14 @@
         return;
       }
       const roomId = activeMeterPhotoRoomId;
+      const isOldSlot = activeMeterPhotoSlot === "old";
       const rm = state.rooms.find((r) => r.id === roomId);
       const rec = ensureMeterDraft(currentPeriod, roomId);
 
-      toast("Đang tải ảnh đồng hồ chất lượng gốc lên máy chủ...", "");
+      toast(isOldSlot ? "Đang tải ảnh đồng hồ tháng cũ lên máy chủ..." : "Đang tải ảnh đồng hồ tháng mới lên máy chủ...", "");
       try {
         const dataUrl = await readFileAsDataUrl(file);
+        let finalUrl = dataUrl;
         try {
           const res = await apiCall({
             action: "uploadImage",
@@ -3344,16 +3482,17 @@
             roomId,
             roomName: rm ? rm.name : roomId,
             period: currentPeriod,
-            photoType: "meter",
+            photoType: isOldSlot ? "meter_old" : "meter",
             mimeType: file.type,
             base64Data: dataUrl
           });
-          rec.photoUrl = res.directUrl || res.viewUrl;
+          finalUrl = res.directUrl || res.viewUrl;
           toast("Đã đồng bộ ảnh đồng hồ chất lượng gốc lên máy chủ!", "ok");
         } catch (uploadErr) {
-          rec.photoUrl = dataUrl;
           toast("Đã lưu ảnh cục bộ (chưa đồng bộ thư mục ảnh: " + uploadErr.message + ")", "warn");
         }
+        if (isOldSlot) rec.oldPhotoUrl = finalUrl;
+        else rec.photoUrl = finalUrl;
         saveState(true);
         renderElectricTab();
         if (hasInitialPulled) pushToServer(true);
@@ -3368,11 +3507,21 @@
       for (const rm of state.rooms) {
         if (isRoomVacant(rm)) continue;
         const rec = getMeterRecord(currentPeriod, rm.id);
-        if (rec && rec.newVal !== "" && Number(rec.newVal) < Number(rec.oldVal || 0)) {
+        if (rec && rec.newVal !== "" && rec.oldVal !== "" && Number(rec.newVal) < Number(rec.oldVal)) {
           toast("Cảnh báo: " + rm.name + " có Số điện mới nhỏ hơn Số điện cũ!", "err");
           return;
         }
       }
+      // Chính thức chốt để đẩy xuống Lịch sử chỉ số điện!
+      state.rooms.forEach((rm) => {
+        if (isRoomVacant(rm)) return;
+        const rec = getMeterRecord(currentPeriod, rm.id);
+        if (rec && (rec.newVal !== "" || rec.oldVal !== "" || rec.photoUrl || rec.oldPhotoUrl || rec.note)) {
+          rec.committed = true;
+          if (!rec.date) rec.date = todayStr();
+        }
+      });
+
       if (quickPushTimer) { clearTimeout(quickPushTimer); quickPushTimer = null; }
       stopAutoSync();
       generateBillsForPeriod(true);
@@ -3426,14 +3575,18 @@
           const vacant = isRoomVacant(rm);
           const rec = getMeterRecord(currentPeriod, rm.id);
           const autoOld = rec ? rec.oldVal : getAutoOldElectric(currentPeriod, rm.id);
-          const newVal = rec && rec.newVal !== "" ? rec.newVal : "";
-          const used = newVal === "" ? 0 : (Number(newVal) - Number(autoOld || 0));
+          const oldDisplayVal = (autoOld === "" || autoOld === null || autoOld === undefined) ? "" : autoOld;
+          const newVal = rec && rec.newVal !== "" && rec.newVal !== null && rec.newVal !== undefined ? rec.newVal : "";
+          const hasBoth = newVal !== "" && oldDisplayVal !== "";
+          const used = hasBoth ? (Number(newVal) - Number(oldDisplayVal)) : 0;
           const noteVal = rec ? (rec.note || "") : "";
           let usedHtml = `<strong>${used} kWh</strong>`;
-          if (newVal !== "" && used < 0) usedHtml = `<span class="warn-red">${used} (Lỗi!)</span>`;
+          if (hasBoth && used < 0) usedHtml = `<span class="warn-red">${used} (Lỗi!)</span>`;
           else if (used > 250) usedHtml = `<span class="warn-amber">${used} kWh (Cao)</span>`;
 
-          const photoUrl = rec ? rec.photoUrl : "";
+          const oldPhotoUrl = (rec && rec.oldPhotoUrl) ? rec.oldPhotoUrl : getAutoOldMeterPhoto(currentPeriod, rm.id);
+          const newPhotoUrl = rec ? (rec.photoUrl || "") : "";
+
           return `
             <tr style="${vacant ? "opacity:0.55;" : ""}">
               <td>
@@ -3447,7 +3600,7 @@
                   onchange="onMeterInputChange('${rm.id}','newVal',this.value)" />
               </td>
               <td>
-                <input type="number" id="meterOld_${rm.id}" class="num-input" value="${autoOld}"
+                <input type="number" id="meterOld_${rm.id}" class="num-input" value="${oldDisplayVal}" placeholder="Nhập cũ"
                   ${vacant ? "disabled" : ""}
                   oninput="onMeterInputLive('${rm.id}','oldVal',this.value)"
                   onchange="onMeterInputChange('${rm.id}','oldVal',this.value)" />
@@ -3460,11 +3613,19 @@
                   onchange="onMeterInputChange('${rm.id}','note',this.value)" />
               </td>
               <td>
-                <div class="flex-row" style="flex-wrap:nowrap;">
-                  ${photoUrl ? `<img src="${escHtml(photoUrl)}" class="photo-thumb" onclick="openLightbox('${escHtml(photoUrl)}')" title="Xem ảnh đồng hồ" />` : ""}
-                  <button type="button" class="photo-btn" onclick="triggerMeterPhotoUpload('${rm.id}')">
-                    ${photoUrl ? "Đổi ảnh" : "+ Ảnh đồng hồ"}
-                  </button>
+                <div class="meter-photo-pair">
+                  <div class="meter-photo-slot">
+                    ${oldPhotoUrl ? `<img src="${escHtml(oldPhotoUrl)}" class="photo-thumb" onclick="openLightbox('${escHtml(oldPhotoUrl)}')" title="Ảnh đồng hồ tháng cũ" />` : ""}
+                    <button type="button" class="photo-btn" onclick="triggerMeterPhotoUpload('${rm.id}','old')">
+                      ${oldPhotoUrl ? "Đổi ảnh cũ" : "+ Ảnh cũ"}
+                    </button>
+                  </div>
+                  <div class="meter-photo-slot">
+                    ${newPhotoUrl ? `<img src="${escHtml(newPhotoUrl)}" class="photo-thumb" onclick="openLightbox('${escHtml(newPhotoUrl)}')" title="Ảnh đồng hồ tháng mới" />` : ""}
+                    <button type="button" class="photo-btn" onclick="triggerMeterPhotoUpload('${rm.id}','new')">
+                      ${newPhotoUrl ? "Đổi ảnh mới" : "+ Ảnh mới"}
+                    </button>
+                  </div>
                 </div>
               </td>
             </tr>
@@ -3475,11 +3636,13 @@
         tenantCard.classList.remove("hidden");
         document.getElementById("tenantMeterPeriodLabel").textContent = formatElectricPeriodRange(currentPeriod);
 
-        const rec = state.meters.find((m) => m.period === currentPeriod && canCurrentUserSeeRecord(m));
+        const rec = state.meters.find((m) => m.period === currentPeriod && m.committed !== false && canCurrentUserSeeRecord(m));
         const body = document.getElementById("tenantMeterDetailBody");
         if (!rec) {
           body.innerHTML = `<div class="muted">Chưa có chỉ số điện kỳ ${escHtml(formatElectricPeriodRange(currentPeriod))} cho tài khoản phòng bạn.</div>`;
         } else {
+          const oldPUrl = rec.oldPhotoUrl || getAutoOldMeterPhoto(rec.period, rec.roomId);
+          const newPUrl = rec.photoUrl || "";
           body.innerHTML = `
             <div class="bill-rows">
               <div class="bill-row"><span>Số điện mới</span><strong>${fmtNum(rec.newVal)}</strong></div>
@@ -3488,14 +3651,22 @@
               ${rec.note ? `<div class="bill-row"><span>Ghi chú</span><strong>${escHtml(rec.note)}</strong></div>` : ""}
               <div class="bill-row"><span>Ngày ghi</span><strong>${escHtml(rec.date || "—")}</strong></div>
             </div>
-            <div class="mt-3">
-              ${rec.photoUrl
-                ? `<div style="display:flex; align-items:center; gap:12px;">
-                     <img src="${escHtml(rec.photoUrl)}" class="photo-thumb" style="width:68px; height:68px;" onclick="openLightbox('${escHtml(rec.photoUrl)}')" />
-                     <button class="btn btn-amber btn-sm" onclick="openLightbox('${escHtml(rec.photoUrl)}')">Xem ảnh chụp đồng hồ</button>
+            <div class="mt-3 flex-row" style="gap:10px;">
+              ${oldPUrl
+                ? `<div style="display:flex; align-items:center; gap:8px;">
+                     <img src="${escHtml(oldPUrl)}" class="photo-thumb" style="width:54px; height:54px;" onclick="openLightbox('${escHtml(oldPUrl)}')" />
+                     <button class="btn btn-glass btn-sm" onclick="openLightbox('${escHtml(oldPUrl)}')">Ảnh ĐH tháng cũ</button>
                    </div>`
-                : `<div class="muted">Quản trị viên chưa đính kèm ảnh chụp đồng hồ kỳ này.</div>`
+                : ""
               }
+              ${newPUrl
+                ? `<div style="display:flex; align-items:center; gap:8px;">
+                     <img src="${escHtml(newPUrl)}" class="photo-thumb" style="width:54px; height:54px;" onclick="openLightbox('${escHtml(newPUrl)}')" />
+                     <button class="btn btn-amber btn-sm" onclick="openLightbox('${escHtml(newPUrl)}')">Ảnh ĐH tháng mới</button>
+                   </div>`
+                : ""
+              }
+              ${!oldPUrl && !newPUrl ? `<div class="muted">Quản trị viên chưa đính kèm ảnh chụp đồng hồ kỳ này.</div>` : ""}
             </div>
           `;
         }
@@ -3630,7 +3801,8 @@
       const curPVal = pSel.value || "ALL";
       const curRVal = rSel.value || "ALL";
 
-      const visibleMeters = state.meters.filter(canCurrentUserSeeRecord);
+      // CHỈ hiển thị bản ghi đã bấm "Lưu số điện & Tự kết sang Tiền phòng" (committed !== false)
+      const visibleMeters = state.meters.filter((m) => m.committed !== false && canCurrentUserSeeRecord(m));
       const periods = [...new Set(visibleMeters.map((m) => m.period))].sort((a, b) => periodToSortable(b) - periodToSortable(a));
 
       pSel.innerHTML = `<option value="ALL">Tất cả các kỳ</option>` +
@@ -3654,7 +3826,7 @@
 
       const tbody = document.getElementById("meterHistoryBody");
       if (!filtered.length) {
-        tbody.innerHTML = `<tr><td colspan="${isAdmin() ? 9 : 8}" class="muted" style="text-align:center; padding:18px;">Chưa có lịch sử chỉ số điện.</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="${isAdmin() ? 9 : 8}" class="muted" style="text-align:center; padding:18px;">Chưa có lịch sử chỉ số điện đã chốt.</td></tr>`;
         return;
       }
 
@@ -3662,6 +3834,8 @@
 
       tbody.innerHTML = filtered.map((m) => {
         const rm = state.rooms.find((r) => r.id === m.roomId);
+        const oldP = m.oldPhotoUrl || getAutoOldMeterPhoto(m.period, m.roomId);
+        const newP = m.photoUrl || "";
         return `
           <tr>
             <td><strong>${escHtml(formatElectricPeriodRange(m.period))}</strong></td>
@@ -3674,10 +3848,11 @@
             <td><strong style="color:var(--amber)">${fmtNum(m.used)} kWh</strong></td>
             <td>${escHtml(m.note || "—")}</td>
             <td>
-              ${m.photoUrl
-                ? `<img src="${escHtml(m.photoUrl)}" class="photo-thumb" onclick="openLightbox('${escHtml(m.photoUrl)}')" title="Bấm xem ảnh đồng hồ" />`
-                : `<span class="muted">—</span>`
-              }
+              <div class="flex-row" style="gap:4px; flex-wrap:nowrap;">
+                ${oldP ? `<button type="button" class="btn btn-glass btn-sm" style="padding:3px 6px; font-size:11px;" onclick="openLightbox('${escHtml(oldP)}')" title="Xem ảnh đồng hồ cũ">Cũ</button>` : ""}
+                ${newP ? `<button type="button" class="btn btn-amber btn-sm" style="padding:3px 6px; font-size:11px;" onclick="openLightbox('${escHtml(newP)}')" title="Xem ảnh đồng hồ mới">Mới</button>` : ""}
+                ${!oldP && !newP ? `<span class="muted">—</span>` : ""}
+              </div>
             </td>
             <td>${escHtml(m.date || "—")}</td>
             ${isAdmin() ? `<td><button type="button" class="trash-btn" onclick="deleteMeterRecord('${escHtml(m.key)}')" title="Xóa lịch sử chỉ số điện">${trashSvg}</button></td>` : ""}
@@ -3920,7 +4095,8 @@
       lines.push(`TỔNG CỘNG: ${fmtMoney(b.total)}`);
       if (state.payment.accountNo) {
         lines.push(`Chuyển khoản: ${state.payment.bankName || ""} - STK: ${state.payment.accountNo} (${state.payment.accountName || ""})`);
-        lines.push(`Nội dung CK: ${roomName} tien phong T${b.period}`);
+        const memoTransfer = `${removeVietnameseTones(roomName)} tien phong T${String(b.period || "").replace(/\//g, ".")}`;
+        lines.push(`Nội dung CK: ${memoTransfer}`);
       }
       return lines.join("\n");
     }
@@ -3994,7 +4170,7 @@
       const cleanAccNo = String(state.payment.accountNo || "").replace(/[^a-zA-Z0-9]/g, "");
       const bankBin = String(state.payment.bankBin || "970422").replace(/[^0-9]/g, "");
       const accNameClean = removeVietnameseTones(state.payment.accountName || "").toUpperCase();
-      const addInfoClean = removeVietnameseTones(`${roomName} tien phong T${String(b.period || "").replace(/\//g, "-")}`);
+      const addInfoClean = `${removeVietnameseTones(roomName)} tien phong T${String(b.period || "").replace(/\//g, ".")}`;
       const amountNum = Math.max(0, Math.round(Number(b.total) || 0));
 
       let qrHtml = "";
@@ -4178,6 +4354,8 @@
     function renderBillingTab() {
       document.getElementById("dockBillingLabel").textContent = "Tiền phòng " + currentPeriod;
       document.getElementById("billingSectionTitle").textContent = "Tiền phòng " + currentPeriod;
+      const bHead = document.getElementById("billingSectionHead");
+      if (bHead) bHead.classList.toggle("center-title", !isAdmin());
 
       document.getElementById("adminKpiSection").classList.toggle("hidden", !isAdmin());
       document.getElementById("adminBillToolbar").classList.toggle("hidden", !isAdmin());
@@ -4293,9 +4471,11 @@
                 ` : ""}
 
                 ${!isVacant ? `
-                  <div class="bill-actions-row3">
+                  <div class="bill-actions-row2">
                     <button type="button" class="bill-act-btn bill-act-qr" onclick="openReceiptModal('${b.id}')">Phiếu thu (QR)</button>
                     <button type="button" class="bill-act-btn bill-act-copy" onclick="copyReceiptText('${b.id}')">Copy phiếu thu</button>
+                  </div>
+                  <div class="bill-actions-full">
                     ${billActionBtnHtml}
                   </div>
                   ${!isAdmin() ? `<div class="bill-attach-note">Vui lòng đính kèm ảnh chuyển khoản</div>` : ""}
@@ -4347,6 +4527,9 @@
 
       tbody.innerHTML = filtered.map((b) => {
         const rm = state.rooms.find((r) => r.id === b.roomId);
+        const mRec = getMeterRecord(b.period, b.roomId);
+        const mOldP = (mRec && mRec.oldPhotoUrl) ? mRec.oldPhotoUrl : getAutoOldMeterPhoto(b.period, b.roomId);
+        const mNewP = mRec ? (mRec.photoUrl || "") : "";
         return `
           <tr>
             <td><strong>${escHtml(b.period)}</strong></td>
@@ -4363,6 +4546,8 @@
             <td>
               <div class="flex-row" style="gap:5px; flex-wrap:nowrap;">
                 <button class="btn btn-glass btn-sm" onclick="openReceiptModal('${b.id}')">Phiếu</button>
+                ${mOldP ? `<button class="btn btn-glass btn-sm" onclick="openLightbox('${escHtml(mOldP)}')" title="Xem ảnh đồng hồ tháng cũ">ĐH cũ</button>` : ""}
+                ${mNewP ? `<button class="btn btn-amber btn-sm" onclick="openLightbox('${escHtml(mNewP)}')" title="Xem ảnh đồng hồ tháng mới">ĐH mới</button>` : ""}
                 ${b.billPhotoUrl ? `<button class="btn btn-indigo btn-sm" onclick="openBillPhotoViewer('${b.id}', ${isAdmin() ? "true" : "false"})">Xem Bill</button>` : ""}
                 ${isAdmin() ? `<button type="button" class="trash-btn" onclick="deleteBillRecord('${escHtml(b.id)}')" title="Xóa hóa đơn này"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"></path><path d="M10 11v6"></path><path d="M14 11v6"></path><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"></path></svg></button>` : ""}
               </div>
@@ -4735,6 +4920,54 @@
       }
     }
 
+    async function submitChangeAdminUsername() {
+      if (!isAdmin() || !session) return;
+      const newUser = document.getElementById("setAdminUser").value.trim();
+      const newPin = document.getElementById("setAdminPin").value.trim() || session.password;
+      if (!newUser) {
+        toast("Tên đăng nhập Quản trị viên không được để trống!", "warn");
+        return;
+      }
+      const btn = document.getElementById("btnSaveAdminUsername");
+      btn.disabled = true;
+      btn.textContent = "Đang lưu...";
+      stopAutoSync();
+      await waitForSyncIdle(5000);
+
+      const oldAuth = { username: session.username, password: session.password };
+      const existingAdmin = state.accounts.find((a) => a.role === "admin" && a.status === "active");
+      const currentPass = (existingAdmin && existingAdmin.password) || session.password;
+      const currentPin = (existingAdmin && existingAdmin.adminPin) || currentPass;
+      try {
+        updateSyncBoxUI("pushing");
+        await apiCall({
+          action: "changeAdminPassword",
+          auth: oldAuth,
+          oldAuth: oldAuth,
+          currentAdminPin: currentPin,
+          newUsername: newUser,
+          newPassword: currentPass,
+          newAdminPin: newPin
+        });
+        if (existingAdmin) {
+          existingAdmin.username = newUser;
+          existingAdmin.adminPin = newPin;
+        }
+        session.username = newUser;
+        saveSession(session);
+        saveState(false);
+        updateSyncBoxUI(hasInitialPulled ? "synced" : "needs-pull");
+        toast("Đã đổi tên đăng nhập Quản trị viên thành \"" + newUser + "\" và đồng bộ lên máy chủ!", "ok");
+      } catch (err) {
+        updateSyncBoxUI(hasInitialPulled ? "synced" : "needs-pull");
+        toast("Không thể cập nhật tên đăng nhập: " + err.message, "err");
+      } finally {
+        btn.disabled = false;
+        btn.textContent = "Lưu tên đăng nhập QTV";
+        if (hasInitialPulled) startAutoSync();
+      }
+    }
+
     async function submitChangeAdminPassword() {
       if (!isAdmin() || !session) return;
       const newPass = document.getElementById("newAdminPassInput").value.trim();
@@ -4995,20 +5228,30 @@
       const sub = document.getElementById("headerUserSub");
       const tabConfigBtn = document.getElementById("dockTabConfig");
 
+      const pBar = document.getElementById("periodBar");
       if (session) {
         dot.classList.remove("hidden");
         dot.classList.toggle("tenant", !isAdmin());
         if (isAdmin()) {
+          if (pBar) pBar.classList.remove("tenant-mode");
+          sub.className = "muted";
+          sub.style.cssText = "font-weight:700; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;";
           sub.textContent = "Quản trị viên · " + state.rooms.length + " phòng";
           tabConfigBtn.classList.remove("hidden");
         } else {
           const rm = state.rooms.find((r) => r.id === session.roomId);
-          sub.textContent = (rm ? rm.name : session.roomId) + " · " + (session.displayName || session.username);
+          const roomDisplay = (rm && rm.name) ? rm.name : (session.displayName || session.roomId);
+          if (pBar) pBar.classList.add("tenant-mode");
+          sub.className = "tenant-room-banner";
+          sub.style.cssText = "";
+          sub.textContent = roomDisplay;
           tabConfigBtn.classList.add("hidden");
           if (currentTab === "config") switchTab("billing");
         }
       } else {
+        if (pBar) pBar.classList.remove("tenant-mode");
         dot.classList.add("hidden");
+        sub.className = "muted";
         sub.textContent = "Chưa đăng nhập";
         tabConfigBtn.classList.add("hidden");
       }

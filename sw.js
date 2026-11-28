@@ -1,4 +1,4 @@
-const APP_VERSION = "9.0.0";
+const APP_VERSION = "10.0.0";
 const CACHE_NAME = "nha-cho-thue-v" + APP_VERSION;
 const ASSETS = [
   "./",
