@@ -1,5 +1,5 @@
 /**
- * Cloudflare Pages Function Proxy — Nhà Cho Thuê V9
+ * Cloudflare Pages Function Proxy — Nhà Cho Thuê V10
  * Route: /api
  *  1. Ẩn hoàn toàn link Google Apps Script (/exec) qua biến môi trường GAS_URL
  *  2. Proxy ảnh VietQR (?action=qrProxy) có CORS sạch giúp hiển thị & tải PNG phiếu thu 100% không lỗi
