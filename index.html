@@ -673,6 +673,42 @@
       transform: translateY(-2px);
     }
 
+    .dock-tab.tab-rules {
+      background: rgba(14, 165, 233, 0.15); color: #0369a1; border-color: rgba(14, 165, 233, 0.28);
+    }
+    html[data-theme="dark"] .dock-tab.tab-rules { color: #7dd3fc; background: rgba(14, 165, 233, 0.22); }
+    .dock-tab.tab-rules.active {
+      background: linear-gradient(135deg, #0ea5e9, #0284c7); color: #ffffff;
+      border-color: rgba(255,255,255,0.45);
+      box-shadow: 0 8px 20px rgba(14, 165, 233, 0.44), inset 0 1px 1px rgba(255,255,255,0.5);
+      transform: translateY(-2px);
+    }
+
+    /* Button color when bill photo is already attached ("Xem Bill C.k") */
+    .bill-act-view {
+      background: linear-gradient(135deg, #0ea5e9, #2563eb);
+      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.34);
+    }
+
+    /* Collapsible Settings Accordion with Toggle Switch */
+    .settings-acc-head {
+      display: flex; align-items: center; justify-content: space-between; gap: 10px;
+      cursor: pointer; user-select: none;
+    }
+    .settings-acc-head h4 { margin: 0 !important; flex: 1; font-size: 13.5px; }
+    .settings-acc-body { margin-top: 12px; padding-top: 10px; border-top: 1px dashed var(--divider); }
+
+    /* House Rules Reader & Editor */
+    .rules-reader {
+      white-space: pre-wrap; line-height: 1.72; font-size: 14px;
+      color: var(--text-main);
+      padding: 14px; border-radius: 16px;
+      background: var(--glass-bg-subtle); border: 1px solid var(--divider);
+    }
+    .rules-textarea {
+      min-height: 290px; line-height: 1.65; font-size: 13.5px; resize: vertical;
+    }
+
     /* Modals */
     .modal-backdrop {
       position: fixed; inset: 0; z-index: 80;
@@ -847,8 +883,8 @@
       <div class="brand">
         <img src="./icon-192.png" alt="Logo" class="brand-icon" />
         <div class="brand-text">
-          <div class="brand-title" id="headerAppTitle">Nhà Cho Thuê</div>
-          <div class="brand-sub" id="headerUserSub">Chưa đăng nhập</div>
+          <div class="brand-title" id="headerAppTitle">Nhà Số 2</div>
+          <div class="brand-sub" id="headerAppAddress">31/11 Phan Đình Giót</div>
         </div>
       </div>
 
@@ -897,12 +933,13 @@
   <!-- Main Swipeable Content -->
   <main class="main-wrap" id="swipeArea">
     <!-- Period Bar -->
-    <div class="period-bar glass" style="justify-content:center;">
+    <div class="period-bar glass">
       <div class="period-nav">
         <button class="period-btn" onclick="shiftPeriod(-1)" title="Tháng trước">&#8249;</button>
         <div class="period-label" id="periodLabel">Tháng 11/2026</div>
         <button class="period-btn" onclick="shiftPeriod(1)" title="Tháng sau">&#8250;</button>
       </div>
+      <div id="headerUserSub" class="muted" style="font-weight:700; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">Chưa đăng nhập</div>
     </div>
 
     <!-- ==================== TAB 1: TIỀN PHÒNG MM/YYYY ==================== -->
@@ -1070,7 +1107,27 @@
       </div>
     </section>
 
-    <!-- ==================== TAB 3: DỮ LIỆU (ADMIN ONLY) ==================== -->
+    <!-- ==================== TAB 3: NỘI QUY (ADMIN SỬA / NGƯỜI THUÊ XEM) ==================== -->
+    <section id="tab-rules" class="tab-panel">
+      <div class="glass-card">
+        <div class="sec-head">
+          <div class="sec-title">Nội quy nhà cho thuê</div>
+          <div id="adminRulesToolbar" class="flex-row hidden">
+            <button type="button" class="btn btn-glass btn-sm" onclick="insertDefaultHouseRules()">Chèn mẫu cơ bản</button>
+            <button type="button" class="btn btn-emerald btn-sm" onclick="saveHouseRulesManual()">Lưu &amp; Đồng bộ</button>
+          </div>
+        </div>
+        <div id="adminRulesEditorWrap" class="hidden">
+          <p class="muted" style="margin:0 0 8px;">Nhập hoặc chỉnh sửa nội quy bên dưới. Nội dung sẽ tự động đồng bộ để tất cả các phòng đều xem được.</p>
+          <textarea id="houseRulesInput" class="rules-textarea" placeholder="Nhập nội quy nhà trọ..." onchange="onHouseRulesChange(this.value)"></textarea>
+        </div>
+        <div id="tenantRulesViewerWrap" class="hidden">
+          <div id="tenantRulesContent" class="rules-reader"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== TAB 4: DỮ LIỆU (ADMIN ONLY) ==================== -->
     <section id="tab-config" class="tab-panel">
       <div class="glass-card">
         <div class="sec-head">
@@ -1121,7 +1178,18 @@
         <span>Số điện</span>
       </button>
 
-      <!-- Tab 3: Dữ liệu (Indigo - Admin Only) -->
+      <!-- Tab 3: Nội quy (Sky Blue - Admin & Tenant) -->
+      <button class="dock-tab tab-rules" data-tab="rules" onclick="switchTab('rules')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+          <polyline points="14 2 14 8 20 8"></polyline>
+          <line x1="16" y1="13" x2="8" y2="13"></line>
+          <line x1="16" y1="17" x2="8" y2="17"></line>
+        </svg>
+        <span>Nội quy</span>
+      </button>
+
+      <!-- Tab 4: Dữ liệu (Indigo - Admin Only) -->
       <button id="dockTabConfig" class="dock-tab tab-config" data-tab="config" onclick="switchTab('config')">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">
           <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
@@ -1140,140 +1208,178 @@
         <button class="close-btn" onclick="closeModal('settingsModal')">&times;</button>
       </div>
 
-      <!-- 1. Quản lý tài khoản từng phòng thuê (ĐƯA LÊN ĐẦU TIÊN, form tạo/sửa hiện ngay dưới từng phòng) -->
-      <div class="settings-section">
-        <h4>Quản lý tài khoản từng phòng thuê</h4>
-        <p class="muted" style="margin:0 0 10px;">
-          Bấm <strong>+ Tạo TK</strong> hoặc <strong>Sửa TK</strong> ngay tại phòng cần chỉnh. Khi khách chuyển đi bấm <strong>Xóa TK</strong>: lịch sử cũ vẫn giữ nguyên cho Quản trị viên, tài khoản mới sẽ không thấy dữ liệu khách cũ.
-        </p>
-        <div id="tenantAccountsList"></div>
-      </div>
-
-      <!-- 2. Tùy chỉnh tiêu đề hiển thị ngoài màn hình -->
+      <!-- 1. Tiêu đề ứng dụng ngoài màn hình (2 dòng: Số nhà + Địa chỉ) -->
       <div class="settings-section">
         <h4>Tiêu đề ứng dụng ngoài màn hình</h4>
-        <div>
-          <label class="field-label">Tên hiển thị (thay cho chữ "Nhà Cho Thuê")</label>
-          <input type="text" id="setAppTitle" placeholder="Nhà Cho Thuê" />
+        <div class="cfg-fields" style="margin-top:0;">
+          <div>
+            <label class="field-label">Dòng trên (Số nhà)</label>
+            <input type="text" id="setAppTitle" placeholder="VD: Nhà Số 2" />
+          </div>
+          <div>
+            <label class="field-label">Dòng dưới (Địa chỉ)</label>
+            <input type="text" id="setAppAddress" placeholder="VD: 31/11 Phan Đình Giót" />
+          </div>
         </div>
       </div>
 
-      <!-- 3. Tài khoản & Thay đổi mật khẩu Quản trị viên -->
+      <!-- 2. Quản lý tài khoản từng phòng thuê (Mặc định thu gọn, có nút gạt) -->
       <div class="settings-section">
-        <h4>Tài khoản &amp; Mật khẩu Quản trị viên</h4>
-        <div class="cfg-fields">
-          <div>
-            <label class="field-label">Tài khoản đăng nhập QTV</label>
-            <input type="text" id="setAdminUser" />
-          </div>
-          <div>
-            <label class="field-label">Mã QTV (mở khóa sửa)</label>
-            <div class="input-eye-wrap">
-              <input type="password" id="setAdminPin" inputmode="numeric" />
-              <button type="button" class="eye-toggle" onclick="toggleInputEye('setAdminPin')">&#128065;</button>
-            </div>
-          </div>
+        <div class="settings-acc-head" onclick="toggleSettingsSection('secAccounts')">
+          <h4>Quản lý tài khoản từng phòng thuê</h4>
+          <label class="status-switch" onclick="event.stopPropagation()">
+            <input type="checkbox" id="sw_secAccounts" onchange="toggleSettingsSection('secAccounts', this.checked)" />
+            <span class="switch-track"><span class="switch-knob"></span></span>
+          </label>
         </div>
-
-        <div class="mt-3">
-          <button type="button" class="btn btn-amber btn-sm" id="btnToggleChangeAdminPass" onclick="toggleChangeAdminPassBox()">
-            Thay đổi mật khẩu quản trị viên
-          </button>
-          <span class="muted" style="margin-left:6px;">Hỗ trợ khôi phục qua Gmail bảo mật khi quên mật khẩu</span>
+        <div id="secAccounts" class="settings-acc-body hidden">
+          <p class="muted" style="margin:0 0 10px;">
+            Bấm <strong>+ Tạo</strong> hoặc <strong>icon cây bút</strong> để đặt tên phòng thuê, mật khẩu số và chọn giữ/xóa lịch sử cũ.
+          </p>
+          <div id="tenantAccountsList"></div>
         </div>
+      </div>
 
-        <div id="changeAdminPassBox" class="change-pass-panel hidden">
-          <div style="font-weight:800; font-size:13px; color:var(--emerald); margin-bottom:8px;">
-            Đặt mật khẩu Quản trị viên mới (tự đồng bộ thay thế mật khẩu cũ trên máy chủ)
-          </div>
+      <!-- 3. Tài khoản & Mật khẩu Quản trị viên (Mặc định thu gọn, có nút gạt) -->
+      <div class="settings-section">
+        <div class="settings-acc-head" onclick="toggleSettingsSection('secAdminAuth')">
+          <h4>Tài khoản &amp; Mật khẩu Quản trị viên</h4>
+          <label class="status-switch" onclick="event.stopPropagation()">
+            <input type="checkbox" id="sw_secAdminAuth" onchange="toggleSettingsSection('secAdminAuth', this.checked)" />
+            <span class="switch-track"><span class="switch-knob"></span></span>
+          </label>
+        </div>
+        <div id="secAdminAuth" class="settings-acc-body hidden">
           <div class="cfg-fields" style="margin-top:0;">
             <div>
-              <label class="field-label">Mật khẩu quản trị viên mới</label>
-              <div class="input-eye-wrap">
-                <input type="password" id="newAdminPassInput" inputmode="numeric" placeholder="Nhập mật khẩu mới (từ 4 ký tự)" />
-                <button type="button" class="eye-toggle" onclick="toggleInputEye('newAdminPassInput')">&#128065;</button>
-              </div>
+              <label class="field-label">Tài khoản đăng nhập QTV</label>
+              <input type="text" id="setAdminUser" />
             </div>
             <div>
-              <label class="field-label">Nhập lại mật khẩu mới</label>
+              <label class="field-label">Mã QTV (mở khóa sửa)</label>
               <div class="input-eye-wrap">
-                <input type="password" id="confirmAdminPassInput" inputmode="numeric" placeholder="Xác nhận lại mật khẩu mới" />
-                <button type="button" class="eye-toggle" onclick="toggleInputEye('confirmAdminPassInput')">&#128065;</button>
+                <input type="password" id="setAdminPin" inputmode="numeric" />
+                <button type="button" class="eye-toggle" onclick="toggleInputEye('setAdminPin')">&#128065;</button>
               </div>
             </div>
           </div>
-          <div class="mt-2 flex-row">
-            <button type="button" class="btn btn-emerald btn-sm" id="btnSaveNewAdminPass" onclick="submitChangeAdminPassword()">Lưu &amp; Đồng bộ mật khẩu mới</button>
-            <button type="button" class="btn btn-glass btn-sm" onclick="toggleChangeAdminPassBox(false)">Hủy</button>
+
+          <div class="mt-3">
+            <button type="button" class="btn btn-amber btn-sm" id="btnToggleChangeAdminPass" onclick="toggleChangeAdminPassBox()">
+              Thay đổi mật khẩu quản trị viên
+            </button>
+            <span class="muted" style="margin-left:6px;">Hỗ trợ khôi phục qua Gmail bảo mật khi quên mật khẩu</span>
+          </div>
+
+          <div id="changeAdminPassBox" class="change-pass-panel hidden">
+            <div style="font-weight:800; font-size:13px; color:var(--emerald); margin-bottom:8px;">
+              Đặt mật khẩu Quản trị viên mới (tự đồng bộ thay thế mật khẩu cũ trên máy chủ)
+            </div>
+            <div class="cfg-fields" style="margin-top:0;">
+              <div>
+                <label class="field-label">Mật khẩu quản trị viên mới</label>
+                <div class="input-eye-wrap">
+                  <input type="password" id="newAdminPassInput" inputmode="numeric" placeholder="Nhập mật khẩu mới (từ 4 ký tự)" />
+                  <button type="button" class="eye-toggle" onclick="toggleInputEye('newAdminPassInput')">&#128065;</button>
+                </div>
+              </div>
+              <div>
+                <label class="field-label">Nhập lại mật khẩu mới</label>
+                <div class="input-eye-wrap">
+                  <input type="password" id="confirmAdminPassInput" inputmode="numeric" placeholder="Xác nhận lại mật khẩu mới" />
+                  <button type="button" class="eye-toggle" onclick="toggleInputEye('confirmAdminPassInput')">&#128065;</button>
+                </div>
+              </div>
+            </div>
+            <div class="mt-2 flex-row">
+              <button type="button" class="btn btn-emerald btn-sm" id="btnSaveNewAdminPass" onclick="submitChangeAdminPassword()">Lưu &amp; Đồng bộ mật khẩu mới</button>
+              <button type="button" class="btn btn-glass btn-sm" onclick="toggleChangeAdminPassBox(false)">Hủy</button>
+            </div>
           </div>
         </div>
       </div>
 
-      <!-- 4. Tài khoản nhận tiền & Ảnh QR (CHUYỂN XUỐNG DƯỚI, để trống gợi ý STK & Chủ TK) -->
+      <!-- 4. Tài khoản nhận tiền & Ảnh QR (Mặc định thu gọn, có nút gạt) -->
       <div class="settings-section">
-        <h4>Tài khoản nhận tiền (Tạo mã VietQR trên phiếu thu)</h4>
-        <div class="cfg-fields">
-          <div class="full">
-            <label class="field-label">Ngân hàng</label>
-            <select id="setBankBin">
-              <option value="970422">MB Bank (Quân Đội)</option>
-              <option value="970436">Vietcombank</option>
-              <option value="970415">VietinBank</option>
-              <option value="970418">BIDV</option>
-              <option value="970405">Agribank</option>
-              <option value="970407">Techcombank</option>
-              <option value="970432">VPBank</option>
-              <option value="970423">TPBank</option>
-              <option value="970416">ACB</option>
-              <option value="970403">Sacombank</option>
-            </select>
-          </div>
-          <div>
-            <label class="field-label">Số tài khoản</label>
-            <input type="text" id="setAccNo" placeholder="" />
-          </div>
-          <div>
-            <label class="field-label">Chủ tài khoản</label>
-            <input type="text" id="setAccName" placeholder="" />
-          </div>
+        <div class="settings-acc-head" onclick="toggleSettingsSection('secPayment')">
+          <h4>Tài khoản nhận tiền (Tạo mã VietQR trên phiếu thu)</h4>
+          <label class="status-switch" onclick="event.stopPropagation()">
+            <input type="checkbox" id="sw_secPayment" onchange="toggleSettingsSection('secPayment', this.checked)" />
+            <span class="switch-track"><span class="switch-knob"></span></span>
+          </label>
         </div>
-
-        <div class="mt-3" style="padding-top:10px; border-top:1px dashed var(--divider);">
-          <label class="field-label">Đính kèm ảnh mã QR (kết xuất trực tiếp sang Phiếu thu)</label>
-          <div class="flex-row">
-            <label class="btn btn-glass btn-sm" style="cursor:pointer;">
-              Tải lên ảnh mã QR
-              <input type="file" accept="image/png,image/jpeg,image/webp" style="display:none" onchange="handleCustomQrUpload(event)" />
-            </label>
-            <button class="btn btn-danger btn-sm hidden" id="btnRemoveCustomQr" onclick="removeCustomQr()">Xóa ảnh QR</button>
+        <div id="secPayment" class="settings-acc-body hidden">
+          <div class="cfg-fields" style="margin-top:0;">
+            <div class="full">
+              <label class="field-label">Ngân hàng</label>
+              <select id="setBankBin">
+                <option value="970422">MB Bank (Quân Đội)</option>
+                <option value="970436">Vietcombank</option>
+                <option value="970415">VietinBank</option>
+                <option value="970418">BIDV</option>
+                <option value="970405">Agribank</option>
+                <option value="970407">Techcombank</option>
+                <option value="970432">VPBank</option>
+                <option value="970423">TPBank</option>
+                <option value="970416">ACB</option>
+                <option value="970403">Sacombank</option>
+              </select>
+            </div>
+            <div>
+              <label class="field-label">Số tài khoản</label>
+              <input type="text" id="setAccNo" placeholder="" />
+            </div>
+            <div>
+              <label class="field-label">Chủ tài khoản</label>
+              <input type="text" id="setAccName" placeholder="" />
+            </div>
           </div>
-          <div id="customQrPreviewWrap" class="mt-2 hidden" style="text-align:center;">
-            <img id="customQrPreview" style="max-width:160px; max-height:180px; border-radius:12px; border:1px solid var(--glass-border);" alt="Mã QR" />
-            <div class="muted mt-2">Đang dùng ảnh mã QR tải lên để hiển thị trên phiếu thu</div>
+
+          <div class="mt-3" style="padding-top:10px; border-top:1px dashed var(--divider);">
+            <label class="field-label">Đính kèm ảnh mã QR (kết xuất trực tiếp sang Phiếu thu)</label>
+            <div class="flex-row">
+              <label class="btn btn-glass btn-sm" style="cursor:pointer;">
+                Tải lên ảnh mã QR
+                <input type="file" accept="image/png,image/jpeg,image/webp" style="display:none" onchange="handleCustomQrUpload(event)" />
+              </label>
+              <button class="btn btn-danger btn-sm hidden" id="btnRemoveCustomQr" onclick="removeCustomQr()">Xóa ảnh QR</button>
+            </div>
+            <div id="customQrPreviewWrap" class="mt-2 hidden" style="text-align:center;">
+              <img id="customQrPreview" style="max-width:160px; max-height:180px; border-radius:12px; border:1px solid var(--glass-border);" alt="Mã QR" />
+              <div class="muted mt-2">Đang dùng ảnh mã QR tải lên để hiển thị trên phiếu thu</div>
+            </div>
           </div>
         </div>
       </div>
 
-      <!-- 5. Đồng bộ máy chủ (Đặt ở CUỐI CÙNG, mặc định ẩn bằng icon mắt) -->
+      <!-- 5. Đồng bộ máy chủ (Mặc định thu gọn, có nút gạt) -->
       <div class="settings-section">
-        <h4>Đồng bộ máy chủ</h4>
-        <div class="cfg-fields">
-          <div class="full">
-            <label class="field-label">Đồng bộ máy chủ (mặc định /api ẩn link qua Cloudflare)</label>
-            <div class="input-eye-wrap">
-              <input type="password" id="setServerEndpoint" placeholder="/api" />
-              <button type="button" class="eye-toggle" onclick="toggleInputEye('setServerEndpoint')" title="Ẩn / Hiện">&#128065;</button>
+        <div class="settings-acc-head" onclick="toggleSettingsSection('secSync')">
+          <h4>Đồng bộ máy chủ</h4>
+          <label class="status-switch" onclick="event.stopPropagation()">
+            <input type="checkbox" id="sw_secSync" onchange="toggleSettingsSection('secSync', this.checked)" />
+            <span class="switch-track"><span class="switch-knob"></span></span>
+          </label>
+        </div>
+        <div id="secSync" class="settings-acc-body hidden">
+          <div class="cfg-fields" style="margin-top:0;">
+            <div class="full">
+              <label class="field-label">Đồng bộ máy chủ (mặc định /api ẩn link qua Cloudflare)</label>
+              <div class="input-eye-wrap">
+                <input type="password" id="setServerEndpoint" placeholder="/api" />
+                <button type="button" class="eye-toggle" onclick="toggleInputEye('setServerEndpoint')" title="Ẩn / Hiện">&#128065;</button>
+              </div>
+              <div class="muted mt-2">Tự động đồng bộ 2 chiều mỗi 6 giây sau khi mở khóa trên thiết bị.</div>
             </div>
-            <div class="muted mt-2">Tự động đồng bộ 2 chiều mỗi 6 giây sau khi mở khóa trên thiết bị.</div>
-          </div>
 
-          <div class="full mt-2">
-            <label class="field-label">Đồng bộ ảnh (Link thư mục lưu ảnh đồng hồ &amp; bill gốc)</label>
-            <div class="input-eye-wrap">
-              <input type="password" id="setDriveFolderUrl" placeholder="Dán link thư mục Google Drive" />
-              <button type="button" class="eye-toggle" onclick="toggleInputEye('setDriveFolderUrl')" title="Ẩn / Hiện">&#128065;</button>
+            <div class="full mt-2">
+              <label class="field-label">Đồng bộ ảnh (Link thư mục lưu ảnh đồng hồ &amp; bill gốc)</label>
+              <div class="input-eye-wrap">
+                <input type="password" id="setDriveFolderUrl" placeholder="Dán link thư mục Google Drive" />
+                <button type="button" class="eye-toggle" onclick="toggleInputEye('setDriveFolderUrl')" title="Ẩn / Hiện">&#128065;</button>
+              </div>
+              <div class="muted mt-2">Tự tạo thư mục con theo từng Phòng → Tháng/Năm và lưu ảnh chất lượng gốc (PNG/JPG).</div>
             </div>
-            <div class="muted mt-2">Tự tạo thư mục con theo từng Phòng → Tháng/Năm và lưu ảnh chất lượng gốc (PNG/JPG).</div>
           </div>
         </div>
       </div>
@@ -1346,8 +1452,9 @@
     <div class="login-card">
       <div style="text-align:center; margin-bottom:16px;">
         <img src="./icon-192.png" alt="Logo" style="width:68px; height:68px; border-radius:18px; box-shadow:0 8px 24px rgba(220,38,38,0.32); object-fit:cover;" />
-        <h2 id="loginAppTitle" style="margin:10px 0 4px; font-size:20px; font-weight:800;">Nhà Cho Thuê</h2>
-        <div class="muted">Chọn phòng, nhập tài khoản &amp; mật khẩu (duy trì 24 giờ)</div>
+        <h2 id="loginAppTitle" style="margin:10px 0 2px; font-size:20px; font-weight:800;">Nhà Số 2</h2>
+        <div id="loginAppAddress" style="font-size:13.5px; font-weight:700; color:var(--emerald); margin-bottom:4px;">31/11 Phan Đình Giót</div>
+        <div class="muted">Chọn phòng &amp; nhập mật khẩu (duy trì 24 giờ)</div>
       </div>
 
       <div id="loginErrorBox" class="login-error-box hidden"></div>
@@ -1423,7 +1530,8 @@
   <!-- ==================== LIGHTBOX XEM ẢNH GỐC ==================== -->
   <div id="photoLightbox" class="lightbox" onclick="if(event.target===this) closeLightbox()">
     <img id="lightboxImg" src="" alt="Ảnh đính kèm" />
-    <div class="lightbox-bar">
+    <div class="lightbox-bar" style="flex-wrap:wrap; justify-content:center;">
+      <button id="lightboxReplaceBillBtn" type="button" class="btn btn-emerald btn-sm hidden" onclick="replaceBillFromLightbox()">Đính kèm lại ảnh thay thế</button>
       <a id="lightboxOpenRaw" href="#" target="_blank" rel="noopener" class="btn btn-glass btn-sm">Mở ảnh gốc</a>
       <button class="btn btn-danger btn-sm" onclick="closeLightbox()">Đóng</button>
     </div>
@@ -1439,7 +1547,8 @@
     /* ============================================================
        NHÀ CHO THUÊ V3 — CORE STATE & STORAGE
        ============================================================ */
-    const APP_VERSION = "8.0.0";
+    const APP_VERSION = "9.0.0";
+    const DEVICE_SYNCED_PREFIX = "nha_cho_thue_dev_synced_";
     const VERSION_KEY = "nha_cho_thue_app_version";
     const STORAGE_KEY = "nha_cho_thue_v3_state";
     const LEGACY_V2_KEY = "nha_cho_thue_v2_state";
@@ -1451,6 +1560,13 @@
     const MAX_LOGIN_ATTEMPTS = 5;
     const LOCKOUT_MS = 5 * 60 * 1000; // Khóa 5 phút sau 5 lần sai
     const AUTO_SYNC_INTERVAL_MS = 6000; // Tự động đồng bộ 2 chiều mỗi 6 giây
+    const DEFAULT_HOUSE_RULES = [
+      "1. Giữ gìn vệ sinh chung hành lang, cầu thang, khu vực để xe; đổ rác đúng nơi quy định.",
+      "2. Khóa cửa cổng cẩn thận khi ra vào; không đưa người lạ qua đêm khi chưa báo chủ nhà.",
+      "3. Giữ yên tĩnh sau 22h00, không gây ồn ào ảnh hưởng các phòng xung quanh.",
+      "4. Phòng cháy chữa cháy: tắt thiết bị điện, bếp khi ra khỏi phòng; không sạc xe điện qua đêm không giám sát.",
+      "5. Thanh toán tiền phòng đúng hạn hàng tháng và đính kèm ảnh chuyển khoản trên hệ thống."
+    ].join("\n");
 
     function getDefaultPeriod() {
       const d = new Date();
@@ -1480,7 +1596,9 @@
 
     function makeDefaultState() {
       return {
-        appTitle: "Nhà Cho Thuê",
+        appTitle: "Nhà Số 2",
+        appAddress: "31/11 Phan Đình Giót",
+        houseRules: DEFAULT_HOUSE_RULES,
         dueDay: 5,
         dueNextMonth: false,
         masterMeters: [],
@@ -1532,7 +1650,9 @@
         return {
           ...def,
           ...parsed,
-          appTitle: (parsed.appTitle && String(parsed.appTitle).trim()) || "Nhà Cho Thuê",
+          appTitle: (parsed.appTitle && String(parsed.appTitle).trim()) || "Nhà Số 2",
+          appAddress: typeof parsed.appAddress === "string" ? parsed.appAddress : "31/11 Phan Đình Giót",
+          houseRules: typeof parsed.houseRules === "string" ? parsed.houseRules : DEFAULT_HOUSE_RULES,
           dueDay: Number(parsed.dueDay) || 5,
           dueNextMonth: Boolean(parsed.dueNextMonth),
           masterMeters: Array.isArray(parsed.masterMeters) ? parsed.masterMeters.map((mm) => ({ ...mm, period: normalizePeriodStr(mm.period) })) : [],
@@ -1639,6 +1759,7 @@
     let currentTab = "billing";
     let activeMeterPhotoRoomId = null;
     let activeBillPhotoBillId = null;
+    let lightboxBillId = null;
     let activeReceiptBillId = null;
     let editingTenantRoomId = null;
     let editingRoomNameId = null;
@@ -1736,23 +1857,40 @@
       el.type = el.type === "password" ? "text" : "password";
     }
 
-    function openLightbox(url) {
+    function openLightbox(url, billId = null, allowReplace = false) {
       if (!url) return;
+      lightboxBillId = billId || null;
       document.getElementById("lightboxImg").src = url;
       document.getElementById("lightboxOpenRaw").href = url;
+      const repBtn = document.getElementById("lightboxReplaceBillBtn");
+      if (repBtn) repBtn.classList.toggle("hidden", !(billId && allowReplace));
       document.getElementById("photoLightbox").classList.add("open");
     }
     function closeLightbox() {
+      lightboxBillId = null;
       document.getElementById("photoLightbox").classList.remove("open");
+    }
+    function replaceBillFromLightbox() {
+      const targetId = lightboxBillId;
+      closeLightbox();
+      if (targetId) triggerBillPhotoUpload(targetId);
     }
 
     function applyAppTitleUI() {
-      const title = (state.appTitle && state.appTitle.trim()) || "Nhà Cho Thuê";
-      document.title = title;
+      const title = (state.appTitle && state.appTitle.trim()) || "Nhà Số 2";
+      const addr = typeof state.appAddress === "string" ? state.appAddress.trim() : "31/11 Phan Đình Giót";
+      document.title = addr ? (title + " — " + addr) : title;
       const h = document.getElementById("headerAppTitle");
       if (h) h.textContent = title;
+      const ha = document.getElementById("headerAppAddress");
+      if (ha) ha.textContent = addr;
       const l = document.getElementById("loginAppTitle");
       if (l) l.textContent = title;
+      const la = document.getElementById("loginAppAddress");
+      if (la) {
+        la.textContent = addr;
+        la.classList.toggle("hidden", !addr);
+      }
     }
 
     /* ============================================================
@@ -1892,6 +2030,8 @@
     function getStateFingerprint(s) {
       return JSON.stringify({
         appTitle: s.appTitle,
+        appAddress: s.appAddress,
+        houseRules: s.houseRules,
         dueDay: s.dueDay,
         dueNextMonth: s.dueNextMonth,
         masterMeters: isAdmin() ? s.masterMeters : null,
@@ -1936,6 +2076,12 @@
 
         if (typeof res.appTitle === "string" && res.appTitle.trim()) {
           state.appTitle = res.appTitle.trim();
+        }
+        if (typeof res.appAddress === "string") {
+          state.appAddress = res.appAddress.trim();
+        }
+        if (typeof res.houseRules === "string") {
+          state.houseRules = res.houseRules;
         }
         if (res.dueDay !== undefined && Number(res.dueDay) >= 1) {
           state.dueDay = Math.min(28, Math.max(1, Number(res.dueDay)));
@@ -1982,6 +2128,9 @@
         saveState(false);
         hasInitialPulled = true;
         localStorage.setItem(PULLED_KEY, "1");
+        if (session && session.id) {
+          localStorage.setItem(DEVICE_SYNCED_PREFIX + session.id, "1");
+        }
         updateSyncBoxUI("synced");
 
         const afterFp = getStateFingerprint(state);
@@ -2036,6 +2185,8 @@
           oldAuth: oldAuth || undefined,
           data: {
             appTitle: state.appTitle,
+            appAddress: state.appAddress,
+            houseRules: state.houseRules,
             dueDay: state.dueDay,
             dueNextMonth: state.dueNextMonth,
             masterMeters: state.masterMeters,
@@ -2327,8 +2478,11 @@
         if (res && res.ok) {
           if (typeof res.appTitle === "string" && res.appTitle.trim()) {
             state.appTitle = res.appTitle.trim();
-            applyAppTitleUI();
           }
+          if (typeof res.appAddress === "string") {
+            state.appAddress = res.appAddress.trim();
+          }
+          applyAppTitleUI();
           if (Array.isArray(res.rooms)) {
             serverLoginRooms = res.rooms;
             populateLoginRoomDropdown();
@@ -2371,6 +2525,11 @@
       ) || null;
     }
 
+    function isKnownSyncedDeviceForUser(userId) {
+      if (!userId) return false;
+      return localStorage.getItem(DEVICE_SYNCED_PREFIX + userId) === "1";
+    }
+
     function completeLoginSuccess(matched) {
       if (autoLoginDebounce) {
         clearTimeout(autoLoginDebounce);
@@ -2379,12 +2538,7 @@
       setLoginFailInfo({ count: 0, lockUntil: 0 });
       showLoginError("");
 
-      const prevSession = loadSession();
-      if (!prevSession || prevSession.id !== matched.id || !hasInitialPulled) {
-        hasInitialPulled = false;
-        localStorage.removeItem(PULLED_KEY);
-      }
-
+      const knownDevice = isKnownSyncedDeviceForUser(matched.id);
       const now = Date.now();
       saveSession({
         id: matched.id,
@@ -2404,14 +2558,22 @@
         currentTab = "billing";
       }
 
-      updateSyncBoxUI(hasInitialPulled ? "synced" : "needs-pull");
-      renderAll();
-
-      if (!hasInitialPulled) {
-        toast("Đăng nhập thành công! Bấm ô Đồng bộ nhấp nháy để tải dữ liệu từ máy chủ xuống.", "ok");
+      if (knownDevice) {
+        // Thiết bị đã từng đăng nhập -> Tự động đồng bộ dữ liệu xuống ngay rồi bật đồng bộ 2 chiều 6 giây/lần
+        hasInitialPulled = true;
+        localStorage.setItem(PULLED_KEY, "1");
+        updateSyncBoxUI("pulling");
+        renderAll();
+        pullFromServer(true, true).then(() => {
+          startAutoSync();
+        });
       } else {
-        startAutoSync();
-        toast("Chào mừng " + (matched.displayName || matched.username) + "!", "ok");
+        // Thiết bị mới đăng nhập lần đầu -> khóa đẩy lên, nhấp nháy để bấm đồng bộ xuống trước
+        hasInitialPulled = false;
+        localStorage.removeItem(PULLED_KEY);
+        updateSyncBoxUI("needs-pull");
+        renderAll();
+        toast("Thiết bị mới: Vui lòng bấm ô Đồng bộ để tải dữ liệu từ máy chủ xuống.", "ok");
       }
     }
 
@@ -2646,7 +2808,7 @@
        TAB NAVIGATION, SWIPE GESTURES & AUTO-HIDE BOTTOM DOCK
        ============================================================ */
     function getVisibleTabs() {
-      return isAdmin() ? ["billing", "electric", "config"] : ["billing", "electric"];
+      return isAdmin() ? ["billing", "electric", "rules", "config"] : ["billing", "electric", "rules"];
     }
 
     function switchTab(tab) {
@@ -3702,13 +3864,12 @@
         b.status = "paid";
         b.paidDate = todayStr();
         b.hasBillPhoto = true;
+        b.billPhotoUrl = uploadedUrl;
         if (isAdmin()) {
-          b.billPhotoUrl = uploadedUrl;
           saveState(true);
           renderBillingTab();
           await pushToServer(true);
         } else {
-          b.billPhotoUrl = "";
           if (!hasInitialPulled) {
             state.pendingTenantSubmissions.push({ billId: b.id, billPhotoUrl: uploadedUrl, paidDate: b.paidDate });
             saveState(false);
@@ -3968,17 +4129,14 @@
       const roomName = rm ? rm.name : b.roomId;
       const ov = getBillOverdueInfo(b);
       const remain = Math.max(0, (Number(b.total) || 0) - (Number(b.paidAmount) || 0));
-      const greeting = b.tenantName ? `Chào ${b.tenantName} (${roomName})` : `Chào bạn (${roomName})`;
+      const greetingName = (b.tenantName && b.tenantName.trim()) ? b.tenantName.trim() : roomName;
       const lines = [
-        `${greeting},`,
-        `Mình nhắn nhắc nhẹ tiền phòng tháng ${b.period} hiện đã quá hạn ${ov.days} ngày (hạn thu ngày ${ov.dueDateStr}).`,
-        `Số tiền cần thanh toán: ${fmtMoney(remain)}.`
+        `Chào ${greetingName}`,
+        `Tiền phòng tháng ${b.period} hiện đã quá hạn ${ov.days} ngày (hạn thu ngày ${ov.dueDateStr}).`,
+        `Số tiền cần thanh toán: ${fmtMoney(remain)}.`,
+        `Truy cập web để thanh toán và đính kèm ảnh chuyển khoản.`,
+        `Cảm ơn bạn nhiều!`
       ];
-      if (state.payment.accountNo) {
-        lines.push(`Thông tin chuyển khoản: ${state.payment.bankName || ""} - STK: ${state.payment.accountNo} (${state.payment.accountName || ""})`);
-        lines.push(`Nội dung CK: ${roomName} tien phong T${b.period}`);
-      }
-      lines.push(`Bạn thu xếp chuyển khoản sớm và đính kèm ảnh chuyển khoản giúp mình nhé. Cảm ơn bạn nhiều!`);
       const txt = lines.join("\n");
       try {
         await navigator.clipboard.writeText(txt);
@@ -3992,54 +4150,28 @@
     }
 
     async function copyZaloGroupAnnouncement() {
-      const appTitle = (state.appTitle && state.appTitle.trim()) || "Nhà Cho Thuê";
-      const appUrl = window.location.origin + window.location.pathname;
-      const parts = String(currentPeriod || "").split("/").map(Number);
-      let dueStr = "";
-      if (parts.length === 2 && parts[0] && parts[1]) {
-        let dm = parts[0];
-        let dy = parts[1];
-        if (state.dueNextMonth) {
-          dm += 1;
-          if (dm > 12) { dm = 1; dy += 1; }
-        }
-        const dd = Math.min(28, Math.max(1, Number(state.dueDay) || 5));
-        dueStr = String(dd).padStart(2, "0") + "/" + String(dm).padStart(2, "0") + "/" + dy;
-      }
-
-      const periodBills = state.bills
-        .filter((b) => b.period === currentPeriod && b.status !== "vacant")
-        .sort((a, b) => a.roomId.localeCompare(b.roomId));
+      const titleLine = (state.appTitle && state.appTitle.trim()) || "Nhà Số 2";
+      const addrLine = (state.appAddress && state.appAddress.trim()) || "31/11 Phan Đình Giót";
+      const fullHeader = (addrLine ? (titleLine + ", " + addrLine) : titleLine).toUpperCase();
+      const appUrl = (window.location.hostname && window.location.hostname.includes("pages.dev"))
+        ? (window.location.origin + "/")
+        : "https://nhachothue.pages.dev/";
 
       const lines = [
-        `📢 THÔNG BÁO TIỀN PHÒNG THÁNG ${currentPeriod} — ${appTitle.toUpperCase()}`,
-        `Chào cả nhà, mình đã chốt xong chỉ số điện và tiền phòng tháng ${currentPeriod}.`
+        `📢 THÔNG BÁO TIỀN PHÒNG THÁNG ${currentPeriod} — ${fullHeader}`,
+        `Chào cả nhà, Đã chốt xong tiền phòng tháng ${currentPeriod}`,
+        `👉 Mời các phòng bấm vào link bên dưới, chọn tên phòng và nhập mật khẩu để xem chi tiết, quét mã QR thanh toán và đính kèm ảnh chuyển khoản nhé: ${appUrl}`,
+        `Cảm ơn cả nhà nhiều!`
       ];
-      if (dueStr) {
-        lines.push(`⏰ Hạn thanh toán: trước ngày ${dueStr}.`);
-      }
-      if (periodBills.length > 0) {
-        lines.push(`📋 Tổng hợp nhanh (${periodBills.length} phòng):`);
-        periodBills.forEach((b) => {
-          const rm = state.rooms.find((r) => r.id === b.roomId);
-          const rName = rm ? rm.name : b.roomId;
-          const stTxt = b.status === "paid" ? " (Đã thanh toán)" : "";
-          lines.push(`• ${rName}: ${fmtMoney(b.total)}${stTxt}`);
-        });
-      }
-      lines.push(`👉 Mời các phòng bấm vào link bên dưới, chọn tên phòng và nhập mật khẩu để xem ảnh đồng hồ điện, quét mã QR thanh toán và đính kèm ảnh chuyển khoản nhé:`);
-      lines.push(appUrl);
-      lines.push(`Cảm ơn cả nhà nhiều!`);
-
       const txt = lines.join("\n");
       try {
         await navigator.clipboard.writeText(txt);
-        toast("Đã copy thông báo tổng! Bạn chỉ cần dán vào nhóm Zalo nhà trọ.", "ok");
+        toast("Đã copy, bạn có thể gửi vào nhóm zalo", "ok");
       } catch (e) {
         const ta = document.createElement("textarea");
         ta.value = txt; document.body.appendChild(ta); ta.select();
         document.execCommand("copy"); ta.remove();
-        toast("Đã copy thông báo tổng! Bạn chỉ cần dán vào nhóm Zalo nhà trọ.", "ok");
+        toast("Đã copy, bạn có thể gửi vào nhóm zalo", "ok");
       }
     }
 
@@ -4093,9 +4225,12 @@
             const ov = getBillOverdueInfo(b);
             const clipSvg = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="m21.44 11.05-9.19 9.19a6 6 0 0 1-8.49-8.49l8.57-8.57A4 4 0 1 1 18 8.84l-8.59 8.57a2 2 0 0 1-2.83-2.83l8.49-8.48"></path></svg>`;
 
-            const adminBillViewBtn = isAdmin() && b.billPhotoUrl
-              ? `<button class="btn btn-indigo btn-sm" onclick="openLightbox('${escHtml(b.billPhotoUrl)}')">Xem ảnh bill</button>`
-              : "";
+            const hasBillImg = Boolean(b.billPhotoUrl);
+            const canReplaceBill = isAdmin() || (b.period === currentPeriod);
+            const eyeSvg = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>`;
+            const billActionBtnHtml = hasBillImg
+              ? `<button type="button" class="bill-act-btn bill-act-view" onclick="openBillPhotoViewer('${b.id}', ${canReplaceBill ? "true" : "false"})">${eyeSvg}<span>Xem Bill C.k</span></button>`
+              : `<button type="button" class="bill-act-btn bill-act-bill" onclick="triggerBillPhotoUpload('${b.id}')">${clipSvg}<span>Bill chuyển khoản</span></button>`;
 
             const adminOverdueBtn = isAdmin() && ov.isOverdue
               ? `<button class="btn btn-danger btn-sm" onclick="copyGentleReminderText('${b.id}')">Copy tin nhắn nhắc nhẹ</button>`
@@ -4161,15 +4296,14 @@
                   <div class="bill-actions-row3">
                     <button type="button" class="bill-act-btn bill-act-qr" onclick="openReceiptModal('${b.id}')">Phiếu thu (QR)</button>
                     <button type="button" class="bill-act-btn bill-act-copy" onclick="copyReceiptText('${b.id}')">Copy phiếu thu</button>
-                    <button type="button" class="bill-act-btn bill-act-bill" onclick="triggerBillPhotoUpload('${b.id}')">${clipSvg}<span>Bill chuyển khoản</span></button>
+                    ${billActionBtnHtml}
                   </div>
                   ${!isAdmin() ? `<div class="bill-attach-note">Vui lòng đính kèm ảnh chuyển khoản</div>` : ""}
                 ` : ""}
 
-                ${(adminBillViewBtn || adminOverdueBtn) ? `
+                ${adminOverdueBtn ? `
                   <div class="bill-actions" style="margin-top:8px;">
                     ${adminOverdueBtn}
-                    ${adminBillViewBtn}
                   </div>
                 ` : ""}
               </div>
@@ -4229,7 +4363,7 @@
             <td>
               <div class="flex-row" style="gap:5px; flex-wrap:nowrap;">
                 <button class="btn btn-glass btn-sm" onclick="openReceiptModal('${b.id}')">Phiếu</button>
-                ${isAdmin() && b.billPhotoUrl ? `<button class="btn btn-indigo btn-sm" onclick="openLightbox('${escHtml(b.billPhotoUrl)}')">Bill</button>` : ""}
+                ${b.billPhotoUrl ? `<button class="btn btn-indigo btn-sm" onclick="openBillPhotoViewer('${b.id}', ${isAdmin() ? "true" : "false"})">Xem Bill</button>` : ""}
                 ${isAdmin() ? `<button type="button" class="trash-btn" onclick="deleteBillRecord('${escHtml(b.id)}')" title="Xóa hóa đơn này"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"></path><path d="M10 11v6"></path><path d="M14 11v6"></path><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"></path></svg></button>` : ""}
               </div>
             </td>
@@ -4244,6 +4378,73 @@
        - Import & Export JSON
        - Fixed Admin password update sync via oldAuth
        ============================================================ */
+    function openBillPhotoViewer(billId, allowReplace = false) {
+      const b = state.bills.find((x) => x.id === billId);
+      if (!b || !b.billPhotoUrl) {
+        triggerBillPhotoUpload(billId);
+        return;
+      }
+      openLightbox(b.billPhotoUrl, billId, allowReplace);
+    }
+
+    function renderRulesTab() {
+      const toolbar = document.getElementById("adminRulesToolbar");
+      const edWrap = document.getElementById("adminRulesEditorWrap");
+      const viewWrap = document.getElementById("tenantRulesViewerWrap");
+      const input = document.getElementById("houseRulesInput");
+      const viewer = document.getElementById("tenantRulesContent");
+      const rulesText = (typeof state.houseRules === "string" && state.houseRules.trim())
+        ? state.houseRules
+        : DEFAULT_HOUSE_RULES;
+
+      if (isAdmin()) {
+        if (toolbar) toolbar.classList.remove("hidden");
+        if (edWrap) edWrap.classList.remove("hidden");
+        if (viewWrap) viewWrap.classList.add("hidden");
+        if (input && document.activeElement !== input) input.value = rulesText;
+      } else {
+        if (toolbar) toolbar.classList.add("hidden");
+        if (edWrap) edWrap.classList.add("hidden");
+        if (viewWrap) viewWrap.classList.remove("hidden");
+        if (viewer) viewer.textContent = rulesText;
+      }
+    }
+
+    function onHouseRulesChange(val) {
+      if (!isAdmin()) return;
+      state.houseRules = val;
+      saveState(true);
+      scheduleQuickPush(900);
+    }
+
+    function insertDefaultHouseRules() {
+      if (!isAdmin()) return openPinModal();
+      const input = document.getElementById("houseRulesInput");
+      if (input) input.value = DEFAULT_HOUSE_RULES;
+      state.houseRules = DEFAULT_HOUSE_RULES;
+      saveState(true);
+      toast("Đã chèn mẫu nội quy cơ bản!", "ok");
+      scheduleQuickPush(600);
+    }
+
+    async function saveHouseRulesManual() {
+      if (!isAdmin()) return openPinModal();
+      const input = document.getElementById("houseRulesInput");
+      if (input) state.houseRules = input.value;
+      saveState(true);
+      toast("Đã lưu nội quy nhà cho thuê!", "ok");
+      if (hasInitialPulled) await pushToServer(false);
+    }
+
+    function toggleSettingsSection(secId, forceOpen) {
+      const body = document.getElementById(secId);
+      const sw = document.getElementById("sw_" + secId);
+      if (!body) return;
+      const shouldOpen = typeof forceOpen === "boolean" ? forceOpen : body.classList.contains("hidden");
+      body.classList.toggle("hidden", !shouldOpen);
+      if (sw) sw.checked = shouldOpen;
+    }
+
     function openSettingsModal() {
       if (!isAdmin()) {
         toast("Chỉ Quản trị viên mới được phép vào Cài đặt quản trị viên!", "warn");
@@ -4251,7 +4452,10 @@
         return;
       }
 
-      document.getElementById("setAppTitle").value = state.appTitle || "Nhà Cho Thuê";
+      document.getElementById("setAppTitle").value = state.appTitle || "Nhà Số 2";
+      document.getElementById("setAppAddress").value = typeof state.appAddress === "string" ? state.appAddress : "31/11 Phan Đình Giót";
+      // Mặc định 4 mục cài đặt đều thu gọn khi mở
+      ["secAccounts", "secAdminAuth", "secPayment", "secSync"].forEach((id) => toggleSettingsSection(id, false));
       document.getElementById("setBankBin").value = state.payment.bankBin || "970422";
       document.getElementById("setAccNo").value = state.payment.accountNo || "";
       document.getElementById("setAccName").value = state.payment.accountName || "";
@@ -4644,8 +4848,10 @@
         }
       }
 
-      const newTitle = document.getElementById("setAppTitle").value.trim() || "Nhà Cho Thuê";
+      const newTitle = document.getElementById("setAppTitle").value.trim() || "Nhà Số 2";
+      const newAddr = document.getElementById("setAppAddress").value.trim();
       state.appTitle = newTitle;
+      state.appAddress = newAddr;
 
       const bankSel = document.getElementById("setBankBin");
       state.payment.bankBin = bankSel.value;
@@ -4809,55 +5015,71 @@
 
       renderBillingTab();
       renderElectricTab();
+      renderRulesTab();
       renderConfigTab();
     }
 
-    // Auto Cache-Clearing on Version Upgrade & Service Worker Auto-Update
+    // Auto Cache-Clearing & Auto-Logout on New Version via version.json
+    async function forceCleanUpdateToVersion(targetVersion) {
+      try {
+        if ("caches" in window) {
+          const keys = await caches.keys();
+          await Promise.all(keys.map((k) => caches.delete(k)));
+        }
+        if ("serviceWorker" in navigator) {
+          const regs = await navigator.serviceWorker.getRegistrations();
+          await Promise.all(regs.map((r) => r.unregister()));
+        }
+      } catch (e) {}
+      // Tự động đăng xuất phiên cũ để người dùng đăng nhập lại giao diện mới (giữ nguyên device_synced_<id>)
+      localStorage.removeItem(SESSION_KEY);
+      localStorage.setItem(VERSION_KEY, targetVersion);
+      sessionStorage.setItem("reloaded_ver", targetVersion);
+      const baseUrl = window.location.origin + window.location.pathname;
+      window.location.replace(baseUrl + "?v=" + encodeURIComponent(targetVersion));
+    }
+
+    async function checkRemoteVersionJson() {
+      if (!window.location.protocol.startsWith("http")) return;
+      try {
+        const resp = await fetch("./version.json?t=" + Date.now(), { cache: "no-store" });
+        if (!resp.ok) return;
+        const info = await resp.json();
+        const remoteVer = info && info.version ? String(info.version).trim() : "";
+        if (remoteVer && remoteVer !== APP_VERSION && sessionStorage.getItem("reloaded_ver") !== remoteVer) {
+          await forceCleanUpdateToVersion(remoteVer);
+        }
+      } catch (e) {}
+    }
+
     async function ensureFreshAppVersion() {
       try {
         const storedVer = localStorage.getItem(VERSION_KEY);
         if (storedVer && storedVer !== APP_VERSION) {
+          // Thiết bị vừa tải bản code mới hơn -> xóa cache cũ & tự đăng xuất phiên cũ để nạp sạch giao diện mới
           if ("caches" in window) {
             const keys = await caches.keys();
             await Promise.all(keys.map((k) => caches.delete(k)));
           }
+          localStorage.removeItem(SESSION_KEY);
+          session = null;
           localStorage.setItem(VERSION_KEY, APP_VERSION);
         } else if (!storedVer) {
           localStorage.setItem(VERSION_KEY, APP_VERSION);
         }
       } catch (e) {}
 
+      await checkRemoteVersionJson();
+
+      document.addEventListener("visibilitychange", () => {
+        if (!document.hidden) checkRemoteVersionJson();
+      });
+
       if ("serviceWorker" in navigator) {
-        let refreshing = false;
-        navigator.serviceWorker.addEventListener("controllerchange", () => {
-          if (refreshing) return;
-          if (sessionStorage.getItem("reloaded_ver") === APP_VERSION) return;
-          refreshing = true;
-          sessionStorage.setItem("reloaded_ver", APP_VERSION);
-          window.location.reload();
-        });
-        navigator.serviceWorker.addEventListener("message", (evt) => {
-          if (evt.data && evt.data.type === "APP_UPDATED" && evt.data.version && evt.data.version !== localStorage.getItem(VERSION_KEY)) {
-            localStorage.setItem(VERSION_KEY, evt.data.version);
-            if (sessionStorage.getItem("reloaded_ver") !== evt.data.version) {
-              sessionStorage.setItem("reloaded_ver", evt.data.version);
-              window.location.reload();
-            }
-          }
-        });
         window.addEventListener("load", () => {
           navigator.serviceWorker.register("./sw.js?v=" + APP_VERSION).then((reg) => {
             reg.update().catch(() => {});
             if (reg.waiting) reg.waiting.postMessage({ type: "SKIP_WAITING" });
-            reg.addEventListener("updatefound", () => {
-              const nw = reg.installing;
-              if (!nw) return;
-              nw.addEventListener("statechange", () => {
-                if (nw.state === "installed" && navigator.serviceWorker.controller) {
-                  nw.postMessage({ type: "SKIP_WAITING" });
-                }
-              });
-            });
           }).catch(() => {});
         });
       }
