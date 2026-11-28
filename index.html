@@ -1136,8 +1136,17 @@
       color: #ffffff; border-color: rgba(255,255,255,0.45);
       box-shadow: 0 5px 14px rgba(16, 185, 129, 0.35);
     }
+    .login-room-pill.admin-pill {
+      grid-column: 1 / -1;
+      margin-top: 3px;
+      border-style: dashed;
+      border-color: rgba(99, 102, 241, 0.45);
+      color: var(--indigo);
+    }
     .login-room-pill.admin-pill.active {
+      border-style: solid;
       background: linear-gradient(135deg, #6366f1, #4f46e5);
+      color: #ffffff;
       box-shadow: 0 5px 14px rgba(99, 102, 241, 0.35);
     }
     .radio-opt-card {
@@ -1566,49 +1575,25 @@
         </div>
       </div>
 
-      <!-- 3. Tài khoản & Mật khẩu Quản trị viên (Mặc định thu gọn, có nút gạt) -->
+      <!-- 3. Mật khẩu Quản trị viên (Mặc định thu gọn, có nút gạt) -->
       <div class="settings-section">
         <div class="settings-acc-head" onclick="toggleSettingsSection('secAdminAuth')">
-          <h4>Tài khoản &amp; Mật khẩu Quản trị viên</h4>
+          <h4>Mật khẩu Quản trị viên</h4>
           <label class="status-switch" onclick="event.stopPropagation()">
             <input type="checkbox" id="sw_secAdminAuth" onchange="toggleSettingsSection('secAdminAuth', this.checked)" />
             <span class="switch-track"><span class="switch-knob"></span></span>
           </label>
         </div>
         <div id="secAdminAuth" class="settings-acc-body hidden">
-          <div class="cfg-fields" style="margin-top:0;">
-            <div>
-              <label class="field-label">Tài khoản đăng nhập QTV</label>
-              <input type="text" id="setAdminUser" />
-            </div>
-            <div>
-              <label class="field-label">Mã QTV (mở khóa sửa)</label>
-              <div class="input-eye-wrap">
-                <input type="password" id="setAdminPin" inputmode="numeric" />
-                <button type="button" class="eye-toggle" onclick="toggleInputEye('setAdminPin')">&#128065;</button>
-              </div>
-            </div>
-          </div>
-
-          <div class="mt-3 flex-row">
-            <button type="button" class="btn btn-indigo btn-sm" id="btnSaveAdminUsername" onclick="submitChangeAdminUsername()">
-              Lưu tên đăng nhập QTV
-            </button>
-            <button type="button" class="btn btn-amber btn-sm" id="btnToggleChangeAdminPass" onclick="toggleChangeAdminPassBox()">
-              Thay đổi mật khẩu quản trị viên
-            </button>
-          </div>
-          <div class="muted mt-2">Hỗ trợ khôi phục qua Gmail bảo mật khi quên mật khẩu</div>
-
-          <div id="changeAdminPassBox" class="change-pass-panel hidden">
+          <div id="changeAdminPassBox" class="change-pass-panel" style="margin-top:0;">
             <div style="font-weight:800; font-size:13px; color:var(--emerald); margin-bottom:8px;">
-              Đặt mật khẩu Quản trị viên mới (tự đồng bộ thay thế mật khẩu cũ trên máy chủ)
+              Đổi mật khẩu Quản trị viên (dùng chung cho đăng nhập QTV &amp; mở khóa Mã QTV)
             </div>
             <div class="cfg-fields" style="margin-top:0;">
               <div>
                 <label class="field-label">Mật khẩu quản trị viên mới</label>
                 <div class="input-eye-wrap">
-                  <input type="password" id="newAdminPassInput" inputmode="numeric" placeholder="Nhập mật khẩu mới (từ 4 ký tự)" />
+                  <input type="password" id="newAdminPassInput" inputmode="numeric" placeholder="Nhập mật khẩu mới (từ 4 số)" />
                   <button type="button" class="eye-toggle" onclick="toggleInputEye('newAdminPassInput')">&#128065;</button>
                 </div>
               </div>
@@ -1622,9 +1607,9 @@
             </div>
             <div class="mt-2 flex-row">
               <button type="button" class="btn btn-emerald btn-sm" id="btnSaveNewAdminPass" onclick="submitChangeAdminPassword()">Lưu &amp; Đồng bộ mật khẩu mới</button>
-              <button type="button" class="btn btn-glass btn-sm" onclick="toggleChangeAdminPassBox(false)">Hủy</button>
             </div>
           </div>
+          <div class="muted mt-2">Hỗ trợ khôi phục qua Gmail bảo mật khi nhập sai quá 5 lần</div>
         </div>
       </div>
 
@@ -1795,10 +1780,7 @@
           <input type="hidden" id="loginRoomSelect" value="ADMIN" />
           <div id="loginRoomGrid" class="login-room-grid"></div>
         </div>
-        <div id="loginUserWrap" style="margin-bottom:10px;">
-          <label class="field-label" style="text-align:center;">Tài khoản Quản trị viên</label>
-          <input type="text" id="loginUser" autocomplete="username" placeholder="Nhập tài khoản QTV" oninput="scheduleAutoLoginCheck()" />
-        </div>
+
         <div style="margin-bottom:14px;">
           <label class="field-label" id="loginPassLabel" style="text-align:center;">Mật khẩu phòng (nhập đúng tự động đăng nhập)</label>
           <div class="input-eye-wrap">
@@ -1884,7 +1866,7 @@
     /* ============================================================
        NHÀ CHO THUÊ V3 — CORE STATE & STORAGE
        ============================================================ */
-    const APP_VERSION = "14.0.0";
+    const APP_VERSION = "15.0.0";
     const DEVICE_SYNCED_PREFIX = "nha_cho_thue_dev_synced_";
     const VERSION_KEY = "nha_cho_thue_app_version";
     const STORAGE_KEY = "nha_cho_thue_v3_state";
@@ -2854,14 +2836,14 @@
       const activeId = validIds.includes(prevVal) ? prevVal : "ADMIN";
       sel.value = activeId;
 
-      const pills = [
-        `<button type="button" class="login-room-pill admin-pill ${activeId === "ADMIN" ? "active" : ""}" onclick="selectLoginRoom('ADMIN')">Quản trị viên</button>`
-      ];
+      const pills = [];
       [...roomMap.entries()]
         .sort((a, b) => a[0].localeCompare(b[0]))
         .forEach(([rId, rName]) => {
           pills.push(`<button type="button" class="login-room-pill ${activeId === rId ? "active" : ""}" onclick="selectLoginRoom('${escHtml(rId)}')">${escHtml(rName)}</button>`);
         });
+      // Đưa nút Quản trị viên xuống cuối cùng
+      pills.push(`<button type="button" class="login-room-pill admin-pill ${activeId === "ADMIN" ? "active" : ""}" onclick="selectLoginRoom('ADMIN')">Quản trị viên</button>`);
 
       if (grid) grid.innerHTML = pills.join("");
       updateLoginFormVisibility();
@@ -2870,14 +2852,10 @@
     function updateLoginFormVisibility() {
       const sel = document.getElementById("loginRoomSelect");
       const isSelectingAdmin = !sel || sel.value === "ADMIN";
-      const userWrap = document.getElementById("loginUserWrap");
-      const userInp = document.getElementById("loginUser");
       const passLbl = document.getElementById("loginPassLabel");
-      if (userWrap) userWrap.classList.toggle("hidden", !isSelectingAdmin);
-      if (userInp) userInp.required = isSelectingAdmin;
       if (passLbl) {
         passLbl.textContent = isSelectingAdmin
-          ? "Mật khẩu Quản trị viên (nhập đúng tự đăng nhập)"
+          ? "Mật khẩu Quản trị viên (nhập đúng tự động đăng nhập)"
           : "Mật khẩu phòng (nhập đúng tự động đăng nhập)";
       }
     }
@@ -2889,11 +2867,7 @@
       showLoginError("");
       document.getElementById("loginPass").value = "";
       syncAdminRecoveryVisibility();
-      if (roomId === "ADMIN") {
-        document.getElementById("loginUser").focus();
-      } else {
-        document.getElementById("loginPass").focus();
-      }
+      document.getElementById("loginPass").focus();
     }
 
     async function fetchPublicLoginRooms() {
@@ -2934,7 +2908,7 @@
       }
     }
 
-    function findLocalMatchingAccount(selectedRoom, username, password) {
+    function findLocalMatchingAccount(selectedRoom, password) {
       const p = String(password || "").trim();
       if (!p) return null;
       if (selectedRoom && selectedRoom !== "ADMIN") {
@@ -2942,10 +2916,8 @@
           a.status === "active" && a.role === "tenant" && a.roomId === selectedRoom && String(a.password).trim() === p
         ) || null;
       }
-      const u = String(username || "").trim().toLowerCase();
-      if (!u) return null;
       return state.accounts.find((a) =>
-        a.status === "active" && a.role === "admin" && a.username.toLowerCase() === u && String(a.password).trim() === p
+        a.status === "active" && a.role === "admin" && (String(a.password).trim() === p || (a.adminPin && String(a.adminPin).trim() === p))
       ) || null;
     }
 
@@ -3005,13 +2977,11 @@
     function scheduleAutoLoginCheck() {
       if (updateLockoutUI()) return;
       const selectedRoom = document.getElementById("loginRoomSelect").value;
-      const username = document.getElementById("loginUser").value.trim();
       const password = document.getElementById("loginPass").value.trim();
       if (!password) return;
-      if (selectedRoom === "ADMIN" && !username) return;
 
       // 1. Kiểm tra tức thì cục bộ
-      const localMatch = findLocalMatchingAccount(selectedRoom, username, password);
+      const localMatch = findLocalMatchingAccount(selectedRoom, password);
       if (localMatch) {
         completeLoginSuccess(localMatch);
         return;
@@ -3023,18 +2993,17 @@
         autoLoginDebounce = setTimeout(async () => {
           if (!document.getElementById("loginGate").classList.contains("open")) return;
           const curRoom = document.getElementById("loginRoomSelect").value;
-          const curUser = document.getElementById("loginUser").value.trim();
           const curPass = document.getElementById("loginPass").value.trim();
-          if (curPass.length < 4 || (curRoom === "ADMIN" && !curUser)) return;
+          if (curPass.length < 4) return;
           try {
-            const res = await apiCall({ action: "login", roomId: curRoom, username: curUser, password: curPass });
+            const res = await apiCall({ action: "login", roomId: curRoom, password: curPass });
             if (res && res.ok && res.user) {
               completeLoginSuccess({ ...res.user, password: curPass });
             }
           } catch (e) {
             // Không tính lần sai khi đang gõ dở tay
           }
-        }, 450);
+        }, 420);
       }
     }
 
@@ -3043,8 +3012,7 @@
       if (updateLockoutUI()) return;
 
       const selectedRoom = document.getElementById("loginRoomSelect").value;
-      const username = document.getElementById("loginUser").value.trim();
-      const password = document.getElementById("loginPass").value;
+      const password = document.getElementById("loginPass").value.trim();
       const btn = document.getElementById("btnLoginSubmit");
 
       btn.disabled = true;
@@ -3053,14 +3021,13 @@
       let matched = null;
       let serverErrorMsg = "";
       try {
-        const res = await apiCall({ action: "login", roomId: selectedRoom, username, password });
+        const res = await apiCall({ action: "login", roomId: selectedRoom, password });
         if (res && res.ok && res.user) {
           matched = { ...res.user, password };
         }
       } catch (err) {
         serverErrorMsg = err.message || "";
-        // Fallback cục bộ khi ngoại tuyến
-        const localAcc = findLocalMatchingAccount(selectedRoom, username, password);
+        const localAcc = findLocalMatchingAccount(selectedRoom, password);
         if (localAcc) matched = localAcc;
       }
 
@@ -3194,27 +3161,52 @@
       openModal("pinModal");
     }
 
-    function submitAdminPinUnlock() {
+    async function submitAdminPinUnlock() {
       const pin = document.getElementById("verifyAdminPinInput").value.trim();
-      const adminAcc = state.accounts.find((a) => a.role === "admin" && a.status === "active");
-      const validPin = (adminAcc && (adminAcc.adminPin || adminAcc.password)) || "123456";
-      if (pin && pin === validPin) {
+      if (!pin) {
+        toast("Vui lòng nhập mật khẩu Quản trị viên!", "warn");
+        return;
+      }
+
+      let matchedAdmin = null;
+      let serverErrMsg = "";
+      try {
+        const res = await apiCall({ action: "verifyAdminPin", pin: pin });
+        if (res && res.ok && res.user) {
+          matchedAdmin = res.user;
+        }
+      } catch (err) {
+        serverErrMsg = err.message || "";
+        // Fallback cục bộ khi ngoại tuyến
+        const localAdmin = state.accounts.find((a) =>
+          a.role === "admin" && a.status === "active" &&
+          (String(a.password).trim() === pin || (a.adminPin && String(a.adminPin).trim() === pin))
+        );
+        if (localAdmin) matchedAdmin = localAdmin;
+      }
+
+      if (matchedAdmin) {
         closeModal("pinModal");
         const now = Date.now();
         saveSession({
-          id: adminAcc ? adminAcc.id : "ADMIN_ROOT",
+          id: matchedAdmin.id || "ADMIN_ROOT",
           role: "admin",
           roomId: "ALL",
-          username: adminAcc ? adminAcc.username : "admin",
-          password: adminAcc ? adminAcc.password : "123456",
-          displayName: adminAcc ? adminAcc.displayName : "Quản trị viên",
+          username: matchedAdmin.username || "admin",
+          password: matchedAdmin.password || pin,
+          displayName: matchedAdmin.displayName || "Quản trị viên",
           loginAt: now,
           expiresAt: now + SESSION_DURATION_MS
         });
-        toast("Đã xác thực Mã Quản trị viên! Bạn có toàn quyền chỉnh sửa.", "ok");
+        hasInitialPulled = true;
+        localStorage.setItem(PULLED_KEY, "1");
+        localStorage.setItem(DEVICE_SYNCED_PREFIX + (matchedAdmin.id || "ADMIN_ROOT"), "1");
+        toast("Đã mở khóa quyền Quản trị viên! Đang tải đầy đủ dữ liệu...", "ok");
         renderAll();
+        await pullFromServer(true, true);
+        startAutoSync();
       } else {
-        toast("Mã Quản trị viên không đúng!", "err");
+        toast(serverErrMsg || "Mã Quản trị viên không đúng!", "err");
       }
     }
 
@@ -4979,10 +4971,10 @@
       document.getElementById("setAccName").value = state.payment.accountName || "";
       refreshCustomQrPreview();
 
-      const adminAcc = state.accounts.find((a) => a.role === "admin" && a.status === "active") || state.accounts[0];
-      document.getElementById("setAdminUser").value = adminAcc ? adminAcc.username : "admin";
-      document.getElementById("setAdminPin").value = adminAcc ? (adminAcc.adminPin || adminAcc.password) : "123456";
-      toggleChangeAdminPassBox(false);
+      const np1 = document.getElementById("newAdminPassInput");
+      const np2 = document.getElementById("confirmAdminPassInput");
+      if (np1) { np1.value = ""; np1.type = "password"; }
+      if (np2) { np2.value = ""; np2.type = "password"; }
 
       const epInput = document.getElementById("setServerEndpoint");
       epInput.type = "password";
@@ -5239,77 +5231,15 @@
       scheduleQuickPush(500);
     }
 
-    function toggleChangeAdminPassBox(forceState) {
-      const box = document.getElementById("changeAdminPassBox");
-      if (!box) return;
-      const shouldShow = typeof forceState === "boolean" ? forceState : box.classList.contains("hidden");
-      box.classList.toggle("hidden", !shouldShow);
-      const inp1 = document.getElementById("newAdminPassInput");
-      const inp2 = document.getElementById("confirmAdminPassInput");
-      if (inp1) { inp1.value = ""; inp1.type = "password"; }
-      if (inp2) { inp2.value = ""; inp2.type = "password"; }
-      if (shouldShow && inp1) {
-        setTimeout(() => inp1.focus(), 50);
-      }
-    }
-
-    async function submitChangeAdminUsername() {
-      if (!isAdmin() || !session) return;
-      const newUser = document.getElementById("setAdminUser").value.trim();
-      const newPin = document.getElementById("setAdminPin").value.trim() || session.password;
-      if (!newUser) {
-        toast("Tên đăng nhập Quản trị viên không được để trống!", "warn");
-        return;
-      }
-      const btn = document.getElementById("btnSaveAdminUsername");
-      btn.disabled = true;
-      btn.textContent = "Đang lưu...";
-      stopAutoSync();
-      await waitForSyncIdle(5000);
-
-      const oldAuth = { username: session.username, password: session.password };
-      const existingAdmin = state.accounts.find((a) => a.role === "admin" && a.status === "active");
-      const currentPass = (existingAdmin && existingAdmin.password) || session.password;
-      const currentPin = (existingAdmin && existingAdmin.adminPin) || currentPass;
-      try {
-        updateSyncBoxUI("pushing");
-        await apiCall({
-          action: "changeAdminPassword",
-          auth: oldAuth,
-          oldAuth: oldAuth,
-          currentAdminPin: currentPin,
-          newUsername: newUser,
-          newPassword: currentPass,
-          newAdminPin: newPin
-        });
-        if (existingAdmin) {
-          existingAdmin.username = newUser;
-          existingAdmin.adminPin = newPin;
-        }
-        session.username = newUser;
-        saveSession(session);
-        saveState(false);
-        updateSyncBoxUI(hasInitialPulled ? "synced" : "needs-pull");
-        toast("Đã đổi tên đăng nhập Quản trị viên thành \"" + newUser + "\" và đồng bộ lên máy chủ!", "ok");
-      } catch (err) {
-        updateSyncBoxUI(hasInitialPulled ? "synced" : "needs-pull");
-        toast("Không thể cập nhật tên đăng nhập: " + err.message, "err");
-      } finally {
-        btn.disabled = false;
-        btn.textContent = "Lưu tên đăng nhập QTV";
-        if (hasInitialPulled) startAutoSync();
-      }
-    }
-
     async function submitChangeAdminPassword() {
       if (!isAdmin() || !session) return;
       const newPass = document.getElementById("newAdminPassInput").value.trim();
       const confirmPass = document.getElementById("confirmAdminPassInput").value.trim();
-      const adminUser = document.getElementById("setAdminUser").value.trim() || session.username || "admin";
-      const adminPin = document.getElementById("setAdminPin").value.trim() || newPass;
+      const existingAdmin = state.accounts.find((a) => a.role === "admin" && a.status === "active");
+      const adminUser = (existingAdmin && existingAdmin.username) || session.username || "admin";
 
       if (newPass.length < 4) {
-        toast("Mật khẩu Quản trị viên mới phải có ít nhất 4 ký tự!", "warn");
+        toast("Mật khẩu Quản trị viên mới phải có ít nhất 4 chữ số!", "warn");
         return;
       }
       if (newPass !== confirmPass) {
@@ -5324,67 +5254,38 @@
       await waitForSyncIdle(5000);
 
       const oldAuth = { username: session.username, password: session.password };
-      const existingAdmin = state.accounts.find((a) => a.role === "admin" && a.status === "active");
       const currentPin = (existingAdmin && existingAdmin.adminPin) || session.password;
       try {
         updateSyncBoxUI("pushing");
-        let changed = false;
-        try {
-          await apiCall({
-            action: "changeAdminPassword",
-            auth: oldAuth,
-            oldAuth: oldAuth,
-            currentAdminPin: currentPin,
-            newUsername: adminUser,
-            newPassword: newPass,
-            newAdminPin: adminPin
-          });
-          changed = true;
-        } catch (primaryErr) {
-          // Tự động tương thích ngược nếu máy chủ Apps Script chưa bấm triển khai phiên bản mới
-          const msg = String(primaryErr && primaryErr.message || "");
-          if (msg.indexOf("Action") !== -1) {
-            const tempAccounts = state.accounts.map((a) => ({ ...a }));
-            let target = tempAccounts.find((a) => a.role === "admin" && a.status === "active");
-            if (!target) {
-              target = { id: "ADMIN_ROOT", role: "admin", roomId: "ALL", displayName: "Quản trị viên", status: "active", createdAt: new Date().toISOString() };
-              tempAccounts.unshift(target);
-            }
-            target.username = adminUser;
-            target.password = newPass;
-            target.adminPin = adminPin;
-            await apiCall({
-              action: "push",
-              auth: oldAuth,
-              oldAuth: oldAuth,
-              data: { accounts: tempAccounts }
-            });
-            changed = true;
-          } else {
-            throw primaryErr;
-          }
+        await apiCall({
+          action: "changeAdminPassword",
+          auth: oldAuth,
+          oldAuth: oldAuth,
+          currentAdminPin: currentPin,
+          newUsername: adminUser,
+          newPassword: newPass,
+          newAdminPin: newPass
+        });
+
+        let adminAcc = state.accounts.find((a) => a.role === "admin" && a.status === "active");
+        if (!adminAcc) {
+          adminAcc = { id: "ADMIN_ROOT", role: "admin", roomId: "ALL", status: "active", createdAt: new Date().toISOString() };
+          state.accounts.unshift(adminAcc);
         }
+        adminAcc.username = adminUser;
+        adminAcc.password = newPass;
+        adminAcc.adminPin = newPass;
+        adminAcc.displayName = "Quản trị viên";
 
-        if (changed) {
-          let adminAcc = state.accounts.find((a) => a.role === "admin" && a.status === "active");
-          if (!adminAcc) {
-            adminAcc = { id: "ADMIN_ROOT", role: "admin", roomId: "ALL", status: "active", createdAt: new Date().toISOString() };
-            state.accounts.unshift(adminAcc);
-          }
-          adminAcc.username = adminUser;
-          adminAcc.password = newPass;
-          adminAcc.adminPin = adminPin;
-          adminAcc.displayName = "Quản trị viên";
+        session.username = adminUser;
+        session.password = newPass;
+        saveSession(session);
+        saveState(false);
 
-          session.username = adminUser;
-          session.password = newPass;
-          saveSession(session);
-          saveState(false);
-
-          updateSyncBoxUI(hasInitialPulled ? "synced" : "needs-pull");
-          toggleChangeAdminPassBox(false);
-          toast("Đã thay đổi mật khẩu Quản trị viên và đồng bộ lên máy chủ thành công!", "ok");
-        }
+        document.getElementById("newAdminPassInput").value = "";
+        document.getElementById("confirmAdminPassInput").value = "";
+        updateSyncBoxUI(hasInitialPulled ? "synced" : "needs-pull");
+        toast("Đã thay đổi mật khẩu Quản trị viên và đồng bộ lên máy chủ thành công!", "ok");
       } catch (err) {
         updateSyncBoxUI(hasInitialPulled ? "synced" : "needs-pull");
         toast("Không thể đổi mật khẩu lên máy chủ: " + err.message, "err");
@@ -5399,13 +5300,11 @@
       const btn = document.getElementById("btnSaveSettings");
       const oldAuth = session ? { username: session.username, password: session.password } : null;
 
-      // Nếu người dùng đang mở khung đổi mật khẩu và đã nhập mật khẩu mới -> kiểm tra khớp trước khi lưu
-      const passBoxOpen = !document.getElementById("changeAdminPassBox").classList.contains("hidden");
       const typedNewPass = document.getElementById("newAdminPassInput").value.trim();
       const typedConfirmPass = document.getElementById("confirmAdminPassInput").value.trim();
-      if (passBoxOpen && (typedNewPass || typedConfirmPass)) {
+      if (typedNewPass || typedConfirmPass) {
         if (typedNewPass.length < 4) {
-          toast("Mật khẩu Quản trị viên mới phải có ít nhất 4 ký tự!", "warn");
+          toast("Mật khẩu Quản trị viên mới phải có ít nhất 4 chữ số!", "warn");
           return;
         }
         if (typedNewPass !== typedConfirmPass) {
@@ -5427,17 +5326,13 @@
 
       let adminAcc = state.accounts.find((a) => a.role === "admin" && a.status === "active");
       if (!adminAcc) {
-        adminAcc = { id: "ADMIN_ROOT", role: "admin", roomId: "ALL", password: (session && session.password) || "123456", status: "active", createdAt: new Date().toISOString() };
+        adminAcc = { id: "ADMIN_ROOT", role: "admin", roomId: "ALL", username: "admin", password: (session && session.password) || "123456", status: "active", createdAt: new Date().toISOString() };
         state.accounts.unshift(adminAcc);
       }
-
-      const adminUser = document.getElementById("setAdminUser").value.trim() || adminAcc.username || "admin";
-      const finalAdminPass = (passBoxOpen && typedNewPass) ? typedNewPass : (adminAcc.password || (session && session.password) || "123456");
-      const adminPin = document.getElementById("setAdminPin").value.trim() || finalAdminPass;
-
-      adminAcc.username = adminUser;
+      const adminUser = adminAcc.username || (session && session.username) || "admin";
+      const finalAdminPass = typedNewPass ? typedNewPass : (adminAcc.password || (session && session.password) || "123456");
       adminAcc.password = finalAdminPass;
-      adminAcc.adminPin = adminPin;
+      adminAcc.adminPin = finalAdminPass;
       adminAcc.displayName = "Quản trị viên";
 
       const ep = document.getElementById("setServerEndpoint").value.trim();
@@ -5455,11 +5350,10 @@
       let synced = false;
       if (hasInitialPulled) {
         synced = await pushToServer(false, oldAuth);
-        if (!synced && oldAuth && (oldAuth.username !== adminUser || oldAuth.password !== finalAdminPass)) {
+        if (!synced && oldAuth && oldAuth.password !== finalAdminPass) {
           synced = await pushToServer(false, { username: adminUser, password: finalAdminPass });
         }
-      } else if (passBoxOpen && typedNewPass && oldAuth) {
-        // Kể cả khi chưa đồng bộ tổng, vẫn cho phép đổi mật khẩu trực tiếp trên máy chủ nếu người dùng vừa gõ mật khẩu mới
+      } else if (typedNewPass && oldAuth) {
         try {
           await apiCall({
             action: "changeAdminPassword",
@@ -5467,7 +5361,7 @@
             oldAuth: oldAuth,
             newUsername: adminUser,
             newPassword: finalAdminPass,
-            newAdminPin: adminPin
+            newAdminPin: finalAdminPass
           });
           synced = true;
         } catch (e) {
@@ -5483,7 +5377,8 @@
 
       btn.disabled = false;
       btn.textContent = "Lưu cài đặt & Đồng bộ";
-      toggleChangeAdminPassBox(false);
+      document.getElementById("newAdminPassInput").value = "";
+      document.getElementById("confirmAdminPassInput").value = "";
       closeModal("settingsModal");
       renderAll();
       if (hasInitialPulled) startAutoSync();
