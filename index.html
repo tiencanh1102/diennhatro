@@ -245,7 +245,44 @@
     .bill-act-copy { background: linear-gradient(135deg, #f59e0b, #d97706); box-shadow: 0 4px 12px rgba(217, 119, 6, 0.30); }
     .bill-act-bill { background: linear-gradient(135deg, #10b981, #059669); box-shadow: 0 4px 12px rgba(5, 150, 105, 0.30); }
     .bill-attach-note {
-      margin-top: 7px; font-size: 11.5px; font-style: italic; color: var(--text-soft); text-align: center;
+      margin-top: 8px;
+      padding: 6px 10px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, #dc2626, #b91c1c);
+      color: #fde047;
+      font-size: 12px;
+      font-weight: 800;
+      font-style: italic;
+      text-align: center;
+      box-shadow: 0 4px 12px rgba(220, 38, 38, 0.30);
+    }
+    .money-nowrap {
+      white-space: nowrap;
+    }
+    /* Upload Loading Popup */
+    .upload-loading-overlay {
+      position: fixed; inset: 0; z-index: 130;
+      background: rgba(15, 23, 42, 0.58);
+      backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+      display: none; align-items: center; justify-content: center; padding: 18px;
+    }
+    .upload-loading-overlay.open { display: flex; }
+    .upload-loading-card {
+      padding: 22px 26px; border-radius: 22px;
+      background: var(--glass-bg-strong);
+      border: 1.4px solid var(--glass-border);
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35), inset 0 1px 0 var(--glass-specular);
+      display: flex; flex-direction: column; align-items: center; gap: 12px;
+      min-width: 240px; text-align: center;
+    }
+    .upload-spinner {
+      width: 36px; height: 36px; border-radius: 50%;
+      border: 3.5px solid rgba(16, 185, 129, 0.24);
+      border-top-color: #10b981;
+      animation: spinUpload 0.8s linear infinite;
+    }
+    @keyframes spinUpload {
+      to { transform: rotate(360deg); }
     }
 
     /* EVN Master Meter Comparison Box */
@@ -705,9 +742,11 @@
 
     /* House Rules Reader & Editor */
     .rules-reader {
-      white-space: pre-wrap; line-height: 1.72; font-size: 14px;
+      white-space: pre-wrap; line-height: 1.75; font-size: 14px;
       color: var(--text-main);
-      padding: 14px; border-radius: 16px;
+      text-align: justify;
+      text-justify: inter-word;
+      padding: 14px 16px; border-radius: 16px;
       background: var(--glass-bg-subtle); border: 1px solid var(--divider);
     }
     .rules-textarea {
@@ -1264,9 +1303,9 @@
     <!-- ==================== TAB 3: NỘI QUY (ADMIN SỬA / NGƯỜI THUÊ XEM) ==================== -->
     <section id="tab-rules" class="tab-panel">
       <div class="glass-card">
-        <div class="sec-head">
-          <div class="sec-title">Nội quy nhà cho thuê</div>
-          <div id="adminRulesToolbar" class="flex-row hidden">
+        <div style="text-align:center; margin-bottom:12px;">
+          <div style="font-size:17px; font-weight:800; text-transform:uppercase; letter-spacing:0.4px; color:var(--text-main);">NỘI QUY TOÀ NHÀ</div>
+          <div id="adminRulesToolbar" class="flex-row hidden" style="justify-content:center; margin-top:10px;">
             <button type="button" class="btn btn-glass btn-sm" onclick="insertDefaultHouseRules()">Chèn mẫu cơ bản</button>
             <button type="button" class="btn btn-emerald btn-sm" onclick="saveHouseRulesManual()">Lưu &amp; Đồng bộ</button>
           </div>
@@ -1697,13 +1736,21 @@
   <input type="file" id="meterPhotoInput" accept="image/png,image/jpeg" style="display:none" onchange="onMeterPhotoSelected(event)" />
   <input type="file" id="billPhotoInput" accept="image/png,image/jpeg" style="display:none" onchange="onBillPhotoSelected(event)" />
 
+  <!-- Popup Đang tải ảnh vui lòng đợi -->
+  <div id="uploadLoadingPopup" class="upload-loading-overlay">
+    <div class="upload-loading-card">
+      <div class="upload-spinner"></div>
+      <div id="uploadLoadingText" style="font-size:14px; font-weight:800; color:var(--text-main);">Đang tải ảnh vui lòng đợi</div>
+    </div>
+  </div>
+
   <div class="toast-wrap" id="toastWrap"></div>
 
   <script>
     /* ============================================================
        NHÀ CHO THUÊ V3 — CORE STATE & STORAGE
        ============================================================ */
-    const APP_VERSION = "11.0.0";
+    const APP_VERSION = "12.0.0";
     const DEVICE_SYNCED_PREFIX = "nha_cho_thue_dev_synced_";
     const VERSION_KEY = "nha_cho_thue_app_version";
     const STORAGE_KEY = "nha_cho_thue_v3_state";
@@ -2008,6 +2055,16 @@
 
     function openModal(id) { document.getElementById(id).classList.add("open"); }
     function closeModal(id) { document.getElementById(id).classList.remove("open"); }
+    function showUploadLoadingPopup(text = "Đang tải ảnh vui lòng đợi") {
+      const el = document.getElementById("uploadLoadingPopup");
+      const txt = document.getElementById("uploadLoadingText");
+      if (txt) txt.textContent = text;
+      if (el) el.classList.add("open");
+    }
+    function hideUploadLoadingPopup() {
+      const el = document.getElementById("uploadLoadingPopup");
+      if (el) el.classList.remove("open");
+    }
 
     function toggleInputEye(inputId) {
       const el = document.getElementById(inputId);
@@ -3589,7 +3646,7 @@
       const rm = state.rooms.find((r) => r.id === roomId);
       const rec = ensureMeterDraft(currentPeriod, roomId);
 
-      toast(isOldSlot ? "Đang tải ảnh đồng hồ cũ lên máy chủ..." : "Đang tải ảnh đồng hồ mới lên máy chủ...", "");
+      showUploadLoadingPopup("Đang tải ảnh vui lòng đợi");
       stopAutoSync();
       await waitForSyncIdle(5000);
       try {
@@ -3626,6 +3683,7 @@
       } catch (err) {
         toast("Lỗi đọc ảnh: " + err.message, "err");
       } finally {
+        hideUploadLoadingPopup();
         if (hasInitialPulled) startAutoSync();
       }
     }
@@ -4137,7 +4195,7 @@
       if (!b) return;
       const rm = state.rooms.find((r) => r.id === b.roomId);
 
-      toast("Đang tải ảnh bill thanh toán lên máy chủ...", "");
+      showUploadLoadingPopup("Đang tải ảnh vui lòng đợi");
       try {
         const dataUrl = await readFileAsDataUrl(file);
         let uploadedUrl = "";
@@ -4194,6 +4252,8 @@
         toast("Đã đồng bộ bill chuyển khoản! Trạng thái đã chuyển sang Đã thanh toán.", "ok");
       } catch (err) {
         toast("Lỗi tải bill: " + err.message, "err");
+      } finally {
+        hideUploadLoadingPopup();
       }
     }
 
@@ -4661,11 +4721,11 @@
               <strong>${escHtml(rm ? rm.name : b.roomId)}</strong>
               <div class="muted">${escHtml(b.tenantName || "")}</div>
             </td>
-            <td>${fmtMoney(b.rent)}</td>
-            <td>${fmtMoney(b.waterTotal)}</td>
-            <td>${fmtMoney(b.electricTotal)}</td>
-            <td>${fmtMoney((Number(b.oldDebt) || 0) + (Number(b.extra) || 0))}</td>
-            <td><strong style="color:var(--emerald)">${fmtMoney(b.total)}</strong></td>
+            <td class="money-nowrap">${fmtMoney(b.rent)}</td>
+            <td class="money-nowrap">${fmtMoney(b.waterTotal)}</td>
+            <td class="money-nowrap">${fmtMoney(b.electricTotal)}</td>
+            <td class="money-nowrap">${fmtMoney((Number(b.oldDebt) || 0) + (Number(b.extra) || 0))}</td>
+            <td class="money-nowrap"><strong style="color:var(--emerald)">${fmtMoney(b.total)}</strong></td>
             <td>${statusBadgeHtml(b.status)}</td>
             <td>
               <div class="flex-row" style="gap:5px; flex-wrap:nowrap;">
