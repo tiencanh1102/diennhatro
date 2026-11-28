@@ -763,15 +763,54 @@
     .settings-acc-body { margin-top: 12px; padding-top: 10px; border-top: 1px dashed var(--divider); }
 
     /* House Rules Reader & Editor */
-    /* Trang nghiêm: Khung 4 cạnh, nền đỏ thẫm, chữ vàng đậm nổi bật cả Sáng & Tối */
+    /* Trang nghiêm: Khung viền hoa văn 4 góc & thanh vàng-cam-đỏ như mẫu, nền đỏ thẫm, chữ vàng đậm */
     .rules-formal-card {
+      position: relative;
       background: linear-gradient(160deg, #b91c1c 0%, #991b1b 55%, #7f1d1d 100%) !important;
-      border: 3px solid #facc15 !important;
-      box-shadow: 0 14px 36px rgba(153, 27, 27, 0.35), inset 0 0 0 3px rgba(250, 204, 21, 0.35) !important;
-      border-radius: 20px !important;
-      padding: 18px 16px !important;
+      border: 2px solid rgba(250, 204, 21, 0.72) !important;
+      box-shadow: 0 16px 40px rgba(127, 29, 29, 0.42), inset 0 0 24px rgba(0, 0, 0, 0.22) !important;
+      border-radius: 18px !important;
+      padding: 36px 28px 34px !important;
       color: #fde047 !important;
+      overflow: hidden;
     }
+    .rules-ornate-frame {
+      position: absolute; inset: 8px; pointer-events: none; z-index: 1;
+    }
+    .rules-ornate-corner {
+      position: absolute; width: 46px; height: 46px;
+      filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.42));
+    }
+    .rules-ornate-corner.tl { top: 0; left: 0; }
+    .rules-ornate-corner.tr { top: 0; right: 0; transform: scaleX(-1); }
+    .rules-ornate-corner.bl { bottom: 0; left: 0; transform: scaleY(-1); }
+    .rules-ornate-corner.br { bottom: 0; right: 0; transform: scale(-1, -1); }
+    .rules-ornate-bar {
+      position: absolute;
+      border-radius: 99px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.35);
+    }
+    .rules-ornate-bar.top {
+      top: 5px; left: 50px; right: 50px; height: 5px;
+      background: linear-gradient(90deg, #fde047 0%, #f59e0b 25%, #ef4444 50%, #f59e0b 75%, #fde047 100%);
+      border-top: 1px solid #fef9c3;
+    }
+    .rules-ornate-bar.bottom {
+      bottom: 5px; left: 50px; right: 50px; height: 5px;
+      background: linear-gradient(90deg, #fde047 0%, #f59e0b 25%, #ef4444 50%, #f59e0b 75%, #fde047 100%);
+      border-bottom: 1px solid #fef9c3;
+    }
+    .rules-ornate-bar.left {
+      left: 5px; top: 50px; bottom: 50px; width: 5px;
+      background: linear-gradient(180deg, #fde047 0%, #f59e0b 25%, #ef4444 50%, #f59e0b 75%, #fde047 100%);
+      border-left: 1px solid #fef9c3;
+    }
+    .rules-ornate-bar.right {
+      right: 5px; top: 50px; bottom: 50px; width: 5px;
+      background: linear-gradient(180deg, #fde047 0%, #f59e0b 25%, #ef4444 50%, #f59e0b 75%, #fde047 100%);
+      border-right: 1px solid #fef9c3;
+    }
+    .rules-formal-inner { position: relative; z-index: 2; }
     .rules-formal-title {
       font-size: 18px;
       font-weight: 800;
@@ -1127,30 +1166,104 @@
       margin-bottom: 10px;
     }
     .login-room-pill {
-      padding: 7px 6px; border-radius: 11px;
-      border: 1.5px solid var(--input-border);
-      background: var(--glass-bg-subtle); color: var(--text-main);
-      font-size: 12px; font-weight: 700; cursor: pointer;
-      text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-      transition: all 0.16s ease;
+      position: relative;
+      overflow: hidden;
+      padding: 8px 7px; border-radius: 13px;
+      border: 1.3px solid rgba(255, 255, 255, 0.72);
+      background: linear-gradient(145deg, rgba(255,255,255,0.62) 0%, rgba(255,255,255,0.28) 100%);
+      backdrop-filter: blur(18px) saturate(200%);
+      -webkit-backdrop-filter: blur(18px) saturate(200%);
+      color: var(--text-main);
+      font-size: 12.2px; font-weight: 800; cursor: pointer;
+      text-align: center; white-space: nowrap; text-overflow: ellipsis;
+      box-shadow: 0 4px 12px rgba(15, 23, 42, 0.08), inset 0 1.5px 2px rgba(255, 255, 255, 0.90), inset 0 -1px 2px rgba(15, 23, 42, 0.06);
+      transition: transform 0.16s ease, box-shadow 0.2s ease, filter 0.18s ease;
     }
+    .login-room-pill::before {
+      content: "";
+      position: absolute; top: 0; left: 6%; right: 6%; height: 46%;
+      border-radius: 0 0 50% 50%;
+      background: linear-gradient(180deg, rgba(255,255,255,0.52) 0%, rgba(255,255,255,0.04) 100%);
+      pointer-events: none;
+    }
+    .login-room-pill:active { transform: scale(0.95); }
+    html[data-theme="dark"] .login-room-pill {
+      border-color: rgba(255, 255, 255, 0.24);
+      box-shadow: 0 5px 14px rgba(0, 0, 0, 0.35), inset 0 1.2px 1.5px rgba(255, 255, 255, 0.25);
+    }
+    /* Colored Liquid Glass Palette for Room Pills */
+    .login-room-pill.pill-c0 { background: linear-gradient(135deg, rgba(16,185,129,0.26), rgba(52,211,153,0.14)); color: #065f46; border-color: rgba(16,185,129,0.48); }
+    .login-room-pill.pill-c1 { background: linear-gradient(135deg, rgba(14,165,233,0.26), rgba(56,189,248,0.14)); color: #075985; border-color: rgba(14,165,233,0.48); }
+    .login-room-pill.pill-c2 { background: linear-gradient(135deg, rgba(139,92,246,0.26), rgba(167,139,250,0.14)); color: #5b21b6; border-color: rgba(139,92,246,0.48); }
+    .login-room-pill.pill-c3 { background: linear-gradient(135deg, rgba(244,63,94,0.24), rgba(251,113,133,0.13)); color: #9f1239; border-color: rgba(244,63,94,0.46); }
+    .login-room-pill.pill-c4 { background: linear-gradient(135deg, rgba(245,158,11,0.26), rgba(251,191,36,0.14)); color: #92400e; border-color: rgba(245,158,11,0.50); }
+    .login-room-pill.pill-c5 { background: linear-gradient(135deg, rgba(20,184,166,0.26), rgba(45,212,191,0.14)); color: #115e59; border-color: rgba(20,184,166,0.48); }
+    .login-room-pill.pill-c6 { background: linear-gradient(135deg, rgba(236,72,153,0.24), rgba(244,114,182,0.13)); color: #9d174d; border-color: rgba(236,72,153,0.46); }
+    .login-room-pill.pill-c7 { background: linear-gradient(135deg, rgba(59,130,246,0.26), rgba(96,165,250,0.14)); color: #1e40af; border-color: rgba(59,130,246,0.48); }
+    .login-room-pill.pill-c8 { background: linear-gradient(135deg, rgba(249,115,22,0.25), rgba(251,146,60,0.14)); color: #9a3412; border-color: rgba(249,115,22,0.48); }
+
+    html[data-theme="dark"] .login-room-pill.pill-c0 { color: #a7f3d0; }
+    html[data-theme="dark"] .login-room-pill.pill-c1 { color: #bae6fd; }
+    html[data-theme="dark"] .login-room-pill.pill-c2 { color: #ddd6fe; }
+    html[data-theme="dark"] .login-room-pill.pill-c3 { color: #fecdd3; }
+    html[data-theme="dark"] .login-room-pill.pill-c4 { color: #fde68a; }
+    html[data-theme="dark"] .login-room-pill.pill-c5 { color: #99f6e4; }
+    html[data-theme="dark"] .login-room-pill.pill-c6 { color: #fbcfe8; }
+    html[data-theme="dark"] .login-room-pill.pill-c7 { color: #bfdbfe; }
+    html[data-theme="dark"] .login-room-pill.pill-c8 { color: #fed7aa; }
+
     .login-room-pill.active {
-      background: linear-gradient(135deg, #10b981, #059669);
-      color: #ffffff; border-color: rgba(255,255,255,0.45);
-      box-shadow: 0 5px 14px rgba(16, 185, 129, 0.35);
+      background: linear-gradient(135deg, rgba(16,185,129,0.92), rgba(5,150,105,0.92)) !important;
+      color: #ffffff !important;
+      border: 1.5px solid rgba(255,255,255,0.85) !important;
+      box-shadow: 0 8px 22px rgba(16, 185, 129, 0.48), inset 0 1.5px 2px rgba(255,255,255,0.68) !important;
+      transform: translateY(-1px);
     }
+
+    /* Liquid Glass Admin Pill */
     .login-room-pill.admin-pill {
       grid-column: 1 / -1;
-      margin-top: 3px;
-      border-style: dashed;
-      border-color: rgba(99, 102, 241, 0.45);
-      color: var(--indigo);
+      margin-top: 4px;
+      padding: 9px 10px;
+      font-size: 13px;
+      background: linear-gradient(135deg, rgba(99,102,241,0.34), rgba(139,92,246,0.24));
+      border: 1.4px solid rgba(129, 140, 248, 0.65);
+      color: #3730a3;
+      box-shadow: 0 6px 18px rgba(99, 102, 241, 0.22), inset 0 1.5px 2px rgba(255,255,255,0.85);
+    }
+    html[data-theme="dark"] .login-room-pill.admin-pill {
+      color: #e0e7ff;
+      background: linear-gradient(135deg, rgba(99,102,241,0.44), rgba(139,92,246,0.32));
     }
     .login-room-pill.admin-pill.active {
-      border-style: solid;
-      background: linear-gradient(135deg, #6366f1, #4f46e5);
-      color: #ffffff;
-      box-shadow: 0 5px 14px rgba(99, 102, 241, 0.35);
+      background: linear-gradient(135deg, rgba(79,70,229,0.94), rgba(124,58,237,0.92)) !important;
+      color: #ffffff !important;
+      border: 1.5px solid rgba(255,255,255,0.82) !important;
+      box-shadow: 0 10px 26px rgba(99, 102, 241, 0.50), inset 0 1.5px 2px rgba(255,255,255,0.62) !important;
+    }
+
+    /* Liquid Glass Login Submit Button */
+    .btn-login-glass {
+      position: relative;
+      overflow: hidden;
+      width: 100%;
+      padding: 12px 16px !important;
+      border-radius: 15px !important;
+      font-size: 14px !important;
+      font-weight: 800 !important;
+      color: #ffffff !important;
+      background: linear-gradient(135deg, rgba(16,185,129,0.92) 0%, rgba(14,165,233,0.90) 100%) !important;
+      backdrop-filter: blur(20px) saturate(210%);
+      -webkit-backdrop-filter: blur(20px) saturate(210%);
+      border: 1.5px solid rgba(255, 255, 255, 0.78) !important;
+      box-shadow: 0 10px 28px rgba(16, 185, 129, 0.42), inset 0 1.5px 2px rgba(255, 255, 255, 0.75) !important;
+    }
+    .btn-login-glass::before {
+      content: "";
+      position: absolute; top: 0; left: 6%; right: 6%; height: 48%;
+      border-radius: 0 0 50% 50%;
+      background: linear-gradient(180deg, rgba(255,255,255,0.45) 0%, rgba(255,255,255,0.03) 100%);
+      pointer-events: none;
     }
     .radio-opt-card {
       display: flex; align-items: flex-start; gap: 8px;
@@ -1448,19 +1561,31 @@
     <!-- ==================== TAB 3: NỘI QUY (ADMIN SỬA / NGƯỜI THUÊ XEM) ==================== -->
     <section id="tab-rules" class="tab-panel">
       <div class="glass-card rules-formal-card">
-        <div style="text-align:center; margin-bottom:12px;">
-          <div class="rules-formal-title">NỘI QUY TOÀ NHÀ</div>
-          <div id="adminRulesToolbar" class="flex-row hidden" style="justify-content:center; margin-top:10px;">
-            <button type="button" class="btn btn-glass btn-sm" onclick="insertDefaultHouseRules()">Chèn mẫu cơ bản</button>
-            <button type="button" class="btn btn-emerald btn-sm" onclick="saveHouseRulesManual()">Lưu &amp; Đồng bộ</button>
+        <div class="rules-ornate-frame" aria-hidden="true">
+          <div class="rules-ornate-corner tl"><svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="ornG" x1="0" y1="0" x2="64" y2="64" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#fef08a"/><stop offset="45%" stop-color="#f59e0b"/><stop offset="100%" stop-color="#ef4444"/></linearGradient></defs><path d="M8 10 C18 2, 34 2, 44 10 C34 9, 25 12, 20 19 C28 16, 38 17, 46 12 C40 22, 29 26, 18 24 C12 23, 8 17, 8 10 Z" fill="url(#ornG)" stroke="#fef9c3" stroke-width="1"/><path d="M10 8 C2 18, 2 34, 10 44 C9 34, 12 25, 19 20 C16 28, 17 38, 12 46 C22 40, 26 29, 24 18 C23 12, 17 8, 10 8 Z" fill="url(#ornG)" stroke="#fef9c3" stroke-width="1"/><path d="M22 22 C28 20, 34 24, 32 30 C30 34, 24 34, 22 29 C20 26, 20 23, 22 22 Z" fill="#fef08a" opacity="0.9"/><circle cx="14" cy="14" r="3.2" fill="#fef9c3"/></svg></div>
+          <div class="rules-ornate-corner tr"><svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="ornG" x1="0" y1="0" x2="64" y2="64" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#fef08a"/><stop offset="45%" stop-color="#f59e0b"/><stop offset="100%" stop-color="#ef4444"/></linearGradient></defs><path d="M8 10 C18 2, 34 2, 44 10 C34 9, 25 12, 20 19 C28 16, 38 17, 46 12 C40 22, 29 26, 18 24 C12 23, 8 17, 8 10 Z" fill="url(#ornG)" stroke="#fef9c3" stroke-width="1"/><path d="M10 8 C2 18, 2 34, 10 44 C9 34, 12 25, 19 20 C16 28, 17 38, 12 46 C22 40, 26 29, 24 18 C23 12, 17 8, 10 8 Z" fill="url(#ornG)" stroke="#fef9c3" stroke-width="1"/><path d="M22 22 C28 20, 34 24, 32 30 C30 34, 24 34, 22 29 C20 26, 20 23, 22 22 Z" fill="#fef08a" opacity="0.9"/><circle cx="14" cy="14" r="3.2" fill="#fef9c3"/></svg></div>
+          <div class="rules-ornate-corner bl"><svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="ornG" x1="0" y1="0" x2="64" y2="64" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#fef08a"/><stop offset="45%" stop-color="#f59e0b"/><stop offset="100%" stop-color="#ef4444"/></linearGradient></defs><path d="M8 10 C18 2, 34 2, 44 10 C34 9, 25 12, 20 19 C28 16, 38 17, 46 12 C40 22, 29 26, 18 24 C12 23, 8 17, 8 10 Z" fill="url(#ornG)" stroke="#fef9c3" stroke-width="1"/><path d="M10 8 C2 18, 2 34, 10 44 C9 34, 12 25, 19 20 C16 28, 17 38, 12 46 C22 40, 26 29, 24 18 C23 12, 17 8, 10 8 Z" fill="url(#ornG)" stroke="#fef9c3" stroke-width="1"/><path d="M22 22 C28 20, 34 24, 32 30 C30 34, 24 34, 22 29 C20 26, 20 23, 22 22 Z" fill="#fef08a" opacity="0.9"/><circle cx="14" cy="14" r="3.2" fill="#fef9c3"/></svg></div>
+          <div class="rules-ornate-corner br"><svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="ornG" x1="0" y1="0" x2="64" y2="64" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#fef08a"/><stop offset="45%" stop-color="#f59e0b"/><stop offset="100%" stop-color="#ef4444"/></linearGradient></defs><path d="M8 10 C18 2, 34 2, 44 10 C34 9, 25 12, 20 19 C28 16, 38 17, 46 12 C40 22, 29 26, 18 24 C12 23, 8 17, 8 10 Z" fill="url(#ornG)" stroke="#fef9c3" stroke-width="1"/><path d="M10 8 C2 18, 2 34, 10 44 C9 34, 12 25, 19 20 C16 28, 17 38, 12 46 C22 40, 26 29, 24 18 C23 12, 17 8, 10 8 Z" fill="url(#ornG)" stroke="#fef9c3" stroke-width="1"/><path d="M22 22 C28 20, 34 24, 32 30 C30 34, 24 34, 22 29 C20 26, 20 23, 22 22 Z" fill="#fef08a" opacity="0.9"/><circle cx="14" cy="14" r="3.2" fill="#fef9c3"/></svg></div>
+          <div class="rules-ornate-bar top"></div>
+          <div class="rules-ornate-bar bottom"></div>
+          <div class="rules-ornate-bar left"></div>
+          <div class="rules-ornate-bar right"></div>
+        </div>
+        <div class="rules-formal-inner">
+          <div style="text-align:center; margin-bottom:12px;">
+            <div class="rules-formal-title">NỘI QUY TOÀ NHÀ</div>
+            <div id="adminRulesToolbar" class="flex-row hidden" style="justify-content:center; margin-top:10px;">
+              <button type="button" class="btn btn-glass btn-sm" onclick="insertDefaultHouseRules()">Chèn mẫu cơ bản</button>
+              <button type="button" class="btn btn-emerald btn-sm" onclick="saveHouseRulesManual()">Lưu &amp; Đồng bộ</button>
+            </div>
           </div>
-        </div>
-        <div id="adminRulesEditorWrap" class="hidden">
-          <p class="muted" style="margin:0 0 8px;">Nhập hoặc chỉnh sửa nội quy bên dưới. Nội dung sẽ tự động đồng bộ để tất cả các phòng đều xem được.</p>
-          <textarea id="houseRulesInput" class="rules-textarea" placeholder="Nhập nội quy nhà trọ..." onchange="onHouseRulesChange(this.value)"></textarea>
-        </div>
-        <div id="tenantRulesViewerWrap" class="hidden">
-          <div id="tenantRulesContent" class="rules-reader"></div>
+          <div id="adminRulesEditorWrap" class="hidden">
+            <p class="muted" style="margin:0 0 8px;">Nhập hoặc chỉnh sửa nội quy bên dưới. Nội dung sẽ tự động đồng bộ để tất cả các phòng đều xem được.</p>
+            <textarea id="houseRulesInput" class="rules-textarea" placeholder="Nhập nội quy nhà trọ..." onchange="onHouseRulesChange(this.value)"></textarea>
+          </div>
+          <div id="tenantRulesViewerWrap" class="hidden">
+            <div id="tenantRulesContent" class="rules-reader"></div>
+          </div>
         </div>
       </div>
     </section>
@@ -1791,7 +1916,7 @@
             <button type="button" class="eye-toggle" onclick="toggleInputEye('loginPass')">&#128065;</button>
           </div>
         </div>
-        <button type="submit" id="btnLoginSubmit" class="btn btn-emerald" style="width:100%; padding:11px;">Đăng nhập</button>
+        <button type="submit" id="btnLoginSubmit" class="btn btn-login-glass">Đăng nhập</button>
       </form>
 
       <!-- Khôi phục mật khẩu Quản trị viên qua Gmail khi nhập sai quá 5 lần -->
@@ -1869,7 +1994,7 @@
     /* ============================================================
        NHÀ CHO THUÊ V3 — CORE STATE & STORAGE
        ============================================================ */
-    const APP_VERSION = "16.0.0";
+    const APP_VERSION = "17.0.0";
     const DEVICE_SYNCED_PREFIX = "nha_cho_thue_dev_synced_";
     const VERSION_KEY = "nha_cho_thue_app_version";
     const STORAGE_KEY = "nha_cho_thue_v3_state";
@@ -2842,8 +2967,9 @@
       const pills = [];
       [...roomMap.entries()]
         .sort((a, b) => a[0].localeCompare(b[0]))
-        .forEach(([rId, rName]) => {
-          pills.push(`<button type="button" class="login-room-pill ${activeId === rId ? "active" : ""}" onclick="selectLoginRoom('${escHtml(rId)}')">${escHtml(rName)}</button>`);
+        .forEach(([rId, rName], idx) => {
+          const colorCls = "pill-c" + (idx % 9);
+          pills.push(`<button type="button" class="login-room-pill ${colorCls} ${activeId === rId ? "active" : ""}" onclick="selectLoginRoom('${escHtml(rId)}')">${escHtml(rName)}</button>`);
         });
       // Đưa nút Quản trị viên xuống cuối cùng
       pills.push(`<button type="button" class="login-room-pill admin-pill ${activeId === "ADMIN" ? "active" : ""}" onclick="selectLoginRoom('ADMIN')">Quản trị viên</button>`);
