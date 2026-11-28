@@ -1,5 +1,5 @@
 /**
- * Cloudflare Pages Function Proxy — Nhà Cho Thuê V10
+ * Cloudflare Pages Function Proxy — Nhà Cho Thuê V11
  * Route: /api
  *  1. Ẩn hoàn toàn link Google Apps Script (/exec) qua biến môi trường GAS_URL
  *  2. Proxy ảnh VietQR (?action=qrProxy) có CORS sạch giúp hiển thị & tải PNG phiếu thu 100% không lỗi
@@ -23,6 +23,37 @@ function getGasUrl(env) {
 export async function onRequestGet(context) {
   const incomingUrl = new URL(context.request.url);
   const action = incomingUrl.searchParams.get("action") || "";
+
+  // Proxy ảnh Google Drive sạch CORS/Referer để hiển thị ảnh đồng hồ & bill 100% không bị chặn
+  if (action === "driveImg") {
+    const fileId = (incomingUrl.searchParams.get("id") || "").replace(/[^a-zA-Z0-9_-]/g, "");
+    if (!fileId) {
+      return new Response("Missing file id", { status: 400, headers: CORS_HEADERS });
+    }
+    const candidates = [
+      `https://drive.google.com/thumbnail?id=${fileId}&sz=w1600`,
+      `https://lh3.googleusercontent.com/d/${fileId}=w1600`,
+      `https://drive.google.com/uc?export=view&id=${fileId}`
+    ];
+    for (const u of candidates) {
+      try {
+        const imgResp = await fetch(u, { method: "GET", redirect: "follow" });
+        const ct = imgResp.headers.get("Content-Type") || "";
+        if (imgResp.ok && ct.startsWith("image/")) {
+          const buf = await imgResp.arrayBuffer();
+          return new Response(buf, {
+            status: 200,
+            headers: {
+              "Access-Control-Allow-Origin": "*",
+              "Content-Type": ct,
+              "Cache-Control": "public, max-age=86400"
+            }
+          });
+        }
+      } catch (e) {}
+    }
+    return new Response("Drive image unavailable", { status: 404, headers: CORS_HEADERS });
+  }
 
   // Proxy ảnh VietQR sạch CORS cho phiếu thu & html2canvas
   if (action === "qrProxy") {
