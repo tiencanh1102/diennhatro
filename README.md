@@ -1,16 +1,16 @@
-# Nhà Cho Thuê — Phiên bản V10
+# Nhà Cho Thuê — Phiên bản V11
 
-## Các nâng cấp trong bản V10
-1. **Tab Số điện sạch & thông minh hơn:** Xóa số `0` mặc định ở cột *Số điện cũ*; cho phép đính kèm cả **Ảnh đồng hồ tháng cũ** và **Ảnh đồng hồ tháng mới** (sang tháng sau tự động lấy ảnh tháng trước làm ảnh cũ); tự động đồng bộ bản nháp lên máy chủ và **chỉ chuyển xuống Lịch sử chỉ số điện khi bấm nút Lưu / Chốt số điện**.
-2. **Màn hình đăng nhập & Thanh tab kính lỏng (Liquid Glass):** Sửa chữ *"Chọn phòng của bạn"* và *"Mật khẩu phòng"* căn giữa cân đối, xóa dòng gợi ý tài khoản mặc định, tăng hiệu ứng kính lỏng nổi bật.
-3. **Đổi tên đăng nhập Quản trị viên:** Có nút **Lưu tên đăng nhập QTV** riêng trong Cài đặt, đồng bộ thẳng lên máy chủ.
-4. **Tối ưu giao diện Người thuê trên điện thoại:**
-   - Chu kỳ tháng căn giữa, **Tên phòng in đậm 1 dòng đầy đủ** phía dưới, tiêu đề *Tiền phòng MM/YYYY* căn giữa.
-   - Bố cục nút 2 dòng gọn đẹp: dòng trên gồm *Phiếu thu (QR)* & *Copy phiếu thu* ngang hàng 50/50, dòng dưới là nút *Bill chuyển khoản / Xem Bill C.k* rộng 100% không bị cắt chữ.
-   - Cho phép xem cả **ảnh đồng hồ tháng cũ & tháng mới** ngay trong *Lịch sử hóa đơn tiền phòng*.
-   - Popup có mũi tên chỉ thẳng vào ô đồng bộ: *"Click vào đây để cập nhật dữ liệu mới từ máy chủ"* khi cần đồng bộ lần đầu.
-   - Chuẩn hóa nội dung chuyển khoản thành `<Tên phòng không dấu> tien phong T<MM>.<YYYY>` (VD: `Thao Duong tien phong T11.2026`).
+## Các nâng cấp & sửa lỗi trong bản V11
+1. **Sửa triệt để lỗi ảnh đồng hồ đã lên Drive nhưng không hiển thị trên web/app:**
+   - Bổ sung proxy ảnh Google Drive (`/api?action=driveImg&id=...`) ngay trong `functions/api.js`, kèm `referrerpolicy="no-referrer"` và cơ chế tự dự phòng 3 nguồn ảnh Google Drive.
+   - Đảm bảo chờ đồng bộ nền rảnh trước khi đẩy link ảnh lên máy chủ, không bị mất link ảnh.
+2. **Nút ảnh đồng hồ gọn & trực quan cho Quản trị viên (Tab Số điện):**
+   - Chưa đính kèm: **`+ Ảnh cũ`** / **`+ Ảnh mới`** → bấm để chọn ảnh.
+   - Đã đính kèm: tự đổi thành **`Xem ảnh cũ`** / **`Xem ảnh mới`** → bấm xem trực tiếp ảnh phóng to trên web/app (kèm nút *Đổi ảnh đồng hồ* ngay dưới ảnh nếu cần thay).
+3. **Mục "Ảnh chụp đồng hồ" riêng cho Người thuê (Tab Số điện):**
+   - Đặt ngay bên trên *Lịch sử chỉ số điện* gồm 2 nút 1 dòng gọn đẹp: **`Xem ảnh chụp đồng hồ tháng hiện tại`** và **`Xem ảnh chụp đồng hồ tháng trước`**, đồng bộ trực tiếp ảnh từ Quản trị viên.
+4. **Gọn bảng Lịch sử chỉ số điện:** Đã xóa cột *Ảnh đồng hồ* ở bảng *Lịch sử chỉ số điện*.
 
-## Cập nhật nhanh lên V10
-1. Mở tệp `Code_V10_AppsScript.js` trong gói ZIP → dán vào Google Apps Script → **Lưu** → chạy hàm `testAllFunctions` 1 lần → **Triển khai → Quản lý các bản triển khai → biểu tượng cây bút → Phiên bản mới → Triển khai**.
-2. Giải nén `nha_cho_thue_v10.zip` và đẩy toàn bộ tệp (bao gồm `version.json`, trừ `Code_V10_AppsScript.js`) cùng thư mục `functions` lên GitHub / Cloudflare Pages.
+## Cập nhật nhanh lên V11
+1. Mở `Code_V11_AppsScript.js` trong gói ZIP → dán vào Google Apps Script → **Lưu** → chạy hàm `testAllFunctions` 1 lần → **Triển khai → Quản lý các bản triển khai → biểu tượng cây bút → Phiên bản mới → Triển khai**.
+2. Giải nén `nha_cho_thue_v11.zip` và đẩy toàn bộ tệp (bao gồm `version.json`, `functions/api.js` mới có `driveImg`, trừ `Code_V11_AppsScript.js`) lên GitHub / Cloudflare Pages.
