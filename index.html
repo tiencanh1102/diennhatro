@@ -1048,7 +1048,10 @@
       display: flex; align-items: center; gap: 5px;
     }
     .meter-photo-slot .photo-btn {
-      width: 100%; justify-content: center; padding: 5px 8px; font-size: 11.5px;
+      flex: 1; min-width: 0; justify-content: center; padding: 5px 8px; font-size: 11.5px;
+    }
+    .meter-photo-del-btn {
+      width: 28px; height: 28px; border-radius: 8px; flex-shrink: 0;
     }
     .photo-btn.has-photo {
       border-style: solid;
@@ -1349,7 +1352,7 @@
       <div id="adminMeterEntryCard" class="glass-card">
         <div class="sec-head">
           <div class="sec-title">Ghi chỉ số điện hàng tháng — <span id="meterPeriodBadge">11/2026</span></div>
-          <button class="btn btn-amber btn-sm" onclick="commitMetersAndBills()">Chốt số điện &amp; Kết tiền</button>
+          <button class="btn btn-amber btn-sm" onclick="commitMetersAndBills()">Lưu số điện &amp; Kết chuyển Tiền phòng</button>
         </div>
         <p class="muted" style="margin:0 0 10px;">
           Số điện cũ tự động kéo từ Số điện mới tháng trước. Nhập Số điện mới sẽ tự động tính Số điện sử dụng và ghi nhận ngày hiện tại.
@@ -1370,7 +1373,7 @@
           </table>
         </div>
         <div class="mt-3 flex-row" style="justify-content:flex-end;">
-          <button class="btn btn-amber" onclick="commitMetersAndBills()">Lưu số điện &amp; Tự kết sang Tiền phòng</button>
+          <button class="btn btn-amber" onclick="commitMetersAndBills()">Lưu số điện &amp; Kết chuyển Tiền phòng</button>
         </div>
       </div>
 
@@ -1866,7 +1869,7 @@
     /* ============================================================
        NHÀ CHO THUÊ V3 — CORE STATE & STORAGE
        ============================================================ */
-    const APP_VERSION = "15.0.0";
+    const APP_VERSION = "16.0.0";
     const DEVICE_SYNCED_PREFIX = "nha_cho_thue_dev_synced_";
     const VERSION_KEY = "nha_cho_thue_app_version";
     const STORAGE_KEY = "nha_cho_thue_v3_state";
@@ -2267,7 +2270,7 @@
     function openAdminMeterPhotoViewer(roomId, slot) {
       const rec = getMeterRecord(currentPeriod, roomId);
       const url = slot === "old"
-        ? ((rec && rec.oldPhotoUrl) ? rec.oldPhotoUrl : getAutoOldMeterPhoto(currentPeriod, roomId))
+        ? ((rec && rec.oldPhotoCleared) ? "" : ((rec && rec.oldPhotoUrl) ? rec.oldPhotoUrl : getAutoOldMeterPhoto(currentPeriod, roomId)))
         : (rec ? (rec.photoUrl || "") : "");
       if (!url) {
         triggerMeterPhotoUpload(roomId, slot);
@@ -3742,6 +3745,27 @@
       if (hasInitialPulled) await pushToServer(true);
     }
 
+    async function deleteMeterPhoto(roomId, slot) {
+      if (!isAdmin()) return openPinModal();
+      const rm = state.rooms.find((r) => r.id === roomId);
+      const roomLabel = rm ? rm.name : roomId;
+      const isOld = slot === "old";
+      if (!confirm(`Xóa ảnh đồng hồ ${isOld ? "tháng cũ" : "tháng mới"} của ${roomLabel} kỳ ${currentPeriod}?`)) {
+        return;
+      }
+      const rec = ensureMeterDraft(currentPeriod, roomId);
+      if (isOld) {
+        rec.oldPhotoUrl = "";
+        rec.oldPhotoCleared = true;
+      } else {
+        rec.photoUrl = "";
+      }
+      saveState(true);
+      renderElectricTab();
+      toast(`Đã xóa ảnh đồng hồ ${isOld ? "cũ" : "mới"} của ${roomLabel}!`, "ok");
+      if (hasInitialPulled) await pushToServer(true);
+    }
+
     function triggerMeterPhotoUpload(roomId, slot = "new") {
       if (!isAdmin()) return openPinModal();
       activeMeterPhotoRoomId = roomId;
@@ -3794,7 +3818,7 @@
         } catch (uploadErr) {
           toast("Đã lưu ảnh cục bộ (chưa đồng bộ thư mục ảnh: " + uploadErr.message + ")", "warn");
         }
-        if (isOldSlot) rec.oldPhotoUrl = finalUrl;
+        if (isOldSlot) { rec.oldPhotoUrl = finalUrl; rec.oldPhotoCleared = false; }
         else rec.photoUrl = finalUrl;
         saveState(true);
         renderElectricTab();
@@ -3899,7 +3923,7 @@
           if (hasBoth && used < 0) usedHtml = `<span class="warn-red">${used} (Lỗi!)</span>`;
           else if (used > 250) usedHtml = `<span class="warn-amber">${used} kWh (Cao)</span>`;
 
-          const oldPhotoUrl = (rec && rec.oldPhotoUrl) ? rec.oldPhotoUrl : getAutoOldMeterPhoto(currentPeriod, rm.id);
+          const oldPhotoUrl = (rec && rec.oldPhotoCleared) ? "" : ((rec && rec.oldPhotoUrl) ? rec.oldPhotoUrl : getAutoOldMeterPhoto(currentPeriod, rm.id));
           const newPhotoUrl = rec ? (rec.photoUrl || "") : "";
 
           return `
@@ -3931,13 +3955,15 @@
                 <div class="meter-photo-pair">
                   <div class="meter-photo-slot">
                     ${oldPhotoUrl
-                      ? `<button type="button" class="photo-btn has-photo" onclick="openAdminMeterPhotoViewer('${rm.id}','old')">Xem ảnh cũ</button>`
+                      ? `<button type="button" class="photo-btn has-photo" onclick="openAdminMeterPhotoViewer('${rm.id}','old')">Xem ảnh cũ</button>
+                         <button type="button" class="trash-btn meter-photo-del-btn" onclick="deleteMeterPhoto('${rm.id}','old')" title="Xóa ảnh đồng hồ cũ"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"></path><path d="M10 11v6"></path><path d="M14 11v6"></path><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"></path></svg></button>`
                       : `<button type="button" class="photo-btn" onclick="triggerMeterPhotoUpload('${rm.id}','old')">+ Ảnh cũ</button>`
                     }
                   </div>
                   <div class="meter-photo-slot">
                     ${newPhotoUrl
-                      ? `<button type="button" class="photo-btn has-photo-new" onclick="openAdminMeterPhotoViewer('${rm.id}','new')">Xem ảnh mới</button>`
+                      ? `<button type="button" class="photo-btn has-photo-new" onclick="openAdminMeterPhotoViewer('${rm.id}','new')">Xem ảnh mới</button>
+                         <button type="button" class="trash-btn meter-photo-del-btn" onclick="deleteMeterPhoto('${rm.id}','new')" title="Xóa ảnh đồng hồ mới"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"></path><path d="M10 11v6"></path><path d="M14 11v6"></path><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"></path></svg></button>`
                       : `<button type="button" class="photo-btn" onclick="triggerMeterPhotoUpload('${rm.id}','new')">+ Ảnh mới</button>`
                     }
                   </div>
