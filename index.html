@@ -106,30 +106,45 @@
       100% { transform: translate(28px, -24px) scale(1.12); }
     }
 
-    /* Liquid Glass Surfaces */
+    /* Enhanced iOS Liquid Glass Surfaces across the entire app */
     .glass {
-      background: var(--glass-bg);
-      backdrop-filter: blur(24px) saturate(185%);
-      -webkit-backdrop-filter: blur(24px) saturate(185%);
-      border: 1px solid var(--glass-border);
-      box-shadow: var(--glass-shadow), inset 0 1px 0 var(--glass-specular);
+      background: linear-gradient(150deg, rgba(255,255,255,0.68) 0%, rgba(255,255,255,0.38) 100%);
+      backdrop-filter: blur(30px) saturate(210%);
+      -webkit-backdrop-filter: blur(30px) saturate(210%);
+      border: 1.2px solid rgba(255,255,255,0.82);
+      box-shadow: 0 12px 34px rgba(15, 23, 42, 0.09), inset 0 1.5px 1.5px rgba(255,255,255,0.95), inset 0 -1px 2px rgba(15,23,42,0.05);
+    }
+    html[data-theme="dark"] .glass {
+      background: linear-gradient(150deg, rgba(30,41,59,0.68) 0%, rgba(15,23,42,0.46) 100%);
+      border-color: rgba(255,255,255,0.20);
+      box-shadow: 0 14px 40px rgba(0, 0, 0, 0.48), inset 0 1.5px 1.5px rgba(255,255,255,0.20), inset 0 -1px 2px rgba(0,0,0,0.35);
     }
     .glass-strong {
-      background: var(--glass-bg-strong);
-      backdrop-filter: blur(28px) saturate(200%);
-      -webkit-backdrop-filter: blur(28px) saturate(200%);
-      border: 1px solid var(--glass-border);
-      box-shadow: var(--glass-shadow), inset 0 1px 0 var(--glass-specular);
+      background: linear-gradient(150deg, rgba(255,255,255,0.82) 0%, rgba(255,255,255,0.56) 100%);
+      backdrop-filter: blur(34px) saturate(225%);
+      -webkit-backdrop-filter: blur(34px) saturate(225%);
+      border: 1.2px solid rgba(255,255,255,0.88);
+      box-shadow: 0 14px 38px rgba(15, 23, 42, 0.11), inset 0 1.5px 2px rgba(255,255,255,0.96);
+    }
+    html[data-theme="dark"] .glass-strong {
+      background: linear-gradient(150deg, rgba(30,41,59,0.82) 0%, rgba(15,23,42,0.64) 100%);
+      border-color: rgba(255,255,255,0.22);
+      box-shadow: 0 16px 44px rgba(0, 0, 0, 0.55), inset 0 1.5px 2px rgba(255,255,255,0.22);
     }
     .glass-card {
-      background: var(--glass-bg);
-      backdrop-filter: blur(22px) saturate(180%);
-      -webkit-backdrop-filter: blur(22px) saturate(180%);
-      border: 1px solid var(--glass-border);
+      background: linear-gradient(155deg, rgba(255,255,255,0.68) 0%, rgba(255,255,255,0.40) 100%);
+      backdrop-filter: blur(28px) saturate(205%);
+      -webkit-backdrop-filter: blur(28px) saturate(205%);
+      border: 1.2px solid rgba(255,255,255,0.82);
       border-radius: var(--radius-lg);
-      box-shadow: var(--glass-shadow), inset 0 1px 0 var(--glass-specular);
+      box-shadow: 0 12px 36px rgba(15, 23, 42, 0.09), inset 0 1.5px 1.5px rgba(255,255,255,0.95), inset 0 -1px 2px rgba(15,23,42,0.04);
       padding: 16px;
       margin-bottom: 14px;
+    }
+    html[data-theme="dark"] .glass-card {
+      background: linear-gradient(155deg, rgba(30,41,59,0.64) 0%, rgba(15,23,42,0.44) 100%);
+      border-color: rgba(255,255,255,0.18);
+      box-shadow: 0 16px 42px rgba(0, 0, 0, 0.48), inset 0 1.5px 1.5px rgba(255,255,255,0.18), inset 0 -1px 2px rgba(0,0,0,0.35);
     }
 
     /* Sticky Top Header */
@@ -515,7 +530,12 @@
     /* Section Header */
     .sec-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; margin-bottom: 12px; }
     .sec-title { font-size: 15px; font-weight: 800; display: flex; align-items: center; gap: 7px; }
-    .badge { display: inline-flex; align-items: center; gap: 4px; padding: 3px 9px; border-radius: 99px; font-size: 11px; font-weight: 700; }
+    .badge {
+      display: inline-flex; align-items: center; justify-content: center; gap: 4px;
+      padding: 3px 8px; border-radius: 99px;
+      font-size: 10.5px; font-weight: 700; line-height: 1.2;
+      white-space: nowrap; flex-shrink: 0;
+    }
     .badge-paid { background: var(--emerald-soft); color: var(--emerald); }
     .badge-partial { background: var(--amber-soft); color: var(--amber); }
     .badge-unpaid { background: var(--danger-soft); color: var(--danger); }
@@ -939,34 +959,70 @@
       gap: 6px;
       padding: 10px 12px;
     }
+    /* iOS Liquid Glass Pill + Gradient Text for Tenant Room Name (e.g. Thảo&Dương) */
     .tenant-room-banner {
-      font-size: 16.5px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      max-width: 100%;
+      padding: 6px 18px;
+      border-radius: 999px;
+      background: linear-gradient(135deg, rgba(16, 185, 129, 0.20) 0%, rgba(14, 165, 233, 0.20) 52%, rgba(99, 102, 241, 0.22) 100%);
+      backdrop-filter: blur(22px) saturate(210%);
+      -webkit-backdrop-filter: blur(22px) saturate(210%);
+      border: 1.3px solid rgba(255, 255, 255, 0.78);
+      box-shadow: 0 6px 18px rgba(14, 165, 233, 0.16), inset 0 1.5px 1.5px rgba(255, 255, 255, 0.92);
+    }
+    html[data-theme="dark"] .tenant-room-banner {
+      background: linear-gradient(135deg, rgba(16, 185, 129, 0.26) 0%, rgba(14, 165, 233, 0.26) 52%, rgba(129, 140, 248, 0.28) 100%);
+      border-color: rgba(255, 255, 255, 0.24);
+      box-shadow: 0 8px 22px rgba(0, 0, 0, 0.40), inset 0 1px 1.5px rgba(255, 255, 255, 0.24);
+    }
+    .tenant-room-banner-text {
+      font-size: 16px;
       font-weight: 800;
-      text-align: center;
-      width: 100%;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
-      background: linear-gradient(135deg, #059669 0%, #0284c7 52%, #4f46e5 100%);
+      background: linear-gradient(135deg, #047857 0%, #0369a1 52%, #4338ca 100%);
       -webkit-background-clip: text;
       background-clip: text;
       color: transparent;
     }
-    html[data-theme="dark"] .tenant-room-banner {
-      background: linear-gradient(135deg, #34d399 0%, #38bdf8 52%, #a5b4fc 100%);
+    html[data-theme="dark"] .tenant-room-banner-text {
+      background: linear-gradient(135deg, #6ee7b7 0%, #7dd3fc 52%, #c7d2fe 100%);
       -webkit-background-clip: text;
       background-clip: text;
       color: transparent;
     }
+
+    /* iOS Liquid Glass Pill + Gradient Text for "Tiền phòng MM/YYYY" */
     .billing-title-colored {
-      font-size: 16.5px !important;
-      font-weight: 800 !important;
-      background: linear-gradient(135deg, #d97706 0%, #dc2626 52%, #7c3aed 100%);
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
+      display: inline-flex !important;
+      width: auto !important;
+      padding: 6px 18px;
+      border-radius: 999px;
+      background: linear-gradient(135deg, rgba(245, 158, 11, 0.20) 0%, rgba(239, 68, 68, 0.18) 52%, rgba(124, 58, 237, 0.20) 100%);
+      backdrop-filter: blur(22px) saturate(210%);
+      -webkit-backdrop-filter: blur(22px) saturate(210%);
+      border: 1.3px solid rgba(255, 255, 255, 0.80);
+      box-shadow: 0 6px 18px rgba(245, 158, 11, 0.18), inset 0 1.5px 1.5px rgba(255, 255, 255, 0.92);
     }
     html[data-theme="dark"] .billing-title-colored {
+      background: linear-gradient(135deg, rgba(245, 158, 11, 0.26) 0%, rgba(239, 68, 68, 0.24) 52%, rgba(168, 85, 247, 0.26) 100%);
+      border-color: rgba(255, 255, 255, 0.24);
+      box-shadow: 0 8px 22px rgba(0, 0, 0, 0.42), inset 0 1px 1.5px rgba(255, 255, 255, 0.24);
+    }
+    .billing-title-grad {
+      font-size: 16px;
+      font-weight: 800;
+      white-space: nowrap;
+      background: linear-gradient(135deg, #b45309 0%, #dc2626 52%, #6d28d9 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+    html[data-theme="dark"] .billing-title-grad {
       background: linear-gradient(135deg, #fde047 0%, #fb923c 52%, #f472b6 100%);
       -webkit-background-clip: text;
       background-clip: text;
@@ -1828,7 +1884,7 @@
     /* ============================================================
        NHÀ CHO THUÊ V3 — CORE STATE & STORAGE
        ============================================================ */
-    const APP_VERSION = "13.0.0";
+    const APP_VERSION = "14.0.0";
     const DEVICE_SYNCED_PREFIX = "nha_cho_thue_dev_synced_";
     const VERSION_KEY = "nha_cho_thue_app_version";
     const STORAGE_KEY = "nha_cho_thue_v3_state";
@@ -4617,8 +4673,13 @@
       document.getElementById("dockBillingLabel").textContent = "Tiền phòng " + currentPeriod;
       const bTitleEl = document.getElementById("billingSectionTitle");
       if (bTitleEl) {
-        bTitleEl.textContent = "Tiền phòng " + currentPeriod;
-        bTitleEl.classList.toggle("billing-title-colored", !isAdmin());
+        if (!isAdmin()) {
+          bTitleEl.innerHTML = `<span class="billing-title-grad">Tiền phòng ${escHtml(currentPeriod)}</span>`;
+          bTitleEl.classList.add("billing-title-colored");
+        } else {
+          bTitleEl.textContent = "Tiền phòng " + currentPeriod;
+          bTitleEl.classList.remove("billing-title-colored");
+        }
       }
       const bHead = document.getElementById("billingSectionHead");
       if (bHead) bHead.classList.toggle("center-title", !isAdmin());
@@ -4665,7 +4726,6 @@
           .map((b) => {
             const rm = state.rooms.find((r) => r.id === b.roomId);
             const roomName = rm ? rm.name : b.roomId;
-            const phone = rm && rm.phone ? ` · ${rm.phone}` : "";
             const isVacant = b.status === "vacant";
 
             const ov = getBillOverdueInfo(b);
@@ -4691,7 +4751,7 @@
                 <div class="bill-top">
                   <div>
                     <div class="bill-room-name">${escHtml(roomName)}</div>
-                    <div class="bill-tenant-meta">${escHtml(b.tenantName || "Chưa có tên khách")}${escHtml(phone)}</div>
+                    <div class="bill-tenant-meta">${escHtml(b.tenantName || "Chưa có tên khách")}</div>
                   </div>
                   <div style="text-align:right;">
                     <div style="display:flex; flex-direction:column; align-items:flex-end; gap:4px;">
@@ -5517,7 +5577,7 @@
           if (pBar) pBar.classList.add("tenant-mode");
           sub.className = "tenant-room-banner";
           sub.style.cssText = "";
-          sub.textContent = roomDisplay;
+          sub.innerHTML = `<span class="tenant-room-banner-text">${escHtml(roomDisplay)}</span>`;
           tabConfigBtn.classList.add("hidden");
           if (currentTab === "config") switchTab("billing");
         }
