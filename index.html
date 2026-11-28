@@ -168,22 +168,124 @@
       display: flex; align-items: center; justify-content: flex-end; gap: 6px;
     }
     .sync-box {
+      width: 96px;
       height: 22px;
-      min-width: 98px;
-      padding: 0 8px;
-      border-radius: 8px;
+      padding: 0 4px;
+      border-radius: 7px;
       border: 1.2px solid var(--glass-border);
       background: var(--glass-bg-strong);
       color: var(--text-main);
-      font-size: 10px;
+      font-size: 9.5px;
       font-weight: 700;
       display: inline-flex;
       align-items: center;
       justify-content: center;
+      gap: 3px;
       white-space: nowrap;
+      overflow: hidden;
       cursor: pointer;
       box-shadow: inset 0 1px 0 var(--glass-specular), 0 2px 6px rgba(0,0,0,0.06);
       transition: transform 0.15s ease, background 0.25s ease, border-color 0.25s ease;
+    }
+    .sync-box svg { width: 12px; height: 12px; flex-shrink: 0; stroke-width: 2.3; }
+    .sync-arrow-down { animation: arrowBounceDown 0.85s ease-in-out infinite; }
+    .sync-arrow-up { animation: arrowBounceUp 0.85s ease-in-out infinite; }
+    @keyframes arrowBounceDown {
+      0%, 100% { transform: translateY(-2px); opacity: 0.35; }
+      50% { transform: translateY(2px); opacity: 1; }
+    }
+    @keyframes arrowBounceUp {
+      0%, 100% { transform: translateY(2px); opacity: 0.35; }
+      50% { transform: translateY(-2px); opacity: 1; }
+    }
+
+    /* Overdue Bill Card Red Border + Reminder Box */
+    .bill-card.overdue {
+      border: 2px solid #ef4444 !important;
+      box-shadow: 0 10px 28px rgba(239, 68, 68, 0.20), inset 0 1px 0 var(--glass-specular);
+    }
+    .badge-overdue {
+      background: rgba(239, 68, 68, 0.18); color: #dc2626;
+      border: 1px solid rgba(239, 68, 68, 0.40);
+    }
+    html[data-theme="dark"] .badge-overdue { color: #fca5a5; }
+    .due-inline-bar {
+      display: inline-flex; align-items: center; gap: 6px; flex-wrap: wrap;
+      padding: 4px 9px; border-radius: 11px;
+      background: var(--glass-bg-subtle); border: 1px solid var(--divider);
+      font-size: 11.5px; font-weight: 700; color: var(--text-muted);
+    }
+    .due-inline-bar input {
+      width: 48px !important; padding: 3px 5px !important; text-align: center;
+      font-size: 12px !important; font-weight: 800; border-radius: 8px;
+    }
+    .due-inline-bar select {
+      width: auto !important; padding: 3px 6px !important; font-size: 11.5px !important;
+      font-weight: 700; border-radius: 8px;
+    }
+
+    /* 3 Equal-Width Distinct-Color Action Row on Bill Card */
+    .bill-actions-row3 {
+      margin-top: 11px;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 6px;
+    }
+    .bill-act-btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: 4px;
+      padding: 8px 4px; border-radius: 11px; border: none;
+      font-size: 11px; font-weight: 700; line-height: 1.15;
+      color: #ffffff; cursor: pointer; text-align: center;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+      transition: transform 0.14s ease, filter 0.18s ease;
+    }
+    .bill-act-btn:active { transform: scale(0.95); }
+    .bill-act-btn svg { width: 13px; height: 13px; flex-shrink: 0; stroke-width: 2.3; }
+    .bill-act-qr { background: linear-gradient(135deg, #6366f1, #4f46e5); box-shadow: 0 4px 12px rgba(79, 70, 229, 0.30); }
+    .bill-act-copy { background: linear-gradient(135deg, #f59e0b, #d97706); box-shadow: 0 4px 12px rgba(217, 119, 6, 0.30); }
+    .bill-act-bill { background: linear-gradient(135deg, #10b981, #059669); box-shadow: 0 4px 12px rgba(5, 150, 105, 0.30); }
+    .bill-attach-note {
+      margin-top: 7px; font-size: 11.5px; font-style: italic; color: var(--text-soft); text-align: center;
+    }
+
+    /* EVN Master Meter Comparison Box */
+    .evn-grid {
+      display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; margin-top: 10px;
+    }
+    @media (min-width: 640px) { .evn-grid { grid-template-columns: repeat(4, 1fr); } }
+    .evn-stat {
+      padding: 10px 11px; border-radius: 14px;
+      background: var(--glass-bg-subtle); border: 1px solid var(--divider);
+    }
+    .evn-stat .lbl { font-size: 11px; color: var(--text-soft); font-weight: 600; }
+    .evn-stat .val { font-size: 16px; font-weight: 800; margin-top: 3px; }
+    .evn-alert {
+      margin-top: 10px; padding: 10px 12px; border-radius: 13px;
+      font-size: 12.5px; font-weight: 700; line-height: 1.4;
+    }
+    .evn-alert.ok { background: var(--emerald-soft); color: var(--emerald); border: 1px solid rgba(16,185,129,0.32); }
+    .evn-alert.warn { background: var(--amber-soft); color: var(--amber); border: 1px solid rgba(245,158,11,0.40); }
+    .evn-alert.err { background: var(--danger-soft); color: var(--danger); border: 1px solid rgba(239,68,68,0.45); }
+
+    /* Tab Dữ liệu: Collapse button + Custom Fees Section */
+    .collapse-btn {
+      padding: 4px 8px; border-radius: 9px; font-size: 11px; font-weight: 700;
+      border: 1px solid var(--glass-border); background: var(--glass-bg-strong);
+      color: var(--text-muted); cursor: pointer; white-space: nowrap;
+    }
+    .custom-fees-box {
+      margin-top: 10px; padding-top: 9px; border-top: 1px dashed var(--divider);
+    }
+    .custom-fees-head {
+      display: flex; align-items: center; justify-content: space-between; gap: 6px; margin-bottom: 6px;
+    }
+    .custom-fee-row {
+      display: flex; align-items: center; justify-content: space-between; gap: 6px;
+      padding: 5px 8px; border-radius: 10px; background: var(--glass-bg-subtle);
+      border: 1px solid var(--divider); margin-bottom: 5px; font-size: 12.5px;
+    }
+    .custom-fee-editor {
+      display: grid; grid-template-columns: 1fr 110px auto; gap: 6px; margin-top: 6px;
     }
     .sync-box:active { transform: scale(0.96); }
     .sync-box.state-synced {
@@ -666,6 +768,35 @@
       background: var(--danger-soft); border: 1px solid rgba(239, 68, 68, 0.35);
       color: var(--danger); font-size: 12.5px; font-weight: 700; text-align: center;
     }
+    .login-room-grid {
+      display: grid; grid-template-columns: repeat(2, 1fr); gap: 7px;
+      max-height: 176px; overflow-y: auto; padding: 3px 2px 6px;
+      margin-bottom: 12px;
+    }
+    .login-room-pill {
+      padding: 9px 8px; border-radius: 12px;
+      border: 1.5px solid var(--input-border);
+      background: var(--glass-bg-subtle); color: var(--text-main);
+      font-size: 12.5px; font-weight: 700; cursor: pointer;
+      text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+      transition: all 0.16s ease;
+    }
+    .login-room-pill.active {
+      background: linear-gradient(135deg, #10b981, #059669);
+      color: #ffffff; border-color: rgba(255,255,255,0.45);
+      box-shadow: 0 5px 14px rgba(16, 185, 129, 0.35);
+    }
+    .login-room-pill.admin-pill.active {
+      background: linear-gradient(135deg, #6366f1, #4f46e5);
+      box-shadow: 0 5px 14px rgba(99, 102, 241, 0.35);
+    }
+    .radio-opt-card {
+      display: flex; align-items: flex-start; gap: 8px;
+      padding: 8px 10px; border-radius: 11px; margin-bottom: 6px;
+      background: var(--glass-bg-subtle); border: 1px solid var(--divider);
+      font-size: 12px; cursor: pointer;
+    }
+    .radio-opt-card input { width: auto; margin-top: 2px; }
 
     /* Lightbox */
     .lightbox {
@@ -802,7 +933,16 @@
         <div class="sec-head">
           <div class="sec-title" id="billingSectionTitle">Tiền phòng 11/2026</div>
           <div class="flex-row" id="adminBillToolbar">
+            <div class="due-inline-bar" title="Thiết lập ngày hạn thu tiền phòng hàng tháng để tự động cảnh báo quá hạn">
+              <span>Hạn thu: mùng</span>
+              <input type="number" id="dueDayInput" min="1" max="28" value="5" onchange="updateDueSettings()" />
+              <select id="dueNextMonthSelect" onchange="updateDueSettings()">
+                <option value="0">Tháng này</option>
+                <option value="1">Tháng sau</option>
+              </select>
+            </div>
             <button class="btn btn-emerald btn-sm" onclick="generateBillsForPeriod()">Kết tổng tiền kỳ này</button>
+            <button class="btn btn-indigo btn-sm" onclick="copyZaloGroupAnnouncement()">Copy thông báo nhóm Zalo</button>
           </div>
         </div>
         <div id="billListContainer" class="bill-grid"></div>
@@ -869,10 +1009,33 @@
         </div>
       </div>
 
-      <!-- Tenant Only: Current Room Meter Detail -->
+      <!-- Admin Only: Đối chiếu công tơ tổng EVN vs tổng các phòng -->
+      <div id="adminEvnCompareCard" class="glass-card">
+        <div class="sec-head" style="margin-bottom:8px;">
+          <div class="sec-title">Đối chiếu công tơ tổng EVN — <span id="evnPeriodLabel">Tháng 10-11/2026</span></div>
+        </div>
+        <div class="cfg-fields" style="grid-template-columns: repeat(auto-fit, minmax(135px, 1fr)); margin-top:0;">
+          <div>
+            <label class="field-label">Chỉ số EVN mới</label>
+            <input type="number" id="evnNewInput" placeholder="Nhập số mới" oninput="onEvnMeterChange('newVal', this.value)" />
+          </div>
+          <div>
+            <label class="field-label">Chỉ số EVN cũ</label>
+            <input type="number" id="evnOldInput" placeholder="Số cũ" oninput="onEvnMeterChange('oldVal', this.value)" />
+          </div>
+          <div>
+            <label class="field-label">Ghi chú EVN</label>
+            <input type="text" id="evnNoteInput" placeholder="VD: Điện hành lang + bơm" onchange="onEvnMeterChange('note', this.value)" />
+          </div>
+        </div>
+        <div id="evnCompareResult"></div>
+      </div>
+
+      <!-- Tenant Only: Current Room Meter Detail (2 lines for mobile) -->
       <div id="tenantMeterDetailCard" class="glass-card hidden">
-        <div class="sec-head">
-          <div class="sec-title">Chi tiết số điện phòng bạn — <span id="tenantMeterPeriodLabel">Tháng 10-11/2026</span></div>
+        <div style="margin-bottom:12px;">
+          <div class="sec-title" style="margin-bottom:3px;">Chi tiết số điện phòng bạn</div>
+          <div id="tenantMeterPeriodLabel" style="font-size:13.5px; font-weight:700; color:var(--amber);">Tháng 10-11/2026</div>
         </div>
         <div id="tenantMeterDetailBody"></div>
       </div>
@@ -911,7 +1074,8 @@
     <section id="tab-config" class="tab-panel">
       <div class="glass-card">
         <div class="sec-head">
-          <div class="sec-title">Thiết lập nhanh giá chung (9 phòng)</div>
+          <div class="sec-title" id="configBulkTitle">Thiết lập nhanh giá chung (9 phòng)</div>
+          <button type="button" class="btn btn-emerald btn-sm" onclick="addNewRoom()">+ Thêm phòng</button>
         </div>
         <div class="cfg-fields" style="grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));">
           <div>
@@ -928,7 +1092,7 @@
           </div>
         </div>
         <div class="mt-3 flex-row" style="justify-content:space-between;">
-          <button class="btn btn-indigo btn-sm" onclick="applyBulkRates()">Áp dụng giá cho cả 9 phòng</button>
+          <button class="btn btn-indigo btn-sm" id="btnApplyBulkRates" onclick="applyBulkRates()">Áp dụng giá cho tất cả phòng</button>
           <span class="muted">Mọi thay đổi thông tin phòng sẽ tự động đồng bộ lên máy chủ</span>
         </div>
       </div>
@@ -1189,18 +1353,19 @@
       <div id="loginErrorBox" class="login-error-box hidden"></div>
 
       <form onsubmit="handleLoginSubmit(event)">
-        <div style="margin-bottom:10px;">
-          <label class="field-label">Chọn phòng / Vai trò</label>
-          <select id="loginRoomSelect" onchange="onLoginRoomChanged()"></select>
+        <div style="margin-bottom:8px;">
+          <label class="field-label">Chọn phòng của bạn (hoặc Quản trị viên)</label>
+          <input type="hidden" id="loginRoomSelect" value="ADMIN" />
+          <div id="loginRoomGrid" class="login-room-grid"></div>
         </div>
-        <div style="margin-bottom:10px;">
-          <label class="field-label">Tài khoản</label>
-          <input type="text" id="loginUser" autocomplete="username" placeholder="Nhập tài khoản đăng nhập" oninput="scheduleAutoLoginCheck()" required />
+        <div id="loginUserWrap" style="margin-bottom:10px;">
+          <label class="field-label">Tài khoản Quản trị viên</label>
+          <input type="text" id="loginUser" autocomplete="username" placeholder="Nhập tài khoản QTV (VD: admin)" oninput="scheduleAutoLoginCheck()" />
         </div>
         <div style="margin-bottom:14px;">
-          <label class="field-label">Mật khẩu (nhập đúng sẽ tự động đăng nhập)</label>
+          <label class="field-label" id="loginPassLabel">Mật khẩu số (nhập đúng tự động đăng nhập)</label>
           <div class="input-eye-wrap">
-            <input type="password" id="loginPass" inputmode="numeric" autocomplete="current-password" placeholder="Nhập mật khẩu" oninput="scheduleAutoLoginCheck()" required />
+            <input type="password" id="loginPass" inputmode="numeric" autocomplete="current-password" placeholder="Nhập mật khẩu số" oninput="scheduleAutoLoginCheck()" required />
             <button type="button" class="eye-toggle" onclick="toggleInputEye('loginPass')">&#128065;</button>
           </div>
         </div>
@@ -1274,6 +1439,8 @@
     /* ============================================================
        NHÀ CHO THUÊ V3 — CORE STATE & STORAGE
        ============================================================ */
+    const APP_VERSION = "8.0.0";
+    const VERSION_KEY = "nha_cho_thue_app_version";
     const STORAGE_KEY = "nha_cho_thue_v3_state";
     const LEGACY_V2_KEY = "nha_cho_thue_v2_state";
     const SESSION_KEY = "nha_cho_thue_v3_session";
@@ -1299,10 +1466,13 @@
           status: "Đang thuê",
           tenantName: "",
           phone: "",
+          cccd: "",
+          email: "",
           people: 1,
           rent: 3000000,
           waterRate: 100000,
-          electricRate: 4000
+          electricRate: 4000,
+          customFees: []
         });
       }
       return arr;
@@ -1311,6 +1481,9 @@
     function makeDefaultState() {
       return {
         appTitle: "Nhà Cho Thuê",
+        dueDay: 5,
+        dueNextMonth: false,
+        masterMeters: [],
         rooms: makeDefaultRooms(),
         accounts: [
           {
@@ -1354,12 +1527,15 @@
         const parsed = JSON.parse(raw);
         const def = makeDefaultState();
         const rooms = Array.isArray(parsed.rooms) && parsed.rooms.length
-          ? parsed.rooms.map((r) => ({ ...r, status: normalizeRoomStatus(r.status) }))
+          ? parsed.rooms.map((r) => ({ ...r, cccd: "", email: "", ...r, status: normalizeRoomStatus(r.status), customFees: Array.isArray(r.customFees) ? r.customFees : [] }))
           : def.rooms;
         return {
           ...def,
           ...parsed,
           appTitle: (parsed.appTitle && String(parsed.appTitle).trim()) || "Nhà Cho Thuê",
+          dueDay: Number(parsed.dueDay) || 5,
+          dueNextMonth: Boolean(parsed.dueNextMonth),
+          masterMeters: Array.isArray(parsed.masterMeters) ? parsed.masterMeters.map((mm) => ({ ...mm, period: normalizePeriodStr(mm.period) })) : [],
           rooms,
           accounts: Array.isArray(parsed.accounts) && parsed.accounts.length ? parsed.accounts : def.accounts,
           meters: Array.isArray(parsed.meters) ? parsed.meters.map((m) => ({ note: "", ...m, period: normalizePeriodStr(m.period), date: normalizeDateStr(m.date) })) : [],
@@ -1466,6 +1642,8 @@
     let activeReceiptBillId = null;
     let editingTenantRoomId = null;
     let editingRoomNameId = null;
+    let collapsedRooms = {};
+    let addingFeeRoomId = null;
     let hasLocalDirty = false;
     let localMutationVersion = 0;
     let quickPushTimer = null;
@@ -1597,21 +1775,25 @@
     /* ============================================================
        SYNC STATUS BOX, 2-WAY SYNC & 6-SECOND AUTO-SYNC
        ============================================================ */
+    const ICON_CLOUD_CHECK = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"></path><path d="m9 15 2 2 4-4"></path></svg>`;
+    const ICON_ARROW_DOWN = `<svg class="sync-arrow-down" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="4" x2="12" y2="19"></line><polyline points="6 13 12 19 18 13"></polyline></svg>`;
+    const ICON_ARROW_UP = `<svg class="sync-arrow-up" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="20" x2="12" y2="5"></line><polyline points="6 11 12 5 18 11"></polyline></svg>`;
+
     function updateSyncBoxUI(mode, customText) {
       const box = document.getElementById("syncBox");
       box.classList.remove("state-synced", "state-busy", "state-needs-pull");
       if (mode === "needs-pull") {
         box.classList.add("state-needs-pull");
-        box.textContent = customText || "Đồng bộ máy chủ";
+        box.innerHTML = `${ICON_ARROW_DOWN}<span>${escHtml(customText || "Đồng bộ")}</span>`;
       } else if (mode === "pulling") {
         box.classList.add("state-busy");
-        box.textContent = "Đang đồng bộ xuống";
+        box.innerHTML = `${ICON_ARROW_DOWN}<span>Đang đồng bộ</span>`;
       } else if (mode === "pushing") {
         box.classList.add("state-busy");
-        box.textContent = "Đang đồng bộ lên máy chủ";
+        box.innerHTML = `${ICON_ARROW_UP}<span>Đang đồng bộ</span>`;
       } else {
         box.classList.add("state-synced");
-        box.textContent = "Đã đồng bộ máy chủ";
+        box.innerHTML = `${ICON_CLOUD_CHECK}<span>Đã đồng bộ</span>`;
       }
     }
 
@@ -1710,6 +1892,9 @@
     function getStateFingerprint(s) {
       return JSON.stringify({
         appTitle: s.appTitle,
+        dueDay: s.dueDay,
+        dueNextMonth: s.dueNextMonth,
+        masterMeters: isAdmin() ? s.masterMeters : null,
         rooms: s.rooms,
         meters: s.meters,
         bills: s.bills,
@@ -1752,8 +1937,17 @@
         if (typeof res.appTitle === "string" && res.appTitle.trim()) {
           state.appTitle = res.appTitle.trim();
         }
+        if (res.dueDay !== undefined && Number(res.dueDay) >= 1) {
+          state.dueDay = Math.min(28, Math.max(1, Number(res.dueDay)));
+        }
+        if (typeof res.dueNextMonth === "boolean") {
+          state.dueNextMonth = res.dueNextMonth;
+        }
+        if (isAdmin() && Array.isArray(res.masterMeters)) {
+          state.masterMeters = res.masterMeters.map((mm) => ({ ...mm, period: normalizePeriodStr(mm.period) }));
+        }
         if (Array.isArray(res.rooms) && res.rooms.length) {
-          state.rooms = res.rooms.map((r) => ({ ...r, status: normalizeRoomStatus(r.status) }));
+          state.rooms = res.rooms.map((r) => ({ ...r, cccd: "", email: "", ...r, status: normalizeRoomStatus(r.status), customFees: Array.isArray(r.customFees) ? r.customFees : [] }));
         }
         if (Array.isArray(res.meters)) {
           state.meters = res.meters.map((m) => ({
@@ -1842,6 +2036,9 @@
           oldAuth: oldAuth || undefined,
           data: {
             appTitle: state.appTitle,
+            dueDay: state.dueDay,
+            dueNextMonth: state.dueNextMonth,
+            masterMeters: state.masterMeters,
             rooms: state.rooms,
             accounts: state.accounts,
             meters: state.meters,
@@ -2064,9 +2261,9 @@
 
     function populateLoginRoomDropdown() {
       const sel = document.getElementById("loginRoomSelect");
+      const grid = document.getElementById("loginRoomGrid");
       const prevVal = sel.value || "ADMIN";
 
-      // Hợp nhất danh sách phòng đã tạo tài khoản từ máy chủ & cục bộ
       const roomMap = new Map();
       serverLoginRooms.forEach((item) => {
         roomMap.set(item.roomId, item.roomName || item.roomId);
@@ -2075,28 +2272,53 @@
         .filter((a) => a.status === "active" && a.role === "tenant" && a.roomId)
         .forEach((a) => {
           const rm = state.rooms.find((r) => r.id === a.roomId);
-          roomMap.set(a.roomId, (rm && rm.name) || a.roomId);
+          roomMap.set(a.roomId, (rm && rm.name) || a.displayName || a.roomId);
         });
 
-      const opts = [`<option value="ADMIN">Quản trị viên</option>`];
+      const validIds = ["ADMIN", ...roomMap.keys()];
+      const activeId = validIds.includes(prevVal) ? prevVal : "ADMIN";
+      sel.value = activeId;
+
+      const pills = [
+        `<button type="button" class="login-room-pill admin-pill ${activeId === "ADMIN" ? "active" : ""}" onclick="selectLoginRoom('ADMIN')">Quản trị viên</button>`
+      ];
       [...roomMap.entries()]
         .sort((a, b) => a[0].localeCompare(b[0]))
         .forEach(([rId, rName]) => {
-          opts.push(`<option value="${escHtml(rId)}">${escHtml(rName)} (${escHtml(rId)})</option>`);
+          pills.push(`<button type="button" class="login-room-pill ${activeId === rId ? "active" : ""}" onclick="selectLoginRoom('${escHtml(rId)}')">${escHtml(rName)}</button>`);
         });
 
-      sel.innerHTML = opts.join("");
-      if ([...sel.options].some((o) => o.value === prevVal)) {
-        sel.value = prevVal;
+      if (grid) grid.innerHTML = pills.join("");
+      updateLoginFormVisibility();
+    }
+
+    function updateLoginFormVisibility() {
+      const sel = document.getElementById("loginRoomSelect");
+      const isSelectingAdmin = !sel || sel.value === "ADMIN";
+      const userWrap = document.getElementById("loginUserWrap");
+      const userInp = document.getElementById("loginUser");
+      const passLbl = document.getElementById("loginPassLabel");
+      if (userWrap) userWrap.classList.toggle("hidden", !isSelectingAdmin);
+      if (userInp) userInp.required = isSelectingAdmin;
+      if (passLbl) {
+        passLbl.textContent = isSelectingAdmin
+          ? "Mật khẩu Quản trị viên (nhập đúng tự đăng nhập)"
+          : "Mật khẩu phòng (nhập đúng tự động đăng nhập)";
       }
     }
 
-    function onLoginRoomChanged() {
+    function selectLoginRoom(roomId) {
+      const sel = document.getElementById("loginRoomSelect");
+      if (sel) sel.value = roomId;
+      populateLoginRoomDropdown();
       showLoginError("");
-      document.getElementById("loginUser").value = "";
       document.getElementById("loginPass").value = "";
       syncAdminRecoveryVisibility();
-      document.getElementById("loginUser").focus();
+      if (roomId === "ADMIN") {
+        document.getElementById("loginUser").focus();
+      } else {
+        document.getElementById("loginPass").focus();
+      }
     }
 
     async function fetchPublicLoginRooms() {
@@ -2135,15 +2357,18 @@
     }
 
     function findLocalMatchingAccount(selectedRoom, username, password) {
+      const p = String(password || "").trim();
+      if (!p) return null;
+      if (selectedRoom && selectedRoom !== "ADMIN") {
+        return state.accounts.find((a) =>
+          a.status === "active" && a.role === "tenant" && a.roomId === selectedRoom && String(a.password).trim() === p
+        ) || null;
+      }
       const u = String(username || "").trim().toLowerCase();
-      const p = String(password || "");
-      if (!u || !p) return null;
-      return state.accounts.find((a) => {
-        if (a.status !== "active") return false;
-        if (a.username.toLowerCase() !== u || a.password !== p) return false;
-        if (selectedRoom === "ADMIN") return a.role === "admin";
-        return a.role === "tenant" && a.roomId === selectedRoom;
-      }) || null;
+      if (!u) return null;
+      return state.accounts.find((a) =>
+        a.status === "active" && a.role === "admin" && a.username.toLowerCase() === u && String(a.password).trim() === p
+      ) || null;
     }
 
     function completeLoginSuccess(matched) {
@@ -2195,8 +2420,9 @@
       if (updateLockoutUI()) return;
       const selectedRoom = document.getElementById("loginRoomSelect").value;
       const username = document.getElementById("loginUser").value.trim();
-      const password = document.getElementById("loginPass").value;
-      if (!username || !password) return;
+      const password = document.getElementById("loginPass").value.trim();
+      if (!password) return;
+      if (selectedRoom === "ADMIN" && !username) return;
 
       // 1. Kiểm tra tức thì cục bộ
       const localMatch = findLocalMatchingAccount(selectedRoom, username, password);
@@ -2205,15 +2431,15 @@
         return;
       }
 
-      // 2. Kiểm tra tự động trên máy chủ sau 450ms (dành cho thiết bị mới / đổi mật khẩu)
+      // 2. Kiểm tra tự động trên máy chủ sau 420ms
       if (autoLoginDebounce) clearTimeout(autoLoginDebounce);
       if (password.length >= 4) {
         autoLoginDebounce = setTimeout(async () => {
           if (!document.getElementById("loginGate").classList.contains("open")) return;
           const curRoom = document.getElementById("loginRoomSelect").value;
           const curUser = document.getElementById("loginUser").value.trim();
-          const curPass = document.getElementById("loginPass").value;
-          if (!curUser || curPass.length < 4) return;
+          const curPass = document.getElementById("loginPass").value.trim();
+          if (curPass.length < 4 || (curRoom === "ADMIN" && !curUser)) return;
           try {
             const res = await apiCall({ action: "login", roomId: curRoom, username: curUser, password: curPass });
             if (res && res.ok && res.user) {
@@ -2279,24 +2505,92 @@
       if (checkSessionExpired()) return;
       const box = document.getElementById("accountProfileBox");
       const room = state.rooms.find((r) => r.id === session.roomId);
+      const roomLabel = room ? room.name : (session.displayName || session.roomId);
       const remainMs = Math.max(0, (session.expiresAt || 0) - Date.now());
       const remainH = Math.floor(remainMs / 3600000);
       const remainM = Math.floor((remainMs % 3600000) / 60000);
 
+      const tenantChangePassHtml = !isAdmin() ? `
+        <div class="settings-section" style="margin-bottom:12px;">
+          <h4 style="margin:0 0 8px; font-size:13.5px;">Đổi mật khẩu phòng của bạn</h4>
+          <div style="margin-bottom:8px;">
+            <label class="field-label">Tên phòng hiển thị (chỉ xem)</label>
+            <input type="text" value="${escHtml(roomLabel)}" readonly />
+          </div>
+          <div class="cfg-fields" style="margin-top:0;">
+            <div>
+              <label class="field-label">Mật khẩu mới</label>
+              <div class="input-eye-wrap">
+                <input type="password" id="tenantNewPassInput" inputmode="numeric" placeholder="Từ 4 chữ số" />
+                <button type="button" class="eye-toggle" onclick="toggleInputEye('tenantNewPassInput')">&#128065;</button>
+              </div>
+            </div>
+            <div>
+              <label class="field-label">Nhập lại mật khẩu</label>
+              <div class="input-eye-wrap">
+                <input type="password" id="tenantConfirmPassInput" inputmode="numeric" placeholder="Nhập lại" />
+                <button type="button" class="eye-toggle" onclick="toggleInputEye('tenantConfirmPassInput')">&#128065;</button>
+              </div>
+            </div>
+          </div>
+          <div class="mt-2">
+            <button type="button" id="btnTenantSavePass" class="btn btn-emerald btn-sm" style="width:100%;" onclick="submitTenantChangePassword()">Lưu mật khẩu mới</button>
+          </div>
+        </div>
+      ` : "";
+
       box.innerHTML = `
         <div class="settings-section" style="margin-bottom:12px;">
-          <div style="font-size:15px; font-weight:800;">${escHtml(session.displayName || session.username)}</div>
-          <div class="muted mt-2">Tài khoản: <strong>${escHtml(session.username)}</strong></div>
-          <div class="muted mt-2">Quyền hạn: <strong>${isAdmin() ? "Quản trị viên (Toàn quyền)" : "Người thuê — " + escHtml(room ? room.name : session.roomId) + " (Chỉ xem & gửi bill)"}</strong></div>
-          <div class="muted mt-2">Phiên đăng nhập còn lại: <strong>${remainH} giờ ${remainM} phút</strong> (tự duy trì 24h)</div>
-          <div class="muted mt-2">Đồng bộ 2 chiều tự động (6 giây/lần): <strong>${hasInitialPulled ? "Đang bật" : "Chưa bật (cần bấm đồng bộ xuống)"}</strong></div>
+          <div style="font-size:15px; font-weight:800;">${escHtml(isAdmin() ? (session.displayName || "Quản trị viên") : roomLabel)}</div>
+          <div class="muted mt-2">Quyền hạn: <strong>${isAdmin() ? "Quản trị viên (Toàn quyền)" : "Người thuê — " + escHtml(roomLabel) + " (Chỉ xem & gửi bill)"}</strong></div>
+          <div class="muted mt-2">Phiên đăng nhập còn lại: <strong>${remainH} giờ ${remainM} phút</strong> (duy trì 24h)</div>
+          <div class="muted mt-2">Đồng bộ 2 chiều tự động: <strong>${hasInitialPulled ? "Đang bật" : "Chưa bật (cần bấm đồng bộ)"}</strong></div>
         </div>
+        ${tenantChangePassHtml}
         <div class="flex-row" style="justify-content:space-between;">
-          ${!isAdmin() ? `<button class="btn btn-indigo btn-sm" onclick="closeModal('accountModal'); openPinModal();">Nhập mã QTV để sửa</button>` : `<span></span>`}
-          <button class="btn btn-danger btn-sm" onclick="logoutUser()">Đăng xuất / Đổi tài khoản</button>
+          ${!isAdmin() ? `<button class="btn btn-indigo btn-sm" onclick="closeModal('accountModal'); openPinModal();">Nhập mã QTV</button>` : `<span></span>`}
+          <button class="btn btn-danger btn-sm" onclick="logoutUser()">Đăng xuất / Đổi phòng</button>
         </div>
       `;
       openModal("accountModal");
+    }
+
+    async function submitTenantChangePassword() {
+      if (!session || isAdmin()) return;
+      const newPass = document.getElementById("tenantNewPassInput").value.trim();
+      const confirmPass = document.getElementById("tenantConfirmPassInput").value.trim();
+      if (newPass.length < 4) {
+        toast("Mật khẩu mới phải có ít nhất 4 chữ số!", "warn");
+        return;
+      }
+      if (newPass !== confirmPass) {
+        toast("Mật khẩu nhập lại không khớp!", "err");
+        return;
+      }
+      const btn = document.getElementById("btnTenantSavePass");
+      btn.disabled = true;
+      btn.textContent = "Đang cập nhật...";
+      try {
+        await apiCall({
+          action: "changeTenantPassword",
+          auth: { username: session.username, password: session.password },
+          newPassword: newPass
+        });
+        session.password = newPass;
+        saveSession(session);
+        const acc = state.accounts.find((a) => a.id === session.id);
+        if (acc) {
+          acc.password = newPass;
+          saveState(false);
+        }
+        toast("Đổi mật khẩu phòng thành công!", "ok");
+        closeModal("accountModal");
+      } catch (err) {
+        toast("Không thể đổi mật khẩu: " + err.message, "err");
+      } finally {
+        btn.disabled = false;
+        btn.textContent = "Lưu mật khẩu mới";
+      }
     }
 
     function logoutUser() {
@@ -2506,14 +2800,119 @@
       scheduleQuickPush(700);
     }
 
+    function addNewRoom() {
+      if (!isAdmin()) return openPinModal();
+      let maxNum = 0;
+      state.rooms.forEach((r) => {
+        const m = String(r.id || "").match(/(\d+)/);
+        if (m) maxNum = Math.max(maxNum, Number(m[1]));
+      });
+      const nextNum = maxNum + 1;
+      const newId = "P" + String(nextNum).padStart(2, "0");
+      const newName = "Phòng " + (100 + nextNum);
+      const rent = Number(document.getElementById("bulkRent").value) || 3000000;
+      const waterRate = Number(document.getElementById("bulkWater").value) || 100000;
+      const electricRate = Number(document.getElementById("bulkElectric").value) || 4000;
+
+      state.rooms.push({
+        id: newId,
+        name: newName,
+        status: "Đang thuê",
+        tenantName: "",
+        phone: "",
+        people: 1,
+        rent,
+        waterRate,
+        electricRate,
+        customFees: []
+      });
+      saveState(true);
+      renderAll();
+      toast("Đã thêm " + newName + " (" + newId + ") & đang tự đồng bộ!", "ok");
+      scheduleQuickPush(600);
+    }
+
+    function toggleRoomCollapse(roomId) {
+      collapsedRooms[roomId] = !collapsedRooms[roomId];
+      renderConfigTab();
+    }
+
+    function toggleAddCustomFee(roomId) {
+      if (!isAdmin()) return openPinModal();
+      addingFeeRoomId = (addingFeeRoomId === roomId) ? null : roomId;
+      if (addingFeeRoomId) collapsedRooms[roomId] = false;
+      renderConfigTab();
+      if (addingFeeRoomId) {
+        setTimeout(() => {
+          const el = document.getElementById("newFeeName_" + roomId);
+          if (el) el.focus();
+        }, 40);
+      }
+    }
+
+    function saveCustomFee(roomId) {
+      if (!isAdmin()) return openPinModal();
+      const nameEl = document.getElementById("newFeeName_" + roomId);
+      const amtEl = document.getElementById("newFeeAmt_" + roomId);
+      if (!nameEl || !amtEl) return;
+      const name = nameEl.value.trim();
+      const amount = Math.max(0, Number(amtEl.value) || 0);
+      if (!name) {
+        toast("Vui lòng nhập tên mục thu thêm (VD: Tiền rác)!", "warn");
+        return;
+      }
+      const rm = state.rooms.find((r) => r.id === roomId);
+      if (!rm) return;
+      if (!Array.isArray(rm.customFees)) rm.customFees = [];
+      rm.customFees.push({ id: "F_" + Date.now(), name, amount });
+      addingFeeRoomId = null;
+      saveState(true);
+      renderConfigTab();
+      toast("Đã thêm mục \"" + name + "\" (" + fmtMoney(amount) + ")!", "ok");
+      scheduleQuickPush(600);
+    }
+
+    function updateCustomFeeAmount(roomId, feeId, rawVal) {
+      if (!isAdmin()) return openPinModal();
+      const rm = state.rooms.find((r) => r.id === roomId);
+      if (!rm || !Array.isArray(rm.customFees)) return;
+      const f = rm.customFees.find((x) => x.id === feeId);
+      if (!f) return;
+      f.amount = Math.max(0, Number(rawVal) || 0);
+      saveState(true);
+      scheduleQuickPush(800);
+    }
+
+    function deleteCustomFee(roomId, feeId) {
+      if (!isAdmin()) return openPinModal();
+      const rm = state.rooms.find((r) => r.id === roomId);
+      if (!rm || !Array.isArray(rm.customFees)) return;
+      rm.customFees = rm.customFees.filter((x) => x.id !== feeId);
+      saveState(true);
+      renderConfigTab();
+      toast("Đã xóa mục thu thêm.", "ok");
+      scheduleQuickPush(600);
+    }
+
     function renderConfigTab() {
       if (!isAdmin()) return;
+      const cnt = state.rooms.length;
+      const bulkTitle = document.getElementById("configBulkTitle");
+      if (bulkTitle) bulkTitle.textContent = `Thiết lập nhanh giá chung (${cnt} phòng)`;
+      const bulkBtn = document.getElementById("btnApplyBulkRates");
+      if (bulkBtn) bulkBtn.textContent = `Áp dụng giá cho cả ${cnt} phòng`;
+
+      const pencilSvg = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>`;
+
       const grid = document.getElementById("configRoomGrid");
       grid.innerHTML = state.rooms.map((rm) => {
         const waterMonth = (Number(rm.people) || 0) * (Number(rm.waterRate) || 0);
         const vacant = isRoomVacant(rm);
         const activeAcc = getActiveTenantForRoom(rm.id);
         const isEditingName = editingRoomNameId === rm.id;
+        const isCollapsed = Boolean(collapsedRooms[rm.id]);
+        const fees = Array.isArray(rm.customFees) ? rm.customFees : [];
+        const isAddingFee = addingFeeRoomId === rm.id;
 
         const titleHtml = isEditingName
           ? `<div class="inline-name-edit">
@@ -2525,60 +2924,100 @@
              </div>`
           : `<div class="room-title-wrap">
                <div style="font-weight:800; font-size:15px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${escHtml(rm.id)} · ${escHtml(rm.name)}</div>
-               <button type="button" class="pencil-btn" onclick="startEditRoomName('${rm.id}')" title="Sửa tên phòng">
-                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                   <path d="M12 20h9"></path>
-                   <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
-                 </svg>
-               </button>
+               <button type="button" class="pencil-btn" onclick="startEditRoomName('${rm.id}')" title="Sửa tên phòng">${pencilSvg}</button>
              </div>`;
+
+        const customFeesHtml = `
+          <div class="custom-fees-box">
+            <div class="custom-fees-head">
+              <span class="field-label" style="margin:0;">Mục thu thêm (Tiền rác, gửi xe...)</span>
+              <button type="button" class="pencil-btn" style="width:auto; padding:0 8px; gap:4px; font-size:11px; font-weight:700;" onclick="toggleAddCustomFee('${rm.id}')" title="Thêm mục thu mới cho phòng">
+                ${pencilSvg}<span>${isAddingFee ? "Đóng" : "Thêm mục"}</span>
+              </button>
+            </div>
+            ${fees.map((f) => `
+              <div class="custom-fee-row">
+                <strong style="flex:1;">${escHtml(f.name)}</strong>
+                <input type="number" value="${f.amount}" step="5000" style="width:104px; padding:4px 7px; font-size:12px; text-align:right; font-weight:700;"
+                  onchange="updateCustomFeeAmount('${rm.id}','${escHtml(f.id)}',this.value)" />
+                <button type="button" class="btn btn-danger btn-sm" style="padding:3px 7px;" onclick="deleteCustomFee('${rm.id}','${escHtml(f.id)}')" title="Xóa mục này">&times;</button>
+              </div>
+            `).join("")}
+            ${isAddingFee ? `
+              <div class="custom-fee-editor">
+                <input type="text" id="newFeeName_${rm.id}" placeholder="VD: Tiền rác" />
+                <input type="number" id="newFeeAmt_${rm.id}" placeholder="Số tiền" step="5000" />
+                <button type="button" class="btn btn-emerald btn-sm" onclick="saveCustomFee('${rm.id}')">Lưu</button>
+              </div>
+            ` : (fees.length === 0 ? `<div class="muted" style="font-size:11.5px;">Bấm icon cây bút để thêm mục thu cố định (rác, vệ sinh...)</div>` : "")}
+          </div>
+        `;
 
         return `
           <div class="cfg-card" style="${vacant ? "opacity:0.74;" : ""}">
             <div class="cfg-head-row">
               ${titleHtml}
-              <label class="status-switch" title="Bật: Đang thuê | Tắt: Phòng trống">
-                <input type="checkbox" ${!vacant ? "checked" : ""} onchange="toggleRoomOccupied('${rm.id}', this.checked)" />
-                <span class="switch-track"><span class="switch-knob"></span></span>
-                <span class="switch-text ${!vacant ? "on" : "off"}">${!vacant ? "Đang thuê" : "Phòng trống"}</span>
-              </label>
-            </div>
-            <div class="muted mt-2">
-              Tài khoản xem phòng: ${activeAcc ? `<strong style="color:var(--emerald)">${escHtml(activeAcc.username)}</strong> (${escHtml(activeAcc.displayName)})` : "Chưa tạo (tạo trong Cài đặt QTV)"}
-            </div>
-            <div class="cfg-fields">
-              <div>
-                <label class="field-label">Tên khách thuê</label>
-                <input type="text" value="${escHtml(rm.tenantName || "")}" placeholder="Nhập tên khách" onchange="updateRoomField('${rm.id}','tenantName',this.value)" />
+              <div style="display:flex; align-items:center; gap:6px; flex-wrap:nowrap;">
+                <label class="status-switch" title="Bật: Đang thuê | Tắt: Phòng trống">
+                  <input type="checkbox" ${!vacant ? "checked" : ""} onchange="toggleRoomOccupied('${rm.id}', this.checked)" />
+                  <span class="switch-track"><span class="switch-knob"></span></span>
+                  <span class="switch-text ${!vacant ? "on" : "off"}">${!vacant ? "Đang thuê" : "Phòng trống"}</span>
+                </label>
+                <button type="button" class="collapse-btn" onclick="toggleRoomCollapse('${rm.id}')">
+                  ${isCollapsed ? "Mở rộng" : "Thu gọn"}
+                </button>
               </div>
-              <div>
-                <label class="field-label">Số điện thoại</label>
-                <div style="display:flex; gap:5px;">
-                  <input type="tel" value="${escHtml(rm.phone || "")}" placeholder="Số điện thoại" onchange="updateRoomField('${rm.id}','phone',this.value)" />
-                  ${rm.phone ? `<a class="btn btn-glass btn-sm" href="tel:${escHtml(rm.phone)}">Gọi</a>` : ""}
+            </div>
+            ${isCollapsed
+              ? `<div class="muted mt-2">${escHtml(rm.tenantName || "Chưa nhập khách")} · Nhà: <strong>${fmtMoney(rm.rent)}</strong> · ${rm.people} người${fees.length ? ` · +${fees.length} mục phụ` : ""}</div>`
+              : `
+                <div class="muted mt-2">
+                  Tài khoản xem phòng: ${activeAcc ? `<strong style="color:var(--emerald)">${escHtml(activeAcc.username)}</strong> (${escHtml(activeAcc.displayName)})` : "Chưa tạo (tạo trong Cài đặt QTV)"}
                 </div>
-              </div>
-              <div>
-                <label class="field-label">Tiền nhà (đ/tháng)</label>
-                <input type="number" value="${rm.rent}" step="50000" onchange="updateRoomField('${rm.id}','rent',this.value)" />
-              </div>
-              <div>
-                <label class="field-label">Số người ở (Nước: ${fmtMoney(waterMonth)})</label>
-                <div class="stepper">
-                  <button type="button" onclick="stepPeople('${rm.id}',-1)">-</button>
-                  <input type="number" value="${rm.people}" min="0" onchange="updateRoomField('${rm.id}','people',this.value)" />
-                  <button type="button" onclick="stepPeople('${rm.id}',1)">+</button>
+                <div class="cfg-fields">
+                  <div>
+                    <label class="field-label">Tên khách thuê</label>
+                    <input type="text" value="${escHtml(rm.tenantName || "")}" placeholder="Nhập tên khách" onchange="updateRoomField('${rm.id}','tenantName',this.value)" />
+                  </div>
+                  <div>
+                    <label class="field-label">Số điện thoại</label>
+                    <div style="display:flex; gap:5px;">
+                      <input type="tel" value="${escHtml(rm.phone || "")}" placeholder="Số điện thoại" onchange="updateRoomField('${rm.id}','phone',this.value)" />
+                      ${rm.phone ? `<a class="btn btn-glass btn-sm" href="tel:${escHtml(rm.phone)}">Gọi</a>` : ""}
+                    </div>
+                  </div>
+                  <div>
+                    <label class="field-label">Số CC</label>
+                    <input type="text" inputmode="numeric" value="${escHtml(rm.cccd || "")}" placeholder="Số căn cước" onchange="updateRoomField('${rm.id}','cccd',this.value)" />
+                  </div>
+                  <div>
+                    <label class="field-label">Email nhận phiếu thu (tự động gửi)</label>
+                    <input type="text" inputmode="email" value="${escHtml(rm.email || "")}" placeholder="Để trống nếu không gửi mail" onchange="updateRoomField('${rm.id}','email',this.value)" />
+                  </div>
+                  <div>
+                    <label class="field-label">Tiền nhà (đ/tháng)</label>
+                    <input type="number" value="${rm.rent}" step="50000" onchange="updateRoomField('${rm.id}','rent',this.value)" />
+                  </div>
+                  <div>
+                    <label class="field-label">Số người ở (Nước: ${fmtMoney(waterMonth)})</label>
+                    <div class="stepper">
+                      <button type="button" onclick="stepPeople('${rm.id}',-1)">-</button>
+                      <input type="number" value="${rm.people}" min="0" onchange="updateRoomField('${rm.id}','people',this.value)" />
+                      <button type="button" onclick="stepPeople('${rm.id}',1)">+</button>
+                    </div>
+                  </div>
+                  <div>
+                    <label class="field-label">Tiền nước (đ/người)</label>
+                    <input type="number" value="${rm.waterRate}" step="10000" onchange="updateRoomField('${rm.id}','waterRate',this.value)" />
+                  </div>
+                  <div>
+                    <label class="field-label">Giá điện (đ/số)</label>
+                    <input type="number" value="${rm.electricRate}" step="100" onchange="updateRoomField('${rm.id}','electricRate',this.value)" />
+                  </div>
                 </div>
-              </div>
-              <div>
-                <label class="field-label">Tiền nước (đ/người)</label>
-                <input type="number" value="${rm.waterRate}" step="10000" onchange="updateRoomField('${rm.id}','waterRate',this.value)" />
-              </div>
-              <div>
-                <label class="field-label">Giá điện (đ/số)</label>
-                <input type="number" value="${rm.electricRate}" step="100" onchange="updateRoomField('${rm.id}','electricRate',this.value)" />
-              </div>
-            </div>
+                ${customFeesHtml}
+              `
+            }
           </div>
         `;
       }).join("");
@@ -2655,6 +3094,7 @@
           rec.date = todayStr();
         }
         updateMeterUsedCellUI(roomId, rec.newVal, rec.oldVal);
+        renderEvnCompareResultOnly();
       }
       saveState(true);
     }
@@ -2781,7 +3221,28 @@
       if (hasInitialPulled) {
         const ok = await pushToServer(false);
         if (ok) {
-          toast(`Đã lưu số điện & kết xuất ${billCount} hóa đơn sang Tiền phòng ${currentPeriod}!`, "ok");
+          const roomsWithEmail = state.rooms.filter((r) => !isRoomVacant(r) && r.email && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(r.email).trim()));
+          if (roomsWithEmail.length > 0) {
+            toast(`Đã chốt ${billCount} hóa đơn! Đang tự động gửi email cho ${roomsWithEmail.length} phòng...`, "");
+            try {
+              const appUrl = window.location.origin + window.location.pathname;
+              const mailRes = await apiCall({
+                action: "sendBillEmails",
+                auth: { username: session.username, password: session.password },
+                period: currentPeriod,
+                appUrl: appUrl
+              });
+              if (mailRes && mailRes.sentCount > 0) {
+                toast(`Đã chốt hóa đơn & tự động gửi email cho ${mailRes.sentCount} phòng!`, "ok");
+              } else {
+                toast(`Đã lưu số điện & kết xuất ${billCount} hóa đơn sang Tiền phòng ${currentPeriod}!`, "ok");
+              }
+            } catch (mailErr) {
+              toast(`Đã chốt hóa đơn, nhưng lỗi gửi email: ${mailErr.message}`, "warn");
+            }
+          } else {
+            toast(`Đã lưu số điện & kết xuất ${billCount} hóa đơn sang Tiền phòng ${currentPeriod}!`, "ok");
+          }
         }
       } else {
         toast(`Đã tạo ${billCount} hóa đơn Tiền phòng ${currentPeriod} trên máy! Hãy bấm ô Đồng bộ để kết nối máy chủ.`, "warn");
@@ -2878,7 +3339,127 @@
         }
       }
 
+      renderEvnCompareCard();
       renderMeterHistory();
+    }
+
+    function getMasterMeterRecord(period) {
+      if (!Array.isArray(state.masterMeters)) state.masterMeters = [];
+      return state.masterMeters.find((m) => m.period === period) || null;
+    }
+
+    function getAutoOldEvn(period) {
+      const prevP = getPrevPeriod(period);
+      const prev = getMasterMeterRecord(prevP);
+      if (prev && prev.newVal !== "" && prev.newVal !== undefined) return Number(prev.newVal);
+      const curSort = periodToSortable(period);
+      const older = (state.masterMeters || [])
+        .filter((m) => periodToSortable(m.period) < curSort && m.newVal !== "" && m.newVal !== undefined)
+        .sort((a, b) => periodToSortable(b.period) - periodToSortable(a.period));
+      return older.length ? Number(older[0].newVal) : 0;
+    }
+
+    function calcRoomsTotalElectricUsed(period) {
+      return state.rooms.reduce((sum, rm) => {
+        if (isRoomVacant(rm)) return sum;
+        const m = getMeterRecord(period, rm.id);
+        const u = m && m.newVal !== "" ? Math.max(0, Number(m.newVal) - Number(m.oldVal || 0)) : 0;
+        return sum + u;
+      }, 0);
+    }
+
+    function onEvnMeterChange(field, rawVal) {
+      if (!isAdmin()) return openPinModal();
+      if (!Array.isArray(state.masterMeters)) state.masterMeters = [];
+      let rec = getMasterMeterRecord(currentPeriod);
+      if (!rec) {
+        rec = {
+          period: currentPeriod,
+          newVal: "",
+          oldVal: getAutoOldEvn(currentPeriod),
+          roomsUsed: calcRoomsTotalElectricUsed(currentPeriod),
+          note: ""
+        };
+        state.masterMeters.push(rec);
+      }
+      if (field === "note") {
+        rec.note = rawVal;
+      } else {
+        rec[field] = rawVal === "" ? "" : Number(rawVal);
+      }
+      rec.roomsUsed = calcRoomsTotalElectricUsed(currentPeriod);
+      saveState(true);
+      renderEvnCompareResultOnly();
+      scheduleQuickPush(900);
+    }
+
+    function renderEvnCompareCard() {
+      const card = document.getElementById("adminEvnCompareCard");
+      if (!card) return;
+      card.classList.toggle("hidden", !isAdmin());
+      if (!isAdmin()) return;
+
+      document.getElementById("evnPeriodLabel").textContent = formatElectricPeriodRange(currentPeriod);
+      const rec = getMasterMeterRecord(currentPeriod);
+      const oldVal = rec ? rec.oldVal : getAutoOldEvn(currentPeriod);
+      const newVal = rec && rec.newVal !== "" && rec.newVal !== undefined ? rec.newVal : "";
+      const noteVal = rec ? (rec.note || "") : "";
+
+      const elNew = document.getElementById("evnNewInput");
+      const elOld = document.getElementById("evnOldInput");
+      const elNote = document.getElementById("evnNoteInput");
+      if (document.activeElement !== elNew) elNew.value = newVal;
+      if (document.activeElement !== elOld) elOld.value = oldVal;
+      if (document.activeElement !== elNote) elNote.value = noteVal;
+
+      renderEvnCompareResultOnly();
+    }
+
+    function renderEvnCompareResultOnly() {
+      const box = document.getElementById("evnCompareResult");
+      if (!box) return;
+      const rec = getMasterMeterRecord(currentPeriod);
+      const oldVal = rec ? Number(rec.oldVal || 0) : getAutoOldEvn(currentPeriod);
+      const hasNew = rec && rec.newVal !== "" && rec.newVal !== undefined;
+      const evnUsed = hasNew ? (Number(rec.newVal) - oldVal) : null;
+      const roomsUsed = calcRoomsTotalElectricUsed(currentPeriod);
+      if (rec) rec.roomsUsed = roomsUsed;
+
+      const priorDiffs = (state.masterMeters || [])
+        .filter((m) => m.period !== currentPeriod && m.newVal !== "" && m.newVal !== undefined)
+        .map((m) => {
+          const eU = Number(m.newVal) - Number(m.oldVal || 0);
+          const rU = calcRoomsTotalElectricUsed(m.period) || Number(m.roomsUsed || 0);
+          return eU - rU;
+        })
+        .filter((d) => d >= 0);
+
+      const avgDiff = priorDiffs.length ? Math.round(priorDiffs.reduce((a, b) => a + b, 0) / priorDiffs.length) : null;
+      const diff = evnUsed !== null ? (evnUsed - roomsUsed) : null;
+      const diffPct = (evnUsed && evnUsed > 0 && diff !== null) ? Math.round((diff / evnUsed) * 100) : 0;
+
+      let alertHtml = "";
+      if (evnUsed === null) {
+        alertHtml = `<div class="muted mt-2">Nhập <strong>Chỉ số EVN mới</strong> để hệ thống tự đối chiếu điện chung (hành lang, máy bơm) và phát hiện hao hụt bất thường.</div>`;
+      } else if (evnUsed < 0 || diff < 0) {
+        alertHtml = `<div class="evn-alert err">Cảnh báo: Chênh lệch âm (${diff} kWh)! Hãy kiểm tra lại chỉ số EVN hoặc chỉ số công tơ các phòng xem có gõ nhầm không.</div>`;
+      } else if (avgDiff !== null && diff > avgDiff * 1.35 && (diff - avgDiff) >= 20) {
+        alertHtml = `<div class="evn-alert err">Cảnh báo bất thường: Chênh lệch ${diff} kWh (${diffPct}%) đang cao hơn mức trung bình hàng tháng (${avgDiff} kWh) tới +${diff - avgDiff} kWh! Nên kiểm tra công tơ phòng có bị kẹt hoặc rò điện chung.</div>`;
+      } else if (avgDiff === null && (diff > 100 || diffPct > 22)) {
+        alertHtml = `<div class="evn-alert warn">Lưu ý: Điện chênh lệch ${diff} kWh (${diffPct}% tổng EVN). Hãy kiểm tra thiết bị dùng chung (máy bơm, đèn hành lang) hoặc đối chiếu lại công tơ phòng.</div>`;
+      } else {
+        alertHtml = `<div class="evn-alert ok">Bình thường: Điện chung / hao hụt là ${diff} kWh (${diffPct}% tổng EVN)${avgDiff !== null ? ` — sát mức trung bình ${avgDiff} kWh/tháng` : ""}.</div>`;
+      }
+
+      box.innerHTML = `
+        <div class="evn-grid">
+          <div class="evn-stat"><div class="lbl">Tổng điện EVN</div><div class="val" style="color:var(--indigo)">${evnUsed !== null ? fmtNum(evnUsed) + " kWh" : "—"}</div></div>
+          <div class="evn-stat"><div class="lbl">Tổng ${state.rooms.length} phòng</div><div class="val" style="color:var(--amber)">${fmtNum(roomsUsed)} kWh</div></div>
+          <div class="evn-stat"><div class="lbl">Chênh lệch (Điện chung)</div><div class="val" style="color:${diff !== null && diff < 0 ? "var(--danger)" : "var(--emerald)"}">${diff !== null ? fmtNum(diff) + " kWh" : "—"}</div></div>
+          <div class="evn-stat"><div class="lbl">TB chênh lệch cũ</div><div class="val">${avgDiff !== null ? fmtNum(avgDiff) + " kWh" : "Chưa có"}</div></div>
+        </div>
+        ${alertHtml}
+      `;
     }
 
     function renderMeterHistory() {
@@ -2895,7 +3476,7 @@
 
       if (isAdmin()) {
         rSel.classList.remove("hidden");
-        rSel.innerHTML = `<option value="ALL">Tất cả 9 phòng</option>` +
+        rSel.innerHTML = `<option value="ALL">Tất cả phòng</option>` +
           state.rooms.map((r) => `<option value="${r.id}" ${curRVal === r.id ? "selected" : ""}>${escHtml(r.name)}</option>`).join("");
       } else {
         rSel.classList.add("hidden");
@@ -2981,10 +3562,12 @@
         const waterTotal = people * waterRate;
         const electricRate = Number(rm.electricRate) || 0;
         const electricTotal = electricUsed * electricRate;
+        const customFees = Array.isArray(rm.customFees) ? rm.customFees.map((f) => ({ id: f.id, name: f.name, amount: Number(f.amount) || 0 })) : [];
+        const customFeesTotal = customFees.reduce((s, f) => s + (Number(f.amount) || 0), 0);
         const oldDebt = existing ? (Number(existing.oldDebt) || 0) : calcPrevUnpaidDebt(currentPeriod, rm.id, tenantId);
         const extra = existing ? (Number(existing.extra) || 0) : 0;
         const extraNote = existing ? (existing.extraNote || "") : "";
-        const total = rent + waterTotal + electricTotal + oldDebt + extra;
+        const total = rent + waterTotal + electricTotal + customFeesTotal + oldDebt + extra;
 
         if (existing) {
           existing.tenantName = rm.tenantName || existing.tenantName || (activeAcc ? activeAcc.displayName : "");
@@ -2997,6 +3580,7 @@
           existing.electricUsed = electricUsed;
           existing.electricRate = electricRate;
           existing.electricTotal = electricTotal;
+          existing.customFees = customFees;
           existing.oldDebt = oldDebt;
           existing.total = total;
           if (existing.status === "vacant") existing.status = "unpaid";
@@ -3010,6 +3594,7 @@
             tenantName: rm.tenantName || (activeAcc ? activeAcc.displayName : ""),
             rent, people, waterRate, waterTotal,
             newVal, oldVal, electricUsed, electricRate, electricTotal,
+            customFees,
             extra, extraNote, oldDebt, total,
             paidAmount: 0,
             status: "unpaid",
@@ -3033,7 +3618,8 @@
       if (!b) return;
       if (field === "extra" || field === "oldDebt") {
         b[field] = Number(value) || 0;
-        b.total = (Number(b.rent) || 0) + (Number(b.waterTotal) || 0) + (Number(b.electricTotal) || 0) + (Number(b.oldDebt) || 0) + (Number(b.extra) || 0);
+        const cfSum = Array.isArray(b.customFees) ? b.customFees.reduce((s, f) => s + (Number(f.amount) || 0), 0) : 0;
+        b.total = (Number(b.rent) || 0) + (Number(b.waterTotal) || 0) + (Number(b.electricTotal) || 0) + cfSum + (Number(b.oldDebt) || 0) + (Number(b.extra) || 0);
         if (b.status === "paid") b.paidAmount = b.total;
       } else if (field === "extraNote") {
         b.extraNote = value;
@@ -3145,7 +3731,7 @@
             saveState(false);
           }
         }
-        toast("Đã đính kèm bill thanh toán! Trạng thái tự chuyển sang Đã đóng đủ.", "ok");
+        toast("Đã đồng bộ bill chuyển khoản! Trạng thái đã chuyển sang Đã thanh toán.", "ok");
       } catch (err) {
         toast("Lỗi tải bill: " + err.message, "err");
       }
@@ -3162,6 +3748,11 @@
         `2. Tiền nước (${b.people} người x ${fmtMoney(b.waterRate)}): ${fmtMoney(b.waterTotal)}`,
         `3. Tiền điện (Mới ${fmtNum(b.newVal)} - Cũ ${fmtNum(b.oldVal)} = ${b.electricUsed} số x ${fmtMoney(b.electricRate)}): ${fmtMoney(b.electricTotal)}`
       ];
+      if (Array.isArray(b.customFees) && b.customFees.length) {
+        b.customFees.forEach((f) => {
+          lines.push(`- ${f.name}: ${fmtMoney(f.amount)}`);
+        });
+      }
       if (b.oldDebt) lines.push(`4. Nợ cũ: ${fmtMoney(b.oldDebt)}`);
       if (b.extra) lines.push(`5. Phát sinh${b.extraNote ? " (" + b.extraNote + ")" : ""}: ${fmtMoney(b.extra)}`);
       lines.push(`--------------------------`);
@@ -3302,6 +3893,7 @@
         <div class="receipt-line"><span>Tiền phòng</span><strong>${fmtMoney(b.rent)}</strong></div>
         <div class="receipt-line"><span>Tiền nước (${b.people} người × ${fmtNum(b.waterRate)}đ)</span><strong>${fmtMoney(b.waterTotal)}</strong></div>
         <div class="receipt-line"><span>Tiền điện (${fmtNum(b.newVal)} - ${fmtNum(b.oldVal)} = ${b.electricUsed} số)</span><strong>${fmtMoney(b.electricTotal)}</strong></div>
+        ${Array.isArray(b.customFees) ? b.customFees.map((f) => `<div class="receipt-line"><span>${escHtml(f.name)}</span><strong>${fmtMoney(f.amount)}</strong></div>`).join("") : ""}
         ${b.oldDebt ? `<div class="receipt-line"><span>Nợ cũ</span><strong style="color:#dc2626">${fmtMoney(b.oldDebt)}</strong></div>` : ""}
         ${b.extra ? `<div class="receipt-line"><span>Phát sinh ${b.extraNote ? "(" + escHtml(b.extraNote) + ")" : ""}</span><strong>${fmtMoney(b.extra)}</strong></div>` : ""}
         <div class="receipt-total"><span>TỔNG CỘNG</span><span>${fmtMoney(b.total)}</span></div>
@@ -3329,10 +3921,126 @@
     }
 
     function statusBadgeHtml(st) {
-      if (st === "paid") return `<span class="badge badge-paid">Đã đóng đủ</span>`;
+      if (st === "paid") return `<span class="badge badge-paid">Đã thanh toán</span>`;
       if (st === "partial") return `<span class="badge badge-partial">Đóng 1 phần</span>`;
       if (st === "vacant") return `<span class="badge badge-vacant">Phòng trống</span>`;
       return `<span class="badge badge-unpaid">Chưa đóng</span>`;
+    }
+
+    function updateDueSettings() {
+      if (!isAdmin()) return;
+      const dEl = document.getElementById("dueDayInput");
+      const mEl = document.getElementById("dueNextMonthSelect");
+      state.dueDay = Math.min(28, Math.max(1, Number(dEl && dEl.value) || 5));
+      state.dueNextMonth = (mEl && mEl.value === "1");
+      saveState(true);
+      renderBillingTab();
+      scheduleQuickPush(700);
+    }
+
+    function getBillOverdueInfo(b) {
+      if (!b || b.status === "paid" || b.status === "vacant") return { isOverdue: false, days: 0, dueDateStr: "" };
+      const parts = String(b.period || "").split("/").map(Number);
+      if (parts.length !== 2 || !parts[0] || !parts[1]) return { isOverdue: false, days: 0, dueDateStr: "" };
+      let m = parts[0];
+      let y = parts[1];
+      if (state.dueNextMonth) {
+        m += 1;
+        if (m > 12) { m = 1; y += 1; }
+      }
+      const dueDay = Math.min(28, Math.max(1, Number(state.dueDay) || 5));
+      const dueDate = new Date(y, m - 1, dueDay, 23, 59, 59);
+      const now = new Date();
+      const dueStr = String(dueDay).padStart(2, "0") + "/" + String(m).padStart(2, "0") + "/" + y;
+      if (now.getTime() <= dueDate.getTime()) {
+        return { isOverdue: false, days: 0, dueDateStr: dueStr };
+      }
+      const todayMid = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
+      const dueMid = new Date(y, m - 1, dueDay).getTime();
+      const days = Math.max(1, Math.floor((todayMid - dueMid) / 86400000));
+      return { isOverdue: true, days, dueDateStr: dueStr };
+    }
+
+    async function copyGentleReminderText(billId) {
+      const b = state.bills.find((x) => x.id === billId);
+      if (!b) return;
+      const rm = state.rooms.find((r) => r.id === b.roomId);
+      const roomName = rm ? rm.name : b.roomId;
+      const ov = getBillOverdueInfo(b);
+      const remain = Math.max(0, (Number(b.total) || 0) - (Number(b.paidAmount) || 0));
+      const greeting = b.tenantName ? `Chào ${b.tenantName} (${roomName})` : `Chào bạn (${roomName})`;
+      const lines = [
+        `${greeting},`,
+        `Mình nhắn nhắc nhẹ tiền phòng tháng ${b.period} hiện đã quá hạn ${ov.days} ngày (hạn thu ngày ${ov.dueDateStr}).`,
+        `Số tiền cần thanh toán: ${fmtMoney(remain)}.`
+      ];
+      if (state.payment.accountNo) {
+        lines.push(`Thông tin chuyển khoản: ${state.payment.bankName || ""} - STK: ${state.payment.accountNo} (${state.payment.accountName || ""})`);
+        lines.push(`Nội dung CK: ${roomName} tien phong T${b.period}`);
+      }
+      lines.push(`Bạn thu xếp chuyển khoản sớm và đính kèm ảnh chuyển khoản giúp mình nhé. Cảm ơn bạn nhiều!`);
+      const txt = lines.join("\n");
+      try {
+        await navigator.clipboard.writeText(txt);
+        toast("Đã copy tin nhắn nhắc nhẹ gửi Zalo!", "ok");
+      } catch (e) {
+        const ta = document.createElement("textarea");
+        ta.value = txt; document.body.appendChild(ta); ta.select();
+        document.execCommand("copy"); ta.remove();
+        toast("Đã copy tin nhắn nhắc nhẹ gửi Zalo!", "ok");
+      }
+    }
+
+    async function copyZaloGroupAnnouncement() {
+      const appTitle = (state.appTitle && state.appTitle.trim()) || "Nhà Cho Thuê";
+      const appUrl = window.location.origin + window.location.pathname;
+      const parts = String(currentPeriod || "").split("/").map(Number);
+      let dueStr = "";
+      if (parts.length === 2 && parts[0] && parts[1]) {
+        let dm = parts[0];
+        let dy = parts[1];
+        if (state.dueNextMonth) {
+          dm += 1;
+          if (dm > 12) { dm = 1; dy += 1; }
+        }
+        const dd = Math.min(28, Math.max(1, Number(state.dueDay) || 5));
+        dueStr = String(dd).padStart(2, "0") + "/" + String(dm).padStart(2, "0") + "/" + dy;
+      }
+
+      const periodBills = state.bills
+        .filter((b) => b.period === currentPeriod && b.status !== "vacant")
+        .sort((a, b) => a.roomId.localeCompare(b.roomId));
+
+      const lines = [
+        `📢 THÔNG BÁO TIỀN PHÒNG THÁNG ${currentPeriod} — ${appTitle.toUpperCase()}`,
+        `Chào cả nhà, mình đã chốt xong chỉ số điện và tiền phòng tháng ${currentPeriod}.`
+      ];
+      if (dueStr) {
+        lines.push(`⏰ Hạn thanh toán: trước ngày ${dueStr}.`);
+      }
+      if (periodBills.length > 0) {
+        lines.push(`📋 Tổng hợp nhanh (${periodBills.length} phòng):`);
+        periodBills.forEach((b) => {
+          const rm = state.rooms.find((r) => r.id === b.roomId);
+          const rName = rm ? rm.name : b.roomId;
+          const stTxt = b.status === "paid" ? " (Đã thanh toán)" : "";
+          lines.push(`• ${rName}: ${fmtMoney(b.total)}${stTxt}`);
+        });
+      }
+      lines.push(`👉 Mời các phòng bấm vào link bên dưới, chọn tên phòng và nhập mật khẩu để xem ảnh đồng hồ điện, quét mã QR thanh toán và đính kèm ảnh chuyển khoản nhé:`);
+      lines.push(appUrl);
+      lines.push(`Cảm ơn cả nhà nhiều!`);
+
+      const txt = lines.join("\n");
+      try {
+        await navigator.clipboard.writeText(txt);
+        toast("Đã copy thông báo tổng! Bạn chỉ cần dán vào nhóm Zalo nhà trọ.", "ok");
+      } catch (e) {
+        const ta = document.createElement("textarea");
+        ta.value = txt; document.body.appendChild(ta); ta.select();
+        document.execCommand("copy"); ta.remove();
+        toast("Đã copy thông báo tổng! Bạn chỉ cần dán vào nhóm Zalo nhà trọ.", "ok");
+      }
     }
 
     function renderBillingTab() {
@@ -3341,6 +4049,11 @@
 
       document.getElementById("adminKpiSection").classList.toggle("hidden", !isAdmin());
       document.getElementById("adminBillToolbar").classList.toggle("hidden", !isAdmin());
+
+      const dEl = document.getElementById("dueDayInput");
+      const mEl = document.getElementById("dueNextMonthSelect");
+      if (dEl && document.activeElement !== dEl) dEl.value = state.dueDay || 5;
+      if (mEl && document.activeElement !== mEl) mEl.value = state.dueNextMonth ? "1" : "0";
 
       const periodBills = state.bills.filter((b) => b.period === currentPeriod && canCurrentUserSeeRecord(b));
 
@@ -3377,23 +4090,33 @@
             const phone = rm && rm.phone ? ` · ${rm.phone}` : "";
             const isVacant = b.status === "vacant";
 
+            const ov = getBillOverdueInfo(b);
+            const clipSvg = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="m21.44 11.05-9.19 9.19a6 6 0 0 1-8.49-8.49l8.57-8.57A4 4 0 1 1 18 8.84l-8.59 8.57a2 2 0 0 1-2.83-2.83l8.49-8.48"></path></svg>`;
+
             const adminBillViewBtn = isAdmin() && b.billPhotoUrl
               ? `<button class="btn btn-indigo btn-sm" onclick="openLightbox('${escHtml(b.billPhotoUrl)}')">Xem ảnh bill</button>`
               : "";
 
-            const tenantBillStatusBadge = !isAdmin() && b.hasBillPhoto
-              ? `<span class="badge badge-paid">Đã gửi bill thanh toán &#10003;</span>`
+            const adminOverdueBtn = isAdmin() && ov.isOverdue
+              ? `<button class="btn btn-danger btn-sm" onclick="copyGentleReminderText('${b.id}')">Copy tin nhắn nhắc nhẹ</button>`
+              : "";
+
+            const customFeeRowsHtml = Array.isArray(b.customFees)
+              ? b.customFees.map((f) => `<div class="bill-row"><span>${escHtml(f.name)}</span><strong>${fmtMoney(f.amount)}</strong></div>`).join("")
               : "";
 
             return `
-              <div class="bill-card ${isVacant ? "vacant" : ""}">
+              <div class="bill-card ${isVacant ? "vacant" : ""} ${ov.isOverdue ? "overdue" : ""}">
                 <div class="bill-top">
                   <div>
                     <div class="bill-room-name">${escHtml(roomName)}</div>
                     <div class="bill-tenant-meta">${escHtml(b.tenantName || "Chưa có tên khách")}${escHtml(phone)}</div>
                   </div>
                   <div style="text-align:right;">
-                    ${statusBadgeHtml(b.status)}
+                    <div style="display:flex; flex-direction:column; align-items:flex-end; gap:4px;">
+                      ${statusBadgeHtml(b.status)}
+                      ${ov.isOverdue ? `<span class="badge badge-overdue">Quá hạn ${ov.days} ngày</span>` : ""}
+                    </div>
                     ${b.paidDate ? `<div class="muted" style="font-size:10.5px; margin-top:3px;">Đóng: ${escHtml(b.paidDate)}</div>` : ""}
                   </div>
                 </div>
@@ -3402,6 +4125,7 @@
                   <div class="bill-row"><span>Tiền nhà</span><strong>${fmtMoney(b.rent)}</strong></div>
                   <div class="bill-row"><span>Tiền nước (${b.people} người × ${fmtNum(b.waterRate)}đ)</span><strong>${fmtMoney(b.waterTotal)}</strong></div>
                   <div class="bill-row"><span>Tiền điện (${fmtNum(b.newVal)} - ${fmtNum(b.oldVal)} = ${b.electricUsed} số)</span><strong>${fmtMoney(b.electricTotal)}</strong></div>
+                  ${customFeeRowsHtml}
                   ${b.oldDebt ? `<div class="bill-row"><span>Nợ cũ</span><strong style="color:var(--danger)">${fmtMoney(b.oldDebt)}</strong></div>` : ""}
                   ${b.extra ? `<div class="bill-row"><span>Phát sinh ${b.extraNote ? "(" + escHtml(b.extraNote) + ")" : ""}</span><strong>${fmtMoney(b.extra)}</strong></div>` : ""}
                 </div>
@@ -3427,23 +4151,27 @@
                     </div>
                     <div style="display:flex; align-items:flex-end;">
                       <button class="btn ${b.status === "paid" ? "btn-glass" : "btn-emerald"} btn-sm" style="width:100%;" onclick="toggleBillPaid('${b.id}')">
-                        ${b.status === "paid" ? "Hoàn tác chưa đóng" : "Đánh dấu Đã đóng đủ"}
+                        ${b.status === "paid" ? "Hoàn tác chưa đóng" : "Đánh dấu Đã thanh toán"}
                       </button>
                     </div>
                   </div>
                 ` : ""}
 
-                <div class="bill-actions">
-                  ${!isVacant ? `<button class="btn btn-glass btn-sm" onclick="openReceiptModal('${b.id}')">Phiếu thu (QR)</button>` : ""}
-                  ${!isVacant ? `<button class="btn btn-glass btn-sm" onclick="copyReceiptText('${b.id}')">Copy phiếu thu</button>` : ""}
-                  ${!isVacant ? `
-                    <button class="btn btn-emerald btn-sm" onclick="triggerBillPhotoUpload('${b.id}')">
-                      ${b.hasBillPhoto ? "Gửi lại ảnh bill" : "Đính kèm bill thanh toán"}
-                    </button>
-                  ` : ""}
-                  ${adminBillViewBtn}
-                  ${tenantBillStatusBadge}
-                </div>
+                ${!isVacant ? `
+                  <div class="bill-actions-row3">
+                    <button type="button" class="bill-act-btn bill-act-qr" onclick="openReceiptModal('${b.id}')">Phiếu thu (QR)</button>
+                    <button type="button" class="bill-act-btn bill-act-copy" onclick="copyReceiptText('${b.id}')">Copy phiếu thu</button>
+                    <button type="button" class="bill-act-btn bill-act-bill" onclick="triggerBillPhotoUpload('${b.id}')">${clipSvg}<span>Bill chuyển khoản</span></button>
+                  </div>
+                  ${!isAdmin() ? `<div class="bill-attach-note">Vui lòng đính kèm ảnh chuyển khoản</div>` : ""}
+                ` : ""}
+
+                ${(adminBillViewBtn || adminOverdueBtn) ? `
+                  <div class="bill-actions" style="margin-top:8px;">
+                    ${adminOverdueBtn}
+                    ${adminBillViewBtn}
+                  </div>
+                ` : ""}
               </div>
             `;
           }).join("");
@@ -3466,7 +4194,7 @@
 
       if (isAdmin()) {
         rSel.classList.remove("hidden");
-        rSel.innerHTML = `<option value="ALL">Tất cả 9 phòng</option>` +
+        rSel.innerHTML = `<option value="ALL">Tất cả phòng</option>` +
           state.rooms.map((r) => `<option value="${r.id}" ${curRVal === r.id ? "selected" : ""}>${escHtml(r.name)}</option>`).join("");
       } else {
         rSel.classList.add("hidden");
@@ -3604,40 +4332,53 @@
       toast("Đã xóa ảnh mã QR tùy chỉnh.", "");
     }
 
-    // Hiển thị form tạo/sửa tài khoản NGAY BÊN DƯỚI từng phòng
+    // Hiển thị danh sách phòng thuê (tên phòng thay cho tên tài khoản + cây bút sửa tên & chọn lịch sử + đổi/reset mật khẩu)
     function renderTenantAccountsList() {
       const wrap = document.getElementById("tenantAccountsList");
+      const pencilSvg = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>`;
+
       wrap.innerHTML = state.rooms.map((rm) => {
         const acc = getActiveTenantForRoom(rm.id);
         const isEditing = editingTenantRoomId === rm.id;
-        const defaultUser = acc ? acc.username : ("phong" + rm.id.replace("P0", "10"));
-        const defaultName = acc ? acc.displayName : (rm.tenantName || rm.name);
+        const defaultRoomName = rm.name || (acc && acc.displayName) || rm.id;
         const defaultPass = acc ? acc.password : "";
 
         const inlineFormHtml = isEditing ? `
           <div class="acc-inline-editor">
             <div style="font-weight:800; font-size:13px; margin-bottom:8px; color:var(--indigo);">
-              ${acc ? "Sửa tài khoản" : "Tạo tài khoản mới"} — ${escHtml(rm.name)} (${escHtml(rm.id)})
+              ${acc ? "Sửa tên phòng & Mật khẩu" : "Tạo phòng thuê mới"} — ${escHtml(rm.id)}
             </div>
             <div class="cfg-fields" style="margin-top:0;">
-              <div>
-                <label class="field-label">Tài khoản đăng nhập</label>
-                <input type="text" id="inlineAccUser_${rm.id}" value="${escHtml(defaultUser)}" placeholder="Nhập tài khoản" />
-              </div>
-              <div>
-                <label class="field-label">Tên hiển thị</label>
-                <input type="text" id="inlineAccName_${rm.id}" value="${escHtml(defaultName)}" placeholder="Nhập tên hiển thị" />
+              <div class="full">
+                <label class="field-label">Tên phòng thuê (hiển thị ngoài màn hình đăng nhập)</label>
+                <input type="text" id="inlineAccName_${rm.id}" value="${escHtml(defaultRoomName)}" placeholder="VD: Phòng 101" />
               </div>
               <div class="full">
-                <label class="field-label">Mật khẩu phòng</label>
+                <label class="field-label">Mật khẩu số đăng nhập phòng</label>
                 <div class="input-eye-wrap">
-                  <input type="password" id="inlineAccPass_${rm.id}" inputmode="numeric" value="${escHtml(defaultPass)}" placeholder="Nhập mật khẩu số" />
+                  <input type="password" id="inlineAccPass_${rm.id}" inputmode="numeric" value="${escHtml(defaultPass)}" placeholder="Nhập mật khẩu số (từ 4 số)" />
                   <button type="button" class="eye-toggle" onclick="toggleInputEye('inlineAccPass_${rm.id}')">&#128065;</button>
                 </div>
               </div>
             </div>
-            <div class="mt-2 flex-row">
-              <button type="button" class="btn btn-emerald btn-sm" onclick="saveTenantAccount('${rm.id}')">Lưu tài khoản</button>
+            ${acc ? `
+              <div class="mt-2">
+                <label class="field-label">Tùy chọn lịch sử khi sửa tên phòng:</label>
+                <label class="radio-opt-card">
+                  <input type="radio" name="histMode_${rm.id}" value="keep" checked />
+                  <span><strong>Cho phép xem lịch sử đóng tiền, lịch sử điện cũ</strong> (dùng khi chỉ đổi tên phòng)</span>
+                </label>
+                <label class="radio-opt-card">
+                  <input type="radio" name="histMode_${rm.id}" value="clear" />
+                  <span><strong>Xóa lịch sử cũ</strong> (dùng khi khách mới vào — không thấy dữ liệu khách cũ, QTV vẫn giữ)</span>
+                </label>
+              </div>
+            ` : ""}
+            <div class="mt-2 flex-row" style="justify-content:space-between;">
+              <div class="flex-row" style="gap:6px;">
+                <button type="button" class="btn btn-emerald btn-sm" onclick="saveTenantAccount('${rm.id}')">Lưu</button>
+                ${acc ? `<button type="button" class="btn btn-amber btn-sm" onclick="resetTenantPassword('${rm.id}')">Reset mật khẩu</button>` : ""}
+              </div>
               <button type="button" class="btn btn-glass btn-sm" onclick="cancelEditTenantAccount()">Hủy</button>
             </div>
           </div>
@@ -3646,16 +4387,19 @@
         return `
           <div class="acc-block">
             <div class="acc-item">
-              <div class="acc-meta">
-                <strong>${escHtml(rm.id)} · ${escHtml(rm.name)}</strong>
-                ${acc
-                  ? `<div class="muted">TK: <strong>${escHtml(acc.username)}</strong> · ${escHtml(acc.displayName)}</div>`
-                  : `<div class="muted">Chưa tạo tài khoản đăng nhập</div>`
-                }
+              <div class="acc-meta" style="display:flex; align-items:center; gap:7px;">
+                <div>
+                  <strong>${escHtml(rm.name)}</strong> <span class="muted">(${escHtml(rm.id)})</span>
+                  ${acc
+                    ? `<div class="muted" style="color:var(--emerald);">Đã mở đăng nhập · Chọn tên phòng &amp; nhập mật khẩu số</div>`
+                    : `<div class="muted">Chưa tạo đăng nhập cho phòng này</div>`
+                  }
+                </div>
               </div>
               <div class="flex-row" style="gap:5px;">
-                <button type="button" class="btn btn-indigo btn-sm" onclick="toggleEditTenantAccount('${rm.id}')">${isEditing ? "Đóng" : (acc ? "Sửa TK" : "+ Tạo TK")}</button>
-                ${acc ? `<button type="button" class="btn btn-danger btn-sm" onclick="deleteTenantAccount('${rm.id}')">Xóa TK</button>` : ""}
+                <button type="button" class="pencil-btn" onclick="toggleEditTenantAccount('${rm.id}')" title="Sửa tên phòng & đổi mật khẩu">${pencilSvg}</button>
+                <button type="button" class="btn btn-indigo btn-sm" onclick="toggleEditTenantAccount('${rm.id}')">${isEditing ? "Đóng" : (acc ? "Sửa" : "+ Tạo")}</button>
+                ${acc ? `<button type="button" class="btn btn-danger btn-sm" onclick="deleteTenantAccount('${rm.id}')">Xóa</button>` : ""}
               </div>
             </div>
             ${inlineFormHtml}
@@ -3669,7 +4413,7 @@
       renderTenantAccountsList();
       if (editingTenantRoomId) {
         setTimeout(() => {
-          const el = document.getElementById("inlineAccUser_" + roomId);
+          const el = document.getElementById("inlineAccName_" + roomId);
           if (el) el.focus();
         }, 50);
       }
@@ -3680,28 +4424,58 @@
       renderTenantAccountsList();
     }
 
+    function resetTenantPassword(roomId) {
+      const inp = document.getElementById("inlineAccPass_" + roomId);
+      if (inp) {
+        inp.value = "123456";
+        inp.type = "text";
+      }
+      toast("Đã đặt lại mật khẩu tạm thành 123456. Bấm Lưu để áp dụng!", "warn");
+    }
+
     function saveTenantAccount(roomId) {
-      const username = document.getElementById("inlineAccUser_" + roomId).value.trim();
-      const displayName = document.getElementById("inlineAccName_" + roomId).value.trim();
-      const password = document.getElementById("inlineAccPass_" + roomId).value;
-      if (!username || !password) {
-        toast("Vui lòng nhập đầy đủ Tài khoản và Mật khẩu!", "warn");
+      const roomName = document.getElementById("inlineAccName_" + roomId).value.trim();
+      const password = document.getElementById("inlineAccPass_" + roomId).value.trim();
+      if (!roomName) {
+        toast("Vui lòng nhập Tên phòng thuê!", "warn");
         return;
       }
-      const existing = getActiveTenantForRoom(roomId);
-      const dup = state.accounts.find(
-        (a) => a.status === "active" && a.username.toLowerCase() === username.toLowerCase() && (!existing || a.id !== existing.id)
-      );
-      if (dup) {
-        toast("Tên tài khoản '" + username + "' đã tồn tại!", "err");
+      if (password.length < 4) {
+        toast("Mật khẩu số phòng phải có ít nhất 4 ký tự!", "warn");
         return;
       }
 
+      const rm = state.rooms.find((r) => r.id === roomId);
+      if (rm) rm.name = roomName;
+
+      const existing = getActiveTenantForRoom(roomId);
+      const histModeEl = document.querySelector(`input[name="histMode_${roomId}"]:checked`);
+      const histMode = histModeEl ? histModeEl.value : "keep";
+      const internalUser = "room_" + roomId.toLowerCase();
+
       if (existing) {
-        existing.username = username;
-        existing.displayName = displayName || username;
-        existing.password = password;
-        toast("Đã cập nhật tài khoản phòng!", "ok");
+        if (histMode === "clear") {
+          // Cô lập dữ liệu khách cũ: đóng tài khoản cũ, tạo tài khoản mới với tenantId mới
+          existing.status = "deleted";
+          const newTenantId = "TNT_" + Date.now() + "_" + roomId;
+          state.accounts.push({
+            id: newTenantId,
+            role: "tenant",
+            roomId,
+            username: internalUser,
+            password,
+            displayName: roomName,
+            adminPin: "",
+            status: "active",
+            createdAt: new Date().toISOString()
+          });
+          toast("Đã cập nhật tên phòng & xóa lịch sử hiển thị cũ cho khách mới!", "ok");
+        } else {
+          existing.username = existing.username || internalUser;
+          existing.displayName = roomName;
+          existing.password = password;
+          toast("Đã cập nhật tên phòng & mật khẩu (giữ nguyên lịch sử cũ)!", "ok");
+        }
       } else {
         const newTenantId = "TNT_" + Date.now() + "_" + roomId;
         state.meters.forEach((m) => { if (m.roomId === roomId && !m.tenantId) m.tenantId = "LEGACY_" + roomId; });
@@ -3710,26 +4484,28 @@
           id: newTenantId,
           role: "tenant",
           roomId,
-          username,
+          username: internalUser,
           password,
-          displayName: displayName || username,
+          displayName: roomName,
           adminPin: "",
           status: "active",
           createdAt: new Date().toISOString()
         });
-        toast("Đã tạo tài khoản mới (cô lập hoàn toàn dữ liệu khách cũ)!", "ok");
+        toast("Đã tạo đăng nhập cho " + roomName + "!", "ok");
       }
+
       saveState(true);
       editingTenantRoomId = null;
       renderTenantAccountsList();
-      renderConfigTab();
+      renderAll();
+      scheduleQuickPush(500);
     }
 
     function deleteTenantAccount(roomId) {
       const rm = state.rooms.find((r) => r.id === roomId);
       const acc = getActiveTenantForRoom(roomId);
       if (!acc) return;
-      if (!confirm(`Xóa tài khoản "${acc.username}" của ${rm ? rm.name : roomId}?\n\nLưu ý: Lịch sử đóng tiền và số điện cũ VẪN ĐƯỢC GIỮ NGUYÊN cho Quản trị viên. Tài khoản mới tạo sau này cho phòng này sẽ KHÔNG thấy dữ liệu của khách cũ.`)) {
+      if (!confirm(`Xóa quyền đăng nhập của ${rm ? rm.name : roomId}?\n\nLưu ý: Lịch sử đóng tiền và số điện cũ VẪN ĐƯỢC GIỮ NGUYÊN cho Quản trị viên.`)) {
         return;
       }
       acc.status = "deleted";
@@ -3737,7 +4513,8 @@
       editingTenantRoomId = null;
       renderTenantAccountsList();
       renderConfigTab();
-      toast("Đã xóa tài khoản phòng. Lịch sử vẫn được lưu cho Quản trị viên.", "ok");
+      toast("Đã xóa đăng nhập phòng. Lịch sử vẫn được lưu cho Quản trị viên.", "ok");
+      scheduleQuickPush(500);
     }
 
     function toggleChangeAdminPassBox(forceState) {
@@ -4016,7 +4793,7 @@
         dot.classList.remove("hidden");
         dot.classList.toggle("tenant", !isAdmin());
         if (isAdmin()) {
-          sub.textContent = "Quản trị viên · 9 phòng";
+          sub.textContent = "Quản trị viên · " + state.rooms.length + " phòng";
           tabConfigBtn.classList.remove("hidden");
         } else {
           const rm = state.rooms.find((r) => r.id === session.roomId);
@@ -4035,12 +4812,57 @@
       renderConfigTab();
     }
 
-    // Service Worker Registration
-    if ("serviceWorker" in navigator) {
-      window.addEventListener("load", () => {
-        navigator.serviceWorker.register("./sw.js").catch(() => {});
-      });
+    // Auto Cache-Clearing on Version Upgrade & Service Worker Auto-Update
+    async function ensureFreshAppVersion() {
+      try {
+        const storedVer = localStorage.getItem(VERSION_KEY);
+        if (storedVer && storedVer !== APP_VERSION) {
+          if ("caches" in window) {
+            const keys = await caches.keys();
+            await Promise.all(keys.map((k) => caches.delete(k)));
+          }
+          localStorage.setItem(VERSION_KEY, APP_VERSION);
+        } else if (!storedVer) {
+          localStorage.setItem(VERSION_KEY, APP_VERSION);
+        }
+      } catch (e) {}
+
+      if ("serviceWorker" in navigator) {
+        let refreshing = false;
+        navigator.serviceWorker.addEventListener("controllerchange", () => {
+          if (refreshing) return;
+          if (sessionStorage.getItem("reloaded_ver") === APP_VERSION) return;
+          refreshing = true;
+          sessionStorage.setItem("reloaded_ver", APP_VERSION);
+          window.location.reload();
+        });
+        navigator.serviceWorker.addEventListener("message", (evt) => {
+          if (evt.data && evt.data.type === "APP_UPDATED" && evt.data.version && evt.data.version !== localStorage.getItem(VERSION_KEY)) {
+            localStorage.setItem(VERSION_KEY, evt.data.version);
+            if (sessionStorage.getItem("reloaded_ver") !== evt.data.version) {
+              sessionStorage.setItem("reloaded_ver", evt.data.version);
+              window.location.reload();
+            }
+          }
+        });
+        window.addEventListener("load", () => {
+          navigator.serviceWorker.register("./sw.js?v=" + APP_VERSION).then((reg) => {
+            reg.update().catch(() => {});
+            if (reg.waiting) reg.waiting.postMessage({ type: "SKIP_WAITING" });
+            reg.addEventListener("updatefound", () => {
+              const nw = reg.installing;
+              if (!nw) return;
+              nw.addEventListener("statechange", () => {
+                if (nw.state === "installed" && navigator.serviceWorker.controller) {
+                  nw.postMessage({ type: "SKIP_WAITING" });
+                }
+              });
+            });
+          }).catch(() => {});
+        });
+      }
     }
+    ensureFreshAppVersion();
 
     // App Bootstrap
     initTheme();
